@@ -1,0 +1,25 @@
+OÙ METTRE VOS IMAGES
+====================
+
+img/equipe/   → les photos de l'équipe
+               Format carré (ex : 600 x 600 px), en .jpg, moins de 300 ko chacune.
+               Exemple : img/equipe/hugo.jpg
+               Puis dans js/config.js, partie « equipe » : photo: "img/equipe/hugo.jpg",
+
+img/lots/     → les photos des lots de la tombola
+               Format carré (ex : 600 x 600 px), en .jpg, moins de 300 ko chacune.
+               Puis dans js/config.js, partie « tombola » : photo: "img/lots/macarons.jpg",
+
+img/          → les logos (de préférence en .png sur fond transparent, ou en .svg)
+               Exemple : img/logo-asso.png et img/logo-iut.png
+               Puis dans js/config.js : logo: "img/logo-asso.png", et logoIUT: "img/logo-iut.png",
+
+Astuces
+- Noms de fichiers en minuscules, sans espace ni accent : « theo.jpg », pas « Théo 2.JPG ».
+- Pour réduire le poids d'une photo gratuitement : https://squoosh.app
+- Si une photo est introuvable, le site affiche l'emoji prévu à la place (pas de cadre cassé).
+- Tant que « photo » est vide (""), le site affiche un avatar rigolo avec l'emoji.
+
+NE PAS SUPPRIMER
+- favicon.svg et apple-touch-icon.png : l'icône du site dans l'onglet et sur l'écran d'accueil.
+- partage.jpg : l'image d'aperçu quand le lien est partagé (WhatsApp, Instagram, Messenger…).

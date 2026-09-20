@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VÉLO CHAOS : la soirée maudite, vendredi 13 novembre en live</title>
+  <meta name="description" content="Vendredi 13 novembre 2026, 3 heures de vélo en live sur Twitch. Tu paries sur les kilomètres, tu donnes pour saboter ou booster, et tout l'argent va à une association solidaire d'Amiens.">
+  <meta name="theme-color" content="#160b26">
+
+  <!-- ════════════════════════════════════════════════════════════════
+       PARTAGE SUR LES RÉSEAUX (aperçu du lien sur WhatsApp, Instagram…)
+       ⚠️ À faire UNE SEULE FOIS, quand le site est en ligne :
+       remplace les 2 adresses https://ton-pseudo.github.io/velo-chaos/
+       ci-dessous par la vraie adresse du site (garde le / final).
+       C'est la seule modification à faire en dehors de js/config.js.
+       ════════════════════════════════════════════════════════════════ -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Vélo Chaos">
+  <meta property="og:title" content="VÉLO CHAOS : la soirée maudite">
+  <meta property="og:description" content="Vendredi 13 novembre, 19h-22h, en live sur Twitch. Tu paries, tu donnes, je souffre. Tout pour une asso solidaire d'Amiens.">
+  <meta property="og:url" content="https://ton-pseudo.github.io/velo-chaos/">
+  <meta property="og:image" content="https://ton-pseudo.github.io/velo-chaos/img/partage.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Un chat noir avec le dossard 13, assis sur un compteur de vélo d'appartement devant la pleine lune.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preload" href="fonts/bungee.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/atkinson-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add("js");</script>
+  <!-- Toutes les données du site sont dans js/config.js -->
+  <script src="js/config.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+<a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+<header class="entete">
+  <div class="entete-barre">
+    <a class="entete-logo" href="#accueil" aria-label="Vélo Chaos, retour en haut de page">
+      <svg class="logo-chat" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+        <circle cx="20" cy="20" r="20" fill="#3d2a61"/>
+        <path d="M9.5 19 L10.5 7 L18 13.5 Z M30.5 19 L29.5 7 L22 13.5 Z" fill="#0b0613"/>
+        <ellipse cx="20" cy="23" rx="12.5" ry="10.5" fill="#0b0613"/>
+        <ellipse cx="15.2" cy="22" rx="2.4" ry="3" fill="#ffd23f"/>
+        <ellipse cx="24.8" cy="22" rx="2.4" ry="3" fill="#ffd23f"/>
+      </svg>
+      <span class="entete-nom">Vélo Chaos</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Menu principal">
+      <ul class="nav-liste">
+        <li><a href="#jauge">La jauge</a></li>
+        <li><a href="#defi">Le défi</a></li>
+        <li><a href="#paris">Paris</a></li>
+        <li><a href="#tombola">Tombola</a></li>
+        <li><a href="#projet">Le projet</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <a class="bouton bouton-trefle bouton-mini" href="#donner">Je donne</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="contenu">
+
+  <!-- ═══════════════ 1. ACCUEIL ═══════════════ -->
+  <section class="hero" id="accueil" aria-labelledby="titre-hero">
+    <div class="conteneur hero-grille">
+
+      <div class="hero-texte">
+        <p class="hero-date">
+          <span data-date="debutLive" data-format="Jour">Vendredi 13 novembre 2026</span>,
+          de <span data-date="debutLive" data-format="heure">19h</span>
+          à&nbsp;<span data-date="finLive" data-format="heure">22h</span>, en direct sur Twitch
+        </p>
+        <h1 class="hero-titre" id="titre-hero">
+          <span class="hero-velo">Vélo</span>
+          <span class="hero-chaos" aria-hidden="true"><span>C</span><span>h</span><span>a</span><span>o</span><span>s</span></span>
+          <span class="sr-only">Chaos :</span>
+          <span class="hero-maudite">la soirée maudite</span>
+        </h1>
+        <p class="hero-intro">On pédale, tu paries, tu donnes. Et tout l'argent va à <strong data-bind="association.nom" data-exemple>l'association</strong>.</p>
+      </div>
+
+      <div class="console-zone">
+        <div class="lune" aria-hidden="true"></div>
+        <div class="console">
+          <!-- Le chat noir porte-malheur, assis sur le compteur du vélo -->
+          <svg class="chat" viewBox="0 0 160 200" aria-hidden="true" focusable="false">
+            <g class="chat-silhouette">
+              <path class="chat-queue" d="M116 146 C 138 146, 148 162, 138 178 C 131 189, 139 197, 150 192"/>
+              <path d="M58 82 C 45 98, 39 124, 41 150 L 119 150 C 121 124, 115 98, 102 82 Z"/>
+              <ellipse cx="50" cy="139" rx="15" ry="12"/>
+              <ellipse cx="110" cy="139" rx="15" ry="12"/>
+              <path d="M50 52 L 53 18 L 76 38 Z"/>
+              <path d="M110 52 L 107 18 L 84 38 Z"/>
+              <ellipse cx="80" cy="62" rx="33" ry="28"/>
+            </g>
+            <path class="chat-oreille" d="M56 45 L 57.5 27 L 69 38 Z"/>
+            <path class="chat-oreille" d="M104 45 L 102.5 27 L 91 38 Z"/>
+            <ellipse class="chat-patte" cx="69" cy="150" rx="9" ry="4.5"/>
+            <ellipse class="chat-patte" cx="91" cy="150" rx="9" ry="4.5"/>
+            <g class="chat-yeux">
+              <path d="M57 62 Q68 46 79 62 Q68 76 57 62 Z" fill="#ffd23f"/>
+              <path d="M81 62 Q92 46 103 62 Q92 76 81 62 Z" fill="#ffd23f"/>
+              <ellipse cx="68" cy="62" rx="2.3" ry="6" fill="#160b26"/>
+              <ellipse cx="92" cy="62" rx="2.3" ry="6" fill="#160b26"/>
+              <circle cx="70.5" cy="57.5" r="1.4" fill="#ffffff"/>
+              <circle cx="94.5" cy="57.5" r="1.4" fill="#ffffff"/>
+            </g>
+            <path d="M77 71 L83 71 L80 74.5 Z" fill="#ff9ec4"/>
+            <path class="chat-bouche" d="M80 74.5 Q77 78.5 73.5 76.5 M80 74.5 Q83 78.5 86.5 76.5"/>
+            <path class="chat-moustaches" d="M60 71 L38 67 M60 74.5 L39 77 M100 71 L122 67 M100 74.5 L121 77"/>
+            <g transform="rotate(-5 80 106)">
+              <rect x="62" y="93" width="36" height="27" rx="3" fill="#f6f1ff"/>
+              <circle cx="66" cy="96.5" r="1.3" fill="#9d8fbf"/>
+              <circle cx="94" cy="96.5" r="1.3" fill="#9d8fbf"/>
+              <text x="80" y="114" text-anchor="middle" font-family="Bungee, 'Arial Black', sans-serif" font-size="15" fill="#160b26">13</text>
+            </g>
+          </svg>
+
+          <!-- L'écran du compteur : compte à rebours, puis « en direct », puis « merci » -->
+          <div class="lcd" id="lcd" data-mode="avant">
+            <p class="lcd-titre" id="lcd-titre">Le chaos commence dans</p>
+            <div class="lcd-chiffres" id="lcd-chiffres" role="timer" aria-live="off"></div>
+            <p class="lcd-message" id="lcd-message"></p>
+            <div class="lcd-cagnotte">
+              <p class="lcd-cagnotte-ligne">
+                <span>Cagnotte</span>
+                <span id="lcd-pourcent">0 %</span>
+              </p>
+              <div class="lcd-segments" id="lcd-segments" aria-hidden="true"></div>
+              <p class="lcd-cagnotte-texte"><span id="lcd-montant">0 €</span> récoltés sur <span id="lcd-objectif" data-exemple>…</span></p>
+            </div>
+          </div>
+
+          <div class="console-boutons">
+            <a class="bouton bouton-poisse" id="hero-parier" href="#paris">Je parie (1 €)</a>
+            <a class="bouton bouton-trefle" href="#donner">Je donne</a>
+            <a class="bouton bouton-twitch" id="hero-live" href="#defi" data-lien="twitch" data-exemple target="_blank" rel="noopener">Voir le live</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="hero-agenda">
+        <span>Pour ne pas rater le live :</span>
+        <a class="lien-agenda" id="agenda-google" href="#" target="_blank" rel="noopener">Google Agenda</a>
+        <a class="lien-agenda" id="agenda-ics" href="#" download="velo-chaos-vendredi-13.ics">Apple ou Outlook (.ics)</a>
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ 2. LA JAUGE ET LES PALIERS ═══════════════ -->
+  <section class="section section-jauge" id="jauge" aria-labelledby="titre-jauge">
+    <div class="conteneur jauge-grille">
+      <div class="jauge-resume">
+        <h2 class="titre-section" id="titre-jauge">Grimpe l'échelle</h2>
+        <p class="intro">Chaque palier atteint débloque un défi en direct. Plus la cagnotte monte, plus je souffre. Et non, on ne passe pas sous l'échelle.</p>
+        <div class="compteur" id="compteur" role="progressbar" aria-labelledby="titre-jauge" aria-valuemin="0">
+          <p class="compteur-montant" id="jauge-montant">0 €</p>
+          <p class="compteur-objectif">récoltés sur <span id="jauge-objectif" data-exemple>…</span>, soit <strong id="jauge-pourcent">0 %</strong> de l'objectif</p>
+        </div>
+        <p class="jauge-bilan" id="jauge-bilan"></p>
+        <p class="jauge-maj">Dernière mise à jour : <span data-bind="cagnotte.miseAJour">…</span></p>
+        <a class="bouton bouton-trefle" href="#donner">Je donne</a>
+      </div>
+      <ol class="echelle" id="echelle" aria-label="Les paliers, du plus haut au plus bas"></ol>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ 3. LE DÉFI ═══════════════ -->
+  <section class="section section-defi" id="defi" aria-labelledby="titre-defi">
+    <div class="conteneur">
+      <div class="defi-intro">
+        <h2 class="titre-section" id="titre-defi">Le défi : Vélo Chaos</h2>
+        <p class="accroche">3 heures. 1 vélo d'appartement. 0 dignité.</p>
+        <p>Moi, c'est <strong data-bind="defi.cycliste" data-exemple>Hugo</strong>. Le <span data-date="debutLive" data-format="jour">vendredi 13 novembre 2026</span>, de <span data-date="debutLive" data-format="heure">19h</span> à&nbsp;<span data-date="finLive" data-format="heure">22h</span>, je pédale sur un vélo d'appartement, en direct sur Twitch. Toi, tu paries sur le nombre de kilomètres que je vais faire.</p>
+        <h3 class="sous-titre">Le twist : la guerre des camps</h3>
+        <p>Pendant le live, chaque don déclenche un <strong class="txt-poisse">sabotage</strong> ou un <strong class="txt-trefle">boost</strong>. Tu as parié bas ? Tu as tout intérêt à me saboter. Tu as parié haut ? Aide-moi à avancer. Que le meilleur camp gagne, et que mes cuisses tiennent.</p>
+      </div>
+
+      <div class="camps">
+        <div class="camp camp-poisse">
+          <h3 class="camp-titre"><span class="camp-team">Team</span> <span class="camp-nom">Poisse</span></h3>
+          <p class="camp-slogan">T'as parié bas ? Sabote-moi.</p>
+          <ul class="cartes" id="cartes-sabotages"></ul>
+        </div>
+        <p class="camps-vs" aria-hidden="true">VS</p>
+        <div class="camp camp-trefle">
+          <h3 class="camp-titre"><span class="camp-team">Team</span> <span class="camp-nom">Trèfle</span></h3>
+          <p class="camp-slogan">T'as parié haut ? Booste-moi.</p>
+          <ul class="cartes" id="cartes-boosts"></ul>
+        </div>
+      </div>
+
+      <div class="defi-bas">
+        <div class="declencher">
+          <h3 class="sous-titre">Comment jouer une carte</h3>
+          <ol class="etapes">
+            <li><strong>Pendant le live</strong>, appuie sur « Jouer une carte ».</li>
+            <li><strong>Paie le prix de la carte</strong> sur HelloAsso et indique laquelle tu joues. L'argent va directement à l'asso.</li>
+            <li><strong>On l'annonce en direct</strong> et je m'exécute. Sans négocier.</li>
+          </ol>
+          <a class="bouton bouton-oeil" href="#donner" data-lien="sabotages" data-exemple target="_blank" rel="noopener">Jouer une carte</a>
+        </div>
+
+        <div class="live" id="live">
+          <h3 class="sous-titre">Le live</h3>
+          <div class="live-ecran" id="live-ecran"></div>
+          <p class="live-lien"><a href="#" data-lien="twitch" data-exemple target="_blank" rel="noopener">Ouvrir la chaîne sur Twitch</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ 4. LES PARIS ═══════════════ -->
+  <section class="section section-paris" id="paris" aria-labelledby="titre-paris">
+    <div class="conteneur">
+      <h2 class="titre-section" id="titre-paris">Combien de km vais-je faire ?</h2>
+      <p class="intro">1 € = 1 pronostic : un nombre de kilomètres exact, arrondi à l'unité. Tu peux parier autant de fois que tu veux.</p>
+
+      <div class="resultat-paris" id="paris-resultat" hidden></div>
+
+      <div class="paris-grille">
+        <article class="bulletin" aria-labelledby="titre-bulletin">
+          <div class="bulletin-haut">
+            <h3 class="bulletin-titre" id="titre-bulletin">Bulletin de pari</h3>
+            <p class="bulletin-mise">Mise : 1 €</p>
+          </div>
+          <dl class="bulletin-champs">
+            <div>
+              <dt>Le défi</dt>
+              <dd><span data-date="debutLive" data-format="Jour">Vendredi 13 novembre 2026</span>, de <span data-date="debutLive" data-format="heure">19h</span> à&nbsp;<span data-date="finLive" data-format="heure">22h</span></dd>
+            </div>
+            <div>
+              <dt>Clôture des paris</dt>
+              <dd><span data-date="clotureParis" data-format="Jour">Vendredi 13 novembre 2026</span> à&nbsp;<span data-date="clotureParis" data-format="heure00">18h00</span></dd>
+            </div>
+            <div>
+              <dt>Lot à gagner</dt>
+              <dd data-bind="paris.lot" data-exemple>…</dd>
+            </div>
+          </dl>
+          <div class="bulletin-action" id="paris-action"></div>
+        </article>
+
+        <div class="graphique">
+          <h3 class="sous-titre" id="titre-graphique">Où les gens ont parié</h3>
+          <p class="graphique-total" id="graphique-total"></p>
+          <ol class="barres" id="barres" aria-labelledby="titre-graphique"></ol>
+          <p class="graphique-legende">Nombre de parieurs par tranche de kilomètres</p>
+          <p class="graphique-commentaire" id="graphique-commentaire"></p>
+        </div>
+      </div>
+
+      <aside class="reglement" aria-labelledby="titre-reglement">
+        <h3 class="sous-titre" id="titre-reglement">Le règlement, en bref</h3>
+        <ul class="reglement-liste">
+          <li>Le gagnant est la personne dont le pronostic est le plus proche du résultat réel.</li>
+          <li>En cas d'égalité, tirage au sort en direct sur le live.</li>
+          <li>Le lot est un objet, non échangeable contre de l'argent.</li>
+          <li>Opération organisée par <span data-bind="association.nom" data-exemple>l'association</span> (autorisation de la mairie d'Amiens n° <span data-bind="paris.numeroAutorisation" data-exemple>…</span>).</li>
+        </ul>
+        <button class="bouton bouton-contour" type="button" data-ouvre="modale-reglement">Lire le règlement complet</button>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ 5. LA TOMBOLA ═══════════════ -->
+  <section class="section section-tombola" id="tombola" aria-labelledby="titre-tombola">
+    <div class="conteneur">
+      <h2 class="titre-section" id="titre-tombola">La tombola</h2>
+      <p class="intro">Tenter sa chance un vendredi 13. Qu'est-ce qui pourrait mal tourner ?</p>
+
+      <div class="tombola-grille">
+        <div class="ticket">
+          <div class="ticket-corps">
+            <p class="ticket-prix"><span id="prix-billet" data-exemple>2 €</span> <span class="ticket-unite">le billet</span></p>
+            <p class="ticket-tirage">Tirage au sort le <span data-date="debutLive" data-format="jour">vendredi 13 novembre 2026</span>, à la fin du live, en direct sur Twitch.</p>
+            <a class="bouton bouton-nuit" href="#" data-lien="tombolaHelloAsso" data-exemple target="_blank" rel="noopener">J'achète mes billets</a>
+          </div>
+          <div class="ticket-souche" aria-hidden="true"><span>N°</span><span>13</span></div>
+        </div>
+        <div class="papier">
+          <h3 class="sous-titre">Billets papier</h3>
+          <p>Pas fan du paiement en ligne ? On vend aussi des billets papier :</p>
+          <ul class="liste-puces" id="points-de-vente" data-exemple></ul>
+        </div>
+      </div>
+
+      <h3 class="sous-titre">Les lots</h3>
+      <p>Tous offerts par des commerçants d'Amiens. Merci à eux !</p>
+      <ol class="lots" id="lots"></ol>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ 6. JE DONNE ═══════════════ -->
+  <section class="section section-donner" id="donner" aria-labelledby="titre-donner">
+    <div class="conteneur">
+      <div class="donner-haut">
+        <h2 class="titre-section" id="titre-donner">Je donne</h2>
+        <p class="intro">Pas besoin de parier pour aider. Tu donnes ce que tu veux, en un clic. Le paiement est sécurisé par HelloAsso et l'argent arrive directement sur le compte de <span data-bind="association.nom" data-exemple>l'association</span> : on ne touche pas un centime.</p>
+        <a class="bouton bouton-trefle bouton-geant" href="#" data-lien="donsHelloAsso" data-exemple target="_blank" rel="noopener">Je donne sur HelloAsso</a>
+        <p class="deduction" id="deduction" hidden></p>
+      </div>
+
+      <h3 class="sous-titre">Ton don en vrai</h3>
+      <p>Quelques exemples de ce que ton don permet d'offrir aux adhérents de l'asso :</p>
+      <ul class="etiquettes" id="equivalences" data-exemple></ul>
+
+      <div class="widget-dons" id="widget-dons" hidden>
+        <h3 class="sous-titre">Ou donne directement ici</h3>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ 7. LE PROJET ET L'ASSOCIATION ═══════════════ -->
+  <section class="section section-projet" id="projet" aria-labelledby="titre-projet">
+    <div class="conteneur">
+      <h2 class="titre-section" id="titre-projet">Derrière le chaos, une vraie cause</h2>
+      <p class="intro">Le vélo, c'est pour rire. La cause, elle, est très sérieuse.</p>
+
+      <article class="asso" aria-labelledby="titre-asso">
+        <div class="asso-logo" id="asso-logo"></div>
+        <div class="asso-texte">
+          <h3 class="asso-nom" id="titre-asso" data-bind="association.nom" data-exemple>L'association</h3>
+          <div class="asso-presentation" id="asso-presentation" data-exemple></div>
+          <p class="asso-site" id="asso-site-ligne" hidden><a id="asso-site" href="#" target="_blank" rel="noopener">Découvrir l'association</a></p>
+        </div>
+        <ul class="chiffres" id="asso-chiffres" data-exemple></ul>
+      </article>
+
+      <div class="projet">
+        <h3 class="sous-titre">Notre projet : une collecte pour le <span data-date="distribution" data-format="jourCourt">samedi 21 novembre</span></h3>
+        <p class="projet-texte">En parallèle du Vélo Chaos, on organise une collecte de nourriture et de vêtements, en magasin et à l'IUT. Le <span data-date="distribution" data-format="jour">samedi 21 novembre 2026</span>, tout ce qui a été collecté, et tout ce que la cagnotte aura permis d'acheter, est distribué aux adhérents de <span data-bind="association.nom" data-exemple>l'association</span>.</p>
+        <div class="collecte">
+          <div class="collecte-bloc">
+            <h4>Où déposer tes dons</h4>
+            <ul class="liste-lieux" id="collecte-lieux" data-exemple></ul>
+          </div>
+          <div class="collecte-bloc">
+            <h4>Ce qu'on collecte</h4>
+            <ul class="liste-oui" id="collecte-oui"></ul>
+          </div>
+          <div class="collecte-bloc">
+            <h4>Ce qu'on ne peut pas prendre</h4>
+            <ul class="liste-non" id="collecte-non"></ul>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="sous-titre">Le planning</h3>
+      <ol class="frise" id="frise"></ol>
+
+      <h3 class="sous-titre">L'équipe</h3>
+      <p>Quatre étudiants en BUT GEA (Gestion des entreprises et des administrations) à l'IUT d'Amiens. Zéro expérience en cyclisme professionnel, beaucoup de motivation.</p>
+      <ul class="equipe" id="equipe"></ul>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════ 8. FAQ ═══════════════ -->
+  <section class="section section-faq" id="faq" aria-labelledby="titre-faq">
+    <div class="conteneur conteneur-etroit">
+      <h2 class="titre-section" id="titre-faq">FAQ</h2>
+      <p class="intro">Les questions qu'on nous pose le plus.</p>
+      <div class="faq">
+        <details>
+          <summary>Où va l'argent ?</summary>
+          <div class="faq-reponse"><p>En totalité à <span data-bind="association.nom" data-exemple>l'association</span>. Paris, tombola, cartes et dons passent par ses formulaires HelloAsso : l'argent arrive directement sur son compte, nous ne touchons pas un centime. Il sert à acheter des denrées et des produits d'hygiène pour la distribution du <span data-date="distribution" data-format="jour">samedi 21 novembre 2026</span> et à soutenir les actions de l'association toute l'année.</p></div>
+        </details>
+        <details>
+          <summary>Comment je sais que le résultat est vrai ?</summary>
+          <div class="faq-reponse"><p>Tout se passe en direct sur Twitch. Le compteur du vélo est filmé en permanence, du premier au dernier coup de pédale, et le chiffre final est relevé devant tout le monde à&nbsp;<span data-date="finLive" data-format="heure">22h</span>. Le replay reste disponible quelques jours sur la chaîne si tu veux vérifier.</p></div>
+        </details>
+        <details>
+          <summary>Je peux parier plusieurs fois ?</summary>
+          <div class="faq-reponse"><p>Oui ! 1 € = 1 pronostic, et tu peux en poser autant que tu veux jusqu'au <span data-date="clotureParis" data-format="jour">vendredi 13 novembre 2026</span> à&nbsp;<span data-date="clotureParis" data-format="heure00">18h00</span>. Seule exception : les membres de l'équipe ne peuvent pas parier. Ce serait un peu trop facile.</p></div>
+        </details>
+        <details>
+          <summary>Comment je récupère mon lot ?</summary>
+          <div class="faq-reponse"><p data-bind="retraitDesLots" data-exemple>…</p></div>
+        </details>
+        <details>
+          <summary>Je peux donner des vêtements ou de la nourriture ?</summary>
+          <div class="faq-reponse"><p>Oui, c'est même le cœur du projet ! Dépose-les pendant la collecte en magasin ou sur notre stand à l'IUT. Les lieux, les dates et la liste de ce qu'on collecte sont dans la partie <a href="#projet">Le projet</a>.</p></div>
+        </details>
+        <details>
+          <summary>Il faut un compte Twitch pour regarder ?</summary>
+          <div class="faq-reponse"><p>Non. Le live se regarde sans compte, depuis ton navigateur ou l'appli Twitch. Un compte gratuit sert seulement à écrire dans le chat… et donc à voter pour mon déguisement.</p></div>
+        </details>
+        <details>
+          <summary>Les paris, c'est autorisé ?</summary>
+          <div class="faq-reponse"><p>Oui. L'opération est organisée par <span data-bind="association.nom" data-exemple>l'association</span> et autorisée par la mairie d'Amiens (n° <span data-bind="paris.numeroAutorisation" data-exemple>…</span>). Le lot est un objet : personne ne gagne d'argent. Tout est détaillé dans le <button class="lien-bouton" type="button" data-ouvre="modale-reglement">règlement complet</button>.</p></div>
+        </details>
+        <details>
+          <summary>Comment vous contacter ?</summary>
+          <div class="faq-reponse"><p>Par e-mail à <a href="#" data-lien="email" data-afficher data-exemple>notre adresse</a>, ou en message privé sur <a href="#" data-lien="instagram" data-exemple target="_blank" rel="noopener">Instagram</a>. On répond vite, sauf pendant le live : on pédale.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+
+<!-- ═══════════════ 9. PIED DE PAGE ═══════════════ -->
+<footer class="pied">
+  <div class="conteneur">
+    <div class="pied-haut">
+      <div class="pied-logos">
+        <div class="pied-logo" id="logo-iut"></div>
+        <div class="pied-logo" id="logo-asso"></div>
+      </div>
+      <p class="pied-texte">Un projet solidaire de quatre étudiants en BUT GEA à l'IUT d'Amiens, au profit de <span data-bind="association.nom" data-exemple>l'association</span>.</p>
+    </div>
+    <ul class="pied-liens">
+      <li>
+        <a href="#" data-lien="instagram" data-exemple target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>
+          Instagram
+        </a>
+      </li>
+      <li>
+        <a href="#" data-lien="twitch" data-exemple target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3 L3.5 6.5 V19 H8 V21.5 H10.5 L13 19 H16.5 L20.5 15 V3 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M11 7.5 V12 M15.5 7.5 V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Twitch
+        </a>
+      </li>
+      <li>
+        <a href="#" data-lien="email" data-exemple>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 7 L12 13 L20 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Nous écrire
+        </a>
+      </li>
+    </ul>
+    <p class="pied-legal">
+      <button class="lien-bouton" type="button" data-ouvre="modale-reglement">Règlement du jeu</button>
+      <button class="lien-bouton" type="button" data-ouvre="modale-mentions">Mentions légales</button>
+    </p>
+    <p class="pied-blague">Aucun chat noir n'a été maltraité pendant ce projet.</p>
+  </div>
+</footer>
+
+
+<!-- ═══════════════ FENÊTRE : RÈGLEMENT COMPLET ═══════════════ -->
+<dialog class="modale" id="modale-reglement" aria-labelledby="titre-modale-reglement">
+  <div class="modale-boite">
+    <div class="modale-entete">
+      <h2 id="titre-modale-reglement">Règlement du jeu « Vélo Chaos »</h2>
+      <button class="modale-fermer" type="button" aria-label="Fermer le règlement">×</button>
+    </div>
+    <div class="modale-contenu">
+      <h3>1. Organisation</h3>
+      <p>Le jeu de pronostic « Vélo Chaos » est organisé par <span data-bind="association.nom" data-exemple>l'association</span>, association loi 1901 (ci-après « l'association »), avec l'aide de quatre étudiants en BUT GEA de l'IUT d'Amiens. L'opération est autorisée par la mairie d'Amiens sous le n° <span data-bind="paris.numeroAutorisation" data-exemple>…</span>. Les sommes collectées financent les actions solidaires de l'association.</p>
+      <h3>2. Participation</h3>
+      <p>Le jeu est ouvert à toute personne physique. Les participants mineurs doivent avoir l'accord d'un parent. Les membres de l'équipe organisatrice ne peuvent pas participer.</p>
+      <h3>3. Comment participer</h3>
+      <p>Chaque pronostic coûte 1 € et se prend uniquement via le formulaire HelloAsso de l'association. Un pronostic est un nombre entier de kilomètres. Chaque participant peut faire plusieurs pronostics. Les pronostics sont acceptés jusqu'au <span data-date="clotureParis" data-format="jour">vendredi 13 novembre 2026</span> à&nbsp;<span data-date="clotureParis" data-format="heure00">18h00</span>, heure de Paris.</p>
+      <h3>4. Le défi et le résultat</h3>
+      <p>Le défi a lieu le <span data-date="debutLive" data-format="jour">vendredi 13 novembre 2026</span> de <span data-date="debutLive" data-format="heure">19h</span> à&nbsp;<span data-date="finLive" data-format="heure">22h</span>, en direct sur la chaîne Twitch de l'événement. Le compteur du vélo d'appartement est filmé pendant toute la durée du défi. Le résultat officiel est la distance affichée par le compteur à la fin du défi, arrondie au kilomètre le plus proche (par exemple, 62,6 km donne 63 km). Les sabotages et les boosts déclenchés par les dons font partie du jeu et peuvent modifier la distance parcourue.</p>
+      <h3>5. Désignation du gagnant</h3>
+      <p>Le gagnant est la personne dont le pronostic est le plus proche du résultat officiel, au-dessus ou en dessous. En cas d'égalité, un tirage au sort est effectué en direct sur le live pour départager les ex æquo.</p>
+      <h3>6. Le lot</h3>
+      <p>Le lot mis en jeu est : <span data-bind="paris.lot" data-exemple>…</span>. Il s'agit d'un objet : il ne peut être ni échangé, ni remboursé, ni converti en argent. Le gagnant est contacté par e-mail grâce aux coordonnées laissées sur HelloAsso. Un lot non réclamé dans les 30 jours reste acquis à l'association.</p>
+      <h3>7. La tombola</h3>
+      <p>La tombola est une opération distincte. Les billets sont vendus en ligne sur HelloAsso et en version papier. Le tirage au sort a lieu en direct à la fin du live. La liste des lots et les numéros gagnants sont publiés sur ce site. Les lots ne peuvent pas être échangés contre de l'argent.</p>
+      <h3>8. Données personnelles</h3>
+      <p>Les données saisies sur HelloAsso servent uniquement à gérer la participation et à contacter les gagnants. Elles ne sont ni vendues, ni transmises à des tiers. Pour toute question ou pour exercer tes droits : <a href="#" data-lien="email" data-afficher data-exemple>notre adresse</a>.</p>
+      <h3>9. Acceptation du règlement</h3>
+      <p>Participer au jeu implique l'acceptation de ce règlement. L'association peut modifier, reporter ou annuler l'opération en cas de force majeure ; les participants en seraient informés sur ce site.</p>
+    </div>
+  </div>
+</dialog>
+
+
+<!-- ═══════════════ FENÊTRE : MENTIONS LÉGALES ═══════════════ -->
+<dialog class="modale" id="modale-mentions" aria-labelledby="titre-modale-mentions">
+  <div class="modale-boite">
+    <div class="modale-entete">
+      <h2 id="titre-modale-mentions">Mentions légales</h2>
+      <button class="modale-fermer" type="button" aria-label="Fermer les mentions légales">×</button>
+    </div>
+    <div class="modale-contenu">
+      <h3>Éditeur du site</h3>
+      <p>Site réalisé dans le cadre d'un projet étudiant du BUT GEA de l'IUT d'Amiens (Université de Picardie Jules Verne), au profit de <span data-bind="association.nom" data-exemple>l'association</span>. Contact : <a href="#" data-lien="email" data-afficher data-exemple>notre adresse</a>.</p>
+      <h3>Responsable de la publication</h3>
+      <p data-bind="mentionsLegales.responsable" data-exemple>…</p>
+      <h3>Hébergement</h3>
+      <p data-bind="mentionsLegales.hebergeur">…</p>
+      <h3>Données personnelles et cookies</h3>
+      <p>Ce site ne collecte aucune donnée personnelle et ne dépose aucun cookie. Les paiements se font sur HelloAsso, qui applique sa propre politique de confidentialité. Le lecteur Twitch ne se charge que si tu appuies dessus ; Twitch peut alors déposer ses propres cookies. Il en va de même pour le formulaire HelloAsso s'il est affiché dans la page.</p>
+      <h3>Crédits</h3>
+      <p>Polices Bungee (David Jonathan Ross) et Atkinson Hyperlegible (Braille Institute), sous licence SIL Open Font License. Illustrations et textes : l'équipe Vélo Chaos.</p>
+    </div>
+  </div>
+</dialog>
+
+
+<!-- Bandeaux d'aide (visibles seulement pour vous) -->
+<div class="bandeau bandeau-brouillon" id="bandeau-brouillon" hidden>
+  <p><strong>Mode brouillon.</strong> Ce qui est entouré de pointillés bleus est un exemple à remplacer dans <code>js/config.js</code>. Passe <code>modeBrouillon</code> à <code>false</code> avant de partager le site.</p>
+  <button class="bandeau-fermer" type="button" aria-label="Masquer ce bandeau">×</button>
+</div>
+<div class="bandeau bandeau-erreur" id="erreur-config" role="alert" hidden>
+  <p><strong>Le fichier js/config.js contient une erreur.</strong> C'est presque toujours une virgule ou un guillemet oublié à l'endroit que tu viens de modifier. Sur ordinateur, la touche F12 (onglet Console) indique le numéro de la ligne.</p>
+</div>
+
+<noscript><p class="noscript">Active JavaScript pour voir la cagnotte, le compte à rebours et les paris.</p></noscript>
+
+</body>
+</html>
