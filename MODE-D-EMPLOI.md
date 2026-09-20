@@ -1,105 +1,95 @@
-# Mode d'emploi : site GEAnérosité
+# Mode d'emploi : site GEAnérosité (course solidaire)
 
-**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Compteurs, liens HelloAsso, tournoi, lots, collecte, équipe : tout est dedans, en français et commenté.
+**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Compteurs, coureurs, kilomètres, liens, lots, collecte, équipe : tout est dedans, en français et commenté.
 
-Le site est déjà en ligne : **https://likooo2.github.io/GEAn-rosit-/**
-Pour le modifier, ouvre le lien ci-dessous, clique sur le crayon ✏️, change ce que tu veux, puis **Commit changes**. C'est publié une à deux minutes plus tard, et ça marche aussi depuis un téléphone :
+Le site est en ligne : **https://likooo2.github.io/GEAn-rosit-/**
+Pour le modifier, ouvre ce lien, clique sur le crayon ✏️, change ce que tu veux, puis **Commit changes**. C'est publié une à deux minutes plus tard, et ça marche aussi depuis un téléphone :
 👉 https://github.com/Likooo2/GEAn-rosit-/edit/main/js/config.js
 
-> Si le site affiche un bandeau rouge après une modification : c'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier. Compare avec les lignes voisines.
+> Bandeau rouge après une modification ? C'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier.
 
 ---
 
-## 1. La règle du projet : ne rien inventer
+## 1. Ce que le site fait tout seul
 
-Tout ce qui n'est pas confirmé reste **vide** (`""`) dans `config.js`. Le site affiche alors tout seul « à confirmer », ou grise le bouton avec « lien bientôt disponible ». Personne n'est induit en erreur, et vous remplissez au fur et à mesure.
+- Il calcule les montants des engagements : montant par km × kilomètres du coureur, en respectant le plafond éventuel.
+- Il affiche un statut **« en attente »** tant que tu n'as pas coché `kmVerifies: true`, puis **« à verser »**.
+- Il classe les coureurs par kilomètres, additionne le total et met à jour les compteurs.
+- Il prévient les personnes qui s'engagent quand le montant devient important, et propose un plafond.
+- Il garde le récapitulatif de chaque visiteur **sur son propre appareil** : aucune donnée ne part vers nous.
 
-Le site est livré en **mode brouillon** : ce qui reste à compléter est entouré de pointillés bleus, et chaque bouton sans lien indique la ligne exacte à remplir. Quand tout est prêt, passe `modeBrouillon: true` à **`false`**.
+## 2. Ce qu'il ne peut pas faire (et comment on contourne)
+
+Un site GitHub Pages est un site « statique » : il ne peut ni recevoir d'inscriptions, ni lire automatiquement le solde HelloAsso.
+
+| Besoin | Solution mise en place |
+|---|---|
+| Inscrire les coureurs | Un formulaire externe (HelloAsso, Google Forms…) → `liens.inscriptionCoureur`. Tu recopies ensuite les coureurs dans `config.js`. |
+| Recevoir les engagements signés | Le visiteur remplit son document sur le site, l'imprime ou l'enregistre en PDF, puis l'envoie. Le bouton « Valider mes engagements » pointe vers `liens.engagement`. |
+| Cagnotte en direct | Deux possibilités : mettre `compteurs.cagnotte` à jour à la main (jauge et paliers), et/ou coller l'adresse du **widget HelloAsso** dans `liens.widgetCagnotte` : il affiche le montant réel, mis à jour automatiquement. |
+| Vérifier les kilomètres | Tu relèves la distance sur Strava, tu l'écris dans `km`, puis tu passes `kmVerifies` à `true`. |
 
 ---
 
-## 2. Avant le lancement
+## 3. Avant le lancement
 
-- [ ] **Les 4 liens HelloAsso** : `cagnotte`, `inscriptionTournoi`, `pronostic`, `tombola`. Copie l'adresse complète du formulaire (elle commence par `https://www.helloasso.com/…`). Tant qu'un lien est vide, le bouton reste grisé.
-- [ ] **Le lien du live** (Twitch ou YouTube), l'**Instagram** et l'**e-mail** de contact.
-- [ ] **La date du tournoi** : `dates.debutTournoi`, par exemple `"2026-11-20T18:00"`. Tant qu'elle est vide, le site affiche « date à confirmer ». Quand elle est définitive, passe `dateConfirmee` à `true` (sinon le site précise « date provisoire »).
-- [ ] **Le tournoi** : lieu, format, noms des joueurs et équipes choisies.
-- [ ] **Le pronostic** : montant de la participation et nature de la surprise.
-- [ ] **La tombola** : prix du billet et date du tirage. Pour chaque lot obtenu, passe `statut` de `"recherche"` à `"confirme"` et écris le nom du partenaire.
+- [ ] **Les liens** : `inscriptionCoureur`, `engagement`, `cagnotte`, `tombola`, `live`, `strava`, `instagram`, `email`. Tant qu'un lien est vide, le bouton reste grisé avec « bientôt disponible » : jamais de faux lien.
+- [ ] **La date** : `dates.debutCourse`, par exemple `"2026-11-21T10:00"`. Passe `dateConfirmee` à `true` quand elle est définitive.
+- [ ] **La course** : lieu, format, heure de départ.
+- [ ] **Les paliers** de la cagnotte : les textes sont des exemples, à valider avec A.V.A.
+- [ ] **La tombola** : prix du billet, date du tirage, statut des lots.
 - [ ] **La collecte** : lieux et dates de dépôt dans `collecte.points`.
-- [ ] **L'association** : présentation, signification du sigle et logo (avec l'accord d'A.V.A.).
-- [ ] **L'équipe** : prénoms, rôles, photos.
-- [ ] **La transparence** : `transparence.encaissement`, pour dire qui encaisse l'argent (par exemple : les paiements arrivent directement sur le compte HelloAsso d'A.V.A.).
-- [ ] **Les mentions légales** : prénom et nom de la personne responsable de la publication.
+- [ ] **L'association** : présentation, sigle, logo (avec son accord).
+- [ ] **L'équipe**, **la transparence** (`encaissement`) et **les mentions légales** (responsable de la publication).
 - [ ] Passer `modeBrouillon` à `false`.
 
 ---
 
-## 3. Pendant le projet : les compteurs
+## 4. Ajouter un coureur
 
-Partie **LES COMPTEURS** de `config.js` :
+Dans `config.js`, partie **LES COUREURS** :
 
 ```js
-compteurs: {
-  cagnotte: 0,              // ← le total récolté en €
-  objectif: 1000,
-  denreesKg: 0,             // ← kg de denrées collectées
-  vetements: 0,             // ← nombre de vêtements
-  participantsTournoi: 0,
-  participantsTombola: 0,
-  miseAJour: "",            // ← ex : "lundi 16 novembre à 18h"
-},
+coureurs: [
+  { prenom: "Julien", dossard: 1, objectifKm: 15, km: 0, kmVerifies: false, strava: "", promesseParKm: 0 },
+  { prenom: "Sarah",  dossard: 2, objectifKm: 10, km: 0, kmVerifies: false, strava: "", promesseParKm: 0 },
+],
 ```
 
-Écris les nombres **sans espace ni €** : `1250`, pas `"1 250 €"`. Les objectifs du live se débloquent tout seuls et le ballon avance sur le terrain.
+- `dossard` doit être **unique** : il sert au lien de partage. Le coureur n° 2 peut partager `…/GEAn-rosit-/?coureur=2`, qui ouvre directement la fenêtre d'engagement pour lui. C'est le meilleur moyen de faire monter les promesses.
+- `promesseParKm` est le total des engagements reçus pour ce coureur, en € par km : tu le remplis au fur et à mesure des formulaires reçus, c'est très motivant à afficher.
+- Le compteur « coureurs inscrits » et le total des kilomètres se calculent automatiquement dès qu'il y a au moins un coureur dans la liste.
+
+## 5. Pendant et après la course
+
+```js
+{ prenom: "Julien", dossard: 1, objectifKm: 15, km: 15.2, kmVerifies: true, strava: "https://www.strava.com/activities/…", promesseParKm: 3.5 },
+```
+
+1. Pendant la course, mets `km` à jour de temps en temps : le classement et les montants bougent en direct.
+2. À l'arrivée, relève la distance Strava de chaque coureur, écris-la dans `km`, colle le lien de l'activité dans `strava`.
+3. Passe `kmVerifies` à `true` : les montants passent de « en attente » à « à verser » pour toutes les personnes engagées.
+4. Recontacte les personnes engagées (via le formulaire ou les documents reçus) avec leur montant exact.
+5. Mets à jour `compteurs.cagnotte` au fur et à mesure des versements.
+
+### Tester sans attendre
+
+- `?etat=direct` : le site comme pendant la course
+- `?etat=apres` : le site comme après la course
+- `?maintenant=2026-11-21T10:30` : simule une date et une heure
+- `?coureur=2` : ouvre l'engagement pour le dossard 2
 
 ---
 
-## 4. Le tournoi, pendant le live
+## 6. Trois points à faire valider par A.V.A.
 
-Dans `tournoi.matchs`, remplis le champ `score` au fur et à mesure :
+Nous ne sommes pas juristes : faites confirmer ces points par l'association.
 
-```js
-{ phase: "Groupe A", a: 1, b: 2, score: "3-1", heure: "18h15" },
-```
+1. **La sécurité de la course.** Selon le lieu et le nombre de participants, une déclaration en mairie ou en préfecture, une assurance et un encadrement peuvent être nécessaires. Le règlement du site rappelle déjà que chacun court sous sa responsabilité et que les mineurs doivent être accompagnés.
+2. **La tombola.** Une tombola ouverte au public demande en général une **autorisation de la mairie**. Les lots doivent être des objets ou des bons, jamais de l'argent.
+3. **Les engagements.** Ce sont des promesses de don : elles ne sont pas juridiquement contraignantes, et c'est très bien ainsi. Ne promettez jamais qu'un versement sera « obligatoire », et gardez la trace des documents signés.
 
-- `a` et `b` sont les **numéros des joueurs** (leur position dans `participants`).
-- Le classement des groupes, le prochain match et le champion se calculent tout seuls.
-- Pour la phase finale, remplace les textes (`"1er du groupe A"`) par les numéros des joueurs qualifiés, par exemple `a: 3`.
-- En cas d'égalité en phase finale, ajoute les tirs au but : `tab: "4-3"`.
-
-Quand la finale a un score, le champion s'affiche en haut de la page et dans la partie tournoi.
-
----
-
-## 5. Après le tournoi
-
-```js
-pronostic: { bonsPronostics: "Camille B." },     // prénom + initiale
-tombola:   { gagnants: ["0427", "0112"] },       // dans l'ordre des lots
-```
-
-### Tester l'affichage sans attendre
-
-Ajoute ceci à la fin de l'adresse du site :
-
-- `?etat=direct` : le site comme pendant le live
-- `?etat=apres` : le site comme après le tournoi
-- `?maintenant=2026-11-20T19:30` : simule une date et une heure
-
-Ces tests ne changent rien pour les autres visiteurs.
-
----
-
-## 6. Trois points à faire valider avant d'ouvrir les participations
-
-Nous ne sommes pas juristes : faites confirmer ces points par A.V.A., qui a l'habitude.
-
-1. **Le pronostic payant.** En France, un jeu avec participation payante et lot à gagner est encadré. La solution la plus simple est souvent un pronostic **gratuit**, avec un don libre à côté. Les textes du site sont déjà prudents (« ce n'est pas un pari d'argent »), mais la forme juridique doit être validée.
-2. **La tombola.** Une tombola organisée par une association et ouverte au public demande en général une **autorisation de la mairie**. Les lots doivent être des objets ou des bons, jamais de l'argent.
-3. **Le règlement.** Celui du site est présenté comme un **projet à valider**. Faites-le relire, puis retirez la mention « à valider » dans `index.html` quand c'est fait.
-
-Pensez aussi à l'accord des personnes photographiées, et à l'accord d'A.V.A. pour son logo et sa présentation.
+Pensez aussi à l'accord des personnes photographiées, et à l'accord d'A.V.A. pour son logo.
 
 ---
 
@@ -109,12 +99,12 @@ Pensez aussi à l'accord des personnes photographiées, et à l'accord d'A.V.A. 
 |---|---|
 | Bandeau rouge « config.js contient une erreur » | Une virgule ou un guillemet manque à l'endroit modifié. Sur ordinateur, la touche **F12** (onglet *Console*) donne le numéro de la ligne. |
 | Un bouton reste grisé | Le lien correspondant est vide ou mal copié dans `liens` (il doit commencer par `https://`). |
+| Un coureur n'apparaît pas | Vérifie qu'il a bien une virgule à la fin de sa ligne et un `dossard` unique. |
 | Le lecteur du live ne s'affiche pas | Il ne fonctionne que sur le site en ligne, et seulement pour un lien Twitch. Sinon, le bouton ouvre le live dans un nouvel onglet. |
-| Une photo ne s'affiche pas | Vérifie le chemin (`img/equipe/prenom.jpg`) et le nom exact du fichier, sans espace ni accent. |
-| Ta modification n'apparaît pas | Recharge la page. GitHub met une à deux minutes à publier, et le navigateur garde parfois l'ancienne version. |
+| Ta modification n'apparaît pas | Recharge la page : GitHub met une à deux minutes à publier. |
 
 ---
 
-## 8. Remettre le site en ligne ailleurs (si besoin)
+## 8. Remettre le site en ligne ailleurs
 
 Le dossier complet fonctionne sur n'importe quel hébergeur de fichiers statiques. Sur **Netlify** : crée un compte, puis dans **Projects**, ouvre **Add new project**, choisis **Deploy manually** et dépose le dossier entier. Pense alors à remplacer les 2 adresses de partage en haut de `index.html`, ainsi que l'hébergeur dans `config.js`.

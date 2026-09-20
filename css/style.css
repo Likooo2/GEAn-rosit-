@@ -31,6 +31,8 @@
   --vert-vif: #1f9d55;
   --vert-clair: #d4f1de;
   --craie: #f4fff7;
+  --piste-1: #c2553a;       /* terre battue de la piste */
+  --piste-2: #b04b33;
   --jaune: #ffd43b;         /* pronostic */
   --jaune-clair: #fff6a8;
   --bleu: #2c55d4;          /* tombola */
@@ -145,8 +147,7 @@ a:hover { text-decoration-style: wavy; }
   transform: rotate(-1.5deg);
 }
 /* Sur fond sombre, la note passe en surlignage plein pour rester lisible */
-.panneau .a-confirmer, .prochain-match .a-confirmer, .section-tournoi .a-confirmer,
-.ticket .a-confirmer, .tier-3 .a-confirmer {
+.panneau .a-confirmer, .live-info .a-confirmer, .ticket .a-confirmer, .tier-3 .a-confirmer {
   padding: 0 .35em; border-radius: 4px; color: var(--encre); background: var(--fluo);
 }
 .a-confirmer-bloc {
@@ -281,13 +282,13 @@ body.menu-ouvert { overflow: hidden; }
 .titre-cadre { container-type: inline-size; max-width: 36rem; }
 .hero-titre { margin: 0 0 1.25rem; font-family: var(--police-titre); font-weight: 900; line-height: .86; text-transform: uppercase; }
 .hero-titre span { display: block; white-space: nowrap; }
-.hero-titre .l1 { font-size: 8.4vw; }
-.hero-titre .l2 { font-size: 13.4vw; }
-.hero-titre .l3 { font-size: 30vw; margin-top: .22em; }
+.hero-titre .l1 { font-size: 6.8vw; }
+.hero-titre .l2 { font-size: 11.7vw; margin-top: .16em; }
+.hero-titre .l3 { font-size: 21.2vw; margin-top: .02em; }
 @supports (width: 1cqi) {
-  .hero-titre .l1 { font-size: 9.9cqi; }
-  .hero-titre .l2 { font-size: 16cqi; }
-  .hero-titre .l3 { font-size: 35.6cqi; }
+  .hero-titre .l1 { font-size: 8cqi; }
+  .hero-titre .l2 { font-size: 13.8cqi; }
+  .hero-titre .l3 { font-size: 25.1cqi; }
 }
 
 .hero-phrase { max-width: 36rem; margin-bottom: 1rem; font-size: clamp(1.1rem, 3.6vw, 1.25rem); line-height: 1.5; }
@@ -383,28 +384,6 @@ body.menu-ouvert { overflow: hidden; }
 }
 .resultat-titre { margin-bottom: .35rem; font: 800 1.3rem/1 var(--police-titre); text-transform: uppercase; }
 
-/* ═════════════════ LE PROJET EN 30 SECONDES ═════════════════ */
-.fiche {
-  position: relative;
-  padding: 1.5rem 1.2rem 1.4rem 3.4rem;
-  background-color: var(--blanc);
-  background-image:
-    linear-gradient(90deg, transparent 2.5rem, var(--marge) 2.5rem, var(--marge) calc(2.5rem + 2px), transparent calc(2.5rem + 2px)),
-    repeating-linear-gradient(180deg, transparent 0 1.95rem, rgba(52, 96, 196, .16) 1.95rem calc(1.95rem + 1px));
-  border: var(--bord); border-radius: 4px; box-shadow: var(--ombre);
-}
-.fiche-titre { margin-bottom: 1.2rem; font: 900 clamp(1.9rem, 7.5vw, 3rem)/1 var(--police-titre); text-transform: uppercase; }
-.fiche-chrono { position: absolute; top: -1rem; right: .9rem; padding: .1rem .5rem; background: var(--fluo); border: 2px solid var(--encre); border-radius: 7px 9px 6px 10px; transform: rotate(5deg); }
-.fiche-liste { margin: 0; }
-.fiche-liste > div { padding: .65rem 0; border-bottom: 2px dashed rgba(22, 22, 27, .14); }
-.fiche-liste > div:last-child { border-bottom: 0; }
-.fiche-liste dt { font: 800 1.3rem/1.1 var(--police-titre); text-transform: uppercase; color: var(--stylo); }
-.fiche-liste dd { margin: .2rem 0 0; line-height: 1.5; }
-@media (min-width: 48rem) {
-  .fiche-liste > div { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1.25rem; align-items: baseline; }
-  .fiche-liste dd { margin-top: 0; }
-}
-
 /* ═════════════════ LE TABLEAU DES SCORES ═════════════════ */
 .tableau-scores {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px;
@@ -430,7 +409,7 @@ body.menu-ouvert { overflow: hidden; }
   .score-principal { grid-column: auto; }
 }
 
-/* ═════════════════ LA CAGNOTTE : LE PARCOURS VERS LE BUT ═════════════════ */
+/* ═════════════════ LA CAGNOTTE : LA PISTE VERS L'ARRIVÉE ═════════════════ */
 .jauge-grille { display: grid; gap: 2.5rem; }
 .compteur { margin: .25rem 0 0; }
 .compteur-montant { margin: 0; font: 900 clamp(3.6rem, 17vw, 6rem)/.88 var(--police-titre); }
@@ -442,42 +421,42 @@ body.menu-ouvert { overflow: hidden; }
 }
 .jauge-bilan strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
 
-.parcours { position: relative; padding-top: 3.2rem; }
-.annotation-ballon { position: absolute; top: .2rem; left: 4.4rem; margin: 0; transform: rotate(-3deg); }
-.but {
+.piste { position: relative; padding-top: 3.2rem; }
+.annotation-piste { position: absolute; top: .2rem; left: 4.4rem; margin: 0; transform: rotate(-3deg); }
+.arrivee {
   position: relative; width: 3.6rem; height: 1.8rem;
   border: 3px solid var(--encre); border-bottom: 0; border-radius: 4px 4px 0 0;
-  background-image:
-    repeating-linear-gradient(0deg, transparent 0 5px, rgba(22, 22, 27, .3) 5px 6px),
-    repeating-linear-gradient(90deg, transparent 0 5px, rgba(22, 22, 27, .3) 5px 6px);
+  background-color: #fff;
+  background-image: repeating-conic-gradient(var(--encre) 0% 25%, #ffffff 0% 50%);
+  background-size: 12px 12px;
 }
-.but-texte {
+.arrivee-texte {
   position: absolute; left: 4.4rem; top: -.2rem; white-space: nowrap;
   padding: .2rem .5rem; background: var(--fluo); border: 2.5px solid var(--encre); border-radius: 7px 9px 6px 10px;
   font: 900 1.2rem/1 var(--police-titre); text-transform: uppercase; transform: rotate(-4deg);
 }
 .paliers { list-style: none; }
 .palier { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr); column-gap: .9rem; }
-.bande {
+.couloir {
   position: relative;
-  background-image: repeating-linear-gradient(180deg, var(--vert) 0 17px, var(--vert-2) 17px 34px);
+  background-image: repeating-linear-gradient(180deg, var(--piste-1) 0 22px, var(--piste-2) 22px 44px);
   border-left: 3px solid var(--encre); border-right: 3px solid var(--encre);
-  box-shadow: inset 3px 0 0 rgba(244, 255, 247, .55), inset -3px 0 0 rgba(244, 255, 247, .55);
+  box-shadow: inset 4px 0 0 rgba(255, 255, 255, .8), inset -4px 0 0 rgba(255, 255, 255, .8);
 }
-.palier:last-child .bande { border-bottom: 3px solid var(--encre); }
-.bande-ligne { position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; background: rgba(244, 255, 247, .65); }
-.est-debloque .bande-ligne { background: var(--fluo); box-shadow: 0 0 8px rgba(255, 240, 74, .8); }
-.bande-trace {
+.palier:last-child .couloir { border-bottom: 3px solid var(--encre); }
+.couloir-ligne { position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; background: rgba(255, 255, 255, .85); }
+.est-debloque .couloir-ligne { background: var(--fluo); box-shadow: 0 0 8px rgba(255, 240, 74, .8); }
+.couloir-trace {
   position: absolute; left: 50%; bottom: 0; width: 5px; margin-left: -2.5px;
   height: calc(var(--fill) * 100%); transform-origin: bottom;
   background-image: repeating-linear-gradient(180deg, var(--fluo) 0 9px, transparent 9px 15px);
 }
-.ballon {
+.coureur-jauge {
   position: absolute; left: 50%; bottom: calc(var(--fill) * 100%); z-index: 2;
   width: 2.4rem; height: 2.4rem; transform: translate(-50%, 50%);
   filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, .3));
 }
-.coup-envoi { margin: .6rem 0 0; font-size: .92rem; font-weight: 700; color: var(--encre-2); }
+.depart-piste { margin: .6rem 0 0; font-size: .92rem; font-weight: 700; color: var(--encre-2); }
 
 .palier-carte {
   margin-block: .45rem; padding: .8rem .95rem .9rem;
@@ -519,14 +498,14 @@ body.menu-ouvert { overflow: hidden; }
 
 /* L'animation : le ballon remonte le terrain (une seule fois, à l'arrivée sur la section) */
 @media (prefers-reduced-motion: no-preference) {
-  .js .paliers .bande-trace { transform: scaleY(0); transition: transform .3s linear calc(var(--ordre) * .3s); }
-  .js .paliers.revele .bande-trace { transform: scaleY(1); }
-  .js .paliers .ballon { opacity: 0; }
-  .js .paliers.revele .ballon { animation: ballon-arrive .45s cubic-bezier(.2, 1.5, .4, 1) both; animation-delay: calc(var(--ordre) * .3s); }
+  .js .paliers .couloir-trace { transform: scaleY(0); transition: transform .3s linear calc(var(--ordre) * .3s); }
+  .js .paliers.revele .couloir-trace { transform: scaleY(1); }
+  .js .paliers .coureur-jauge { opacity: 0; }
+  .js .paliers.revele .coureur-jauge { animation: ballon-arrive .45s cubic-bezier(.2, 1.5, .4, 1) both; animation-delay: calc(var(--ordre) * .3s); }
   .js .paliers .est-debloque .tampon { opacity: 0; }
   .js .paliers.revele .est-debloque .tampon { animation: tampon .45s cubic-bezier(.2, 1.5, .4, 1) both; animation-delay: calc(var(--ordre) * .3s + .15s); }
-  .js .paliers .est-debloque .bande-ligne { background: rgba(244, 255, 247, .65); box-shadow: none; transition: background .2s, box-shadow .2s; transition-delay: calc(var(--ordre) * .3s + .1s); }
-  .js .paliers.revele .est-debloque .bande-ligne { background: var(--fluo); box-shadow: 0 0 8px rgba(255, 240, 74, .8); }
+  .js .paliers .est-debloque .couloir-ligne { background: rgba(255, 255, 255, .85); box-shadow: none; transition: background .2s, box-shadow .2s; transition-delay: calc(var(--ordre) * .3s + .1s); }
+  .js .paliers.revele .est-debloque .couloir-ligne { background: var(--fluo); box-shadow: 0 0 8px rgba(255, 240, 74, .8); }
 }
 @keyframes ballon-arrive {
   0% { opacity: 0; transform: translate(-50%, 180%) rotate(-140deg) scale(.7); }
@@ -611,140 +590,6 @@ body.menu-ouvert { overflow: hidden; }
   .cartons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; }
   .collecte-bas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; }
 }
-
-/* ═════════════════ LE TOURNOI (sur le terrain) ═════════════════ */
-.section-tournoi {
-  position: relative; overflow: hidden; color: var(--craie);
-  background-image: repeating-linear-gradient(90deg, var(--vert) 0 4.5rem, var(--vert-2) 4.5rem 9rem);
-  border-block: 4px solid var(--encre);
-}
-.section-tournoi::before { /* rond central */
-  content: ""; position: absolute; top: -10rem; left: 50%; width: 20rem; height: 20rem; margin-left: -10rem;
-  border: 3px solid rgba(244, 255, 247, .3); border-radius: 50%; pointer-events: none;
-}
-.section-tournoi .conteneur { position: relative; }
-.section-tournoi .intro { color: rgba(244, 255, 247, .88); }
-.section-tournoi .petit { color: rgba(244, 255, 247, .75); }
-.section-tournoi .sous-titre { color: var(--craie); }
-.section-tournoi .bouton-vert { --fond: var(--craie); --texte: var(--vert); }
-.section-tournoi .destination { color: rgba(244, 255, 247, .85); }
-.section-tournoi .destination strong { color: #fff; }
-
-.infos-tournoi { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.75rem; }
-.infos-tournoi li {
-  display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .8rem;
-  border: 2px solid rgba(244, 255, 247, .65); border-radius: 999px; font-size: .95rem; font-weight: 700;
-}
-.infos-tournoi .a-confirmer { color: var(--encre); }
-
-.tournoi-haut { display: grid; gap: 1.5rem; margin-bottom: 1rem; }
-.prochain-match {
-  padding: 1.1rem 1rem 1.2rem; color: #fff;
-  background-color: #000; background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1.4px); background-size: 6px 6px;
-  border: 4px solid var(--encre); border-radius: 14px; box-shadow: 6px 6px 0 rgba(0, 0, 0, .35);
-}
-.pm-haut { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: 1rem; }
-.pm-etiquette { font: 800 1.05rem/1 var(--police-titre); text-transform: uppercase; letter-spacing: .05em; color: var(--led); }
-.pm-phase { padding: .2rem .5rem; border: 2px solid rgba(255, 255, 255, .4); border-radius: 999px; font-size: .82rem; font-weight: 700; }
-.pm-affiche { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: .5rem; text-align: center; }
-.pm-nom { font: 900 clamp(1.3rem, 5.5vw, 1.9rem)/1 var(--police-titre); text-transform: uppercase; color: var(--led); }
-.pm-equipe { font-size: .85rem; color: rgba(255, 255, 255, .75); }
-.pm-vs { display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 50%; background: var(--rose); color: var(--encre); font: 900 1.2rem/1 var(--police-titre); transform: rotate(-8deg); }
-.pm-heure { margin: 1rem 0 0; text-align: center; font-weight: 700; color: rgba(255, 255, 255, .9); }
-.pm-fini { margin: .25rem 0 0; text-align: center; color: rgba(255, 255, 255, .85); }
-
-.live-ecran {
-  position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; overflow: hidden;
-  background: #0b0b0f; border: 4px solid var(--encre); border-radius: 12px;
-}
-.live-ecran.a-info { aspect-ratio: auto; min-height: 12rem; }
-.live-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.live-info { padding: 1.4rem 1.1rem; text-align: center; max-width: 30rem; color: #fff; }
-.live-info-titre { margin-bottom: .5rem; font: 800 1.15rem/1.15 var(--police-titre); text-transform: uppercase; }
-.live-info p { font-size: .95rem; color: rgba(255, 255, 255, .85); }
-.live-lancer { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: .9rem; width: 100%; padding: 1rem; background: none; border: 0; color: #fff; cursor: pointer; }
-.live-play { position: relative; width: 4.2rem; height: 4.2rem; border-radius: 50%; background: var(--rouge); border: 3px solid #fff; transition: transform .15s ease; }
-.live-play::after { content: ""; position: absolute; left: 54%; top: 50%; transform: translate(-50%, -50%); border-style: solid; border-width: .75rem 0 .75rem 1.2rem; border-color: transparent transparent transparent #fff; }
-.live-lancer:hover .live-play { transform: scale(1.07); }
-.live-lancer-texte { max-width: 20rem; font: 800 1.05rem/1.2 var(--police-titre); text-transform: uppercase; }
-
-.joueurs { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem .8rem; }
-.joueur { position: relative; padding: .7rem .7rem .8rem; color: var(--encre); background: var(--blanc); border: 3px solid var(--encre); border-radius: 10px; box-shadow: 4px 4px 0 rgba(0, 0, 0, .35); }
-.joueur-num { position: absolute; top: -.75rem; right: -.45rem; display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%; background: var(--fluo); border: 2.5px solid var(--encre); font: 900 1.05rem/1 var(--police-titre); }
-.joueur-maillot { display: block; width: 100%; height: auto; margin-bottom: .5rem; }
-.joueur-nom { font: 900 1.2rem/1.05 var(--police-titre); text-transform: uppercase; }
-.joueur-equipe { margin: .2rem 0 0; font-size: .88rem; color: var(--encre-2); }
-.est-inconnu .joueur-nom { color: var(--encre-2); }
-@media (min-width: 46rem) { .joueurs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; } }
-
-.groupes { display: grid; gap: 1.1rem; }
-.groupe { color: var(--encre); background: var(--blanc); border: 3px solid var(--encre); border-radius: 10px; overflow: hidden; box-shadow: 4px 4px 0 rgba(0, 0, 0, .35); }
-.groupe-titre { padding: .5rem .85rem .45rem; background: var(--fluo); border-bottom: 3px solid var(--encre); font: 900 1.35rem/1 var(--police-titre); text-transform: uppercase; }
-.groupe table { width: 100%; border-collapse: collapse; font-size: .95rem; }
-.groupe th, .groupe td { padding: .5rem .45rem; text-align: center; }
-.groupe th:nth-child(2), .groupe td:nth-child(2) { text-align: left; }
-.groupe thead th { font-size: .78rem; font-weight: 700; color: var(--encre-2); border-bottom: 2px solid var(--encre); }
-.groupe tbody tr + tr td { border-top: 1px dashed rgba(22, 22, 27, .2); }
-.groupe td:first-child { font: 900 1.1rem/1 var(--police-titre); }
-.groupe .pts { font-weight: 700; }
-@media (min-width: 52rem) { .groupes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; } }
-
-.tableau-final { display: grid; gap: 1.25rem; }
-.tour-titre { margin-bottom: .6rem; font: 800 1.15rem/1 var(--police-titre); text-transform: uppercase; color: var(--fluo); }
-.tour-matchs { display: grid; gap: .85rem; }
-.match-carte { color: var(--encre); background: var(--blanc); border: 3px solid var(--encre); border-radius: 8px; overflow: hidden; box-shadow: 3px 3px 0 rgba(0, 0, 0, .35); }
-.match-ligne { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .5rem .7rem; font-weight: 700; }
-.match-ligne + .match-ligne { border-top: 2px dashed rgba(22, 22, 27, .2); }
-.match-ligne.gagne { background: var(--fluo); }
-.match-score { font: 900 1.2rem/1 var(--police-titre); }
-.match-info { padding: .35rem .7rem; background: #f1f3f9; border-top: 2px solid var(--encre); font-size: .82rem; color: var(--encre-2); }
-.match-bonus { border-style: dashed; background: rgba(255, 255, 255, .92); }
-.match-bonus .match-ligne { justify-content: flex-start; }
-.champion {
-  display: flex; align-items: center; gap: .6rem; margin-bottom: 1.1rem; padding: .7rem 1rem;
-  background: var(--fluo); color: var(--encre); border: 3px solid var(--encre); border-radius: var(--coins); box-shadow: 4px 4px 0 var(--encre);
-  font: 900 1.4rem/1 var(--police-titre); text-transform: uppercase;
-}
-@media (min-width: 52rem) {
-  .tableau-final { grid-template-columns: repeat(var(--tours, 2), minmax(0, 1fr)); align-items: start; gap: 1.75rem; }
-}
-
-.tous-matchs { margin-top: 2rem; }
-.tous-matchs summary { display: inline-flex; align-items: center; gap: .5rem; padding: .55rem .9rem; border: 2px solid rgba(244, 255, 247, .7); border-radius: 999px; font-weight: 700; cursor: pointer; }
-.tous-matchs summary::-webkit-details-marker { display: none; }
-.liste-matchs { margin-top: 1.25rem; display: grid; gap: 1.25rem; }
-.phase-bloc h4 { margin-bottom: .5rem; font: 800 1.1rem/1 var(--police-titre); text-transform: uppercase; color: var(--fluo); }
-.phase-liste { list-style: none; display: grid; gap: .4rem; }
-.phase-liste li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; padding: .5rem .75rem; background: rgba(0, 0, 0, .22); border-radius: 8px; }
-.phase-liste .m-score { font: 900 1.1rem/1 var(--police-titre); color: var(--led); }
-.tournoi-cta { margin-top: 2rem; }
-@media (min-width: 60rem) { .tournoi-haut { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: start; } }
-
-/* ═════════════════ LE PRONOSTIC ═════════════════ */
-.pronostic-grille { display: grid; gap: 2.5rem; }
-.etapes { list-style: none; counter-reset: etape; display: grid; gap: 1rem; margin-bottom: 1.75rem; }
-.etapes li { position: relative; counter-increment: etape; min-height: 2.4rem; padding-left: 3.2rem; line-height: 1.5; }
-.etapes li::before {
-  content: counter(etape); position: absolute; left: 0; top: -.2rem;
-  display: grid; place-items: center; width: 2.4rem; height: 2.4rem;
-  background: var(--jaune); border: 2.5px solid var(--encre); border-radius: 50% 48% 52% 50%;
-  font: 900 1.25rem/1 var(--police-titre); transform: rotate(-4deg);
-}
-.encadre { padding: 1.1rem 1.15rem; background: var(--blanc); border: var(--bord); border-radius: var(--coins); box-shadow: 4px 4px 0 var(--jaune); }
-.encadre-titre { margin-bottom: .5rem; font: 800 1.35rem/1.1 var(--police-titre); text-transform: uppercase; }
-.encadre p { margin: 0; }
-
-.coupon { position: relative; padding: 1.4rem 1.2rem 1.3rem; background: var(--blanc); border: 3px dashed var(--encre); border-radius: 10px; transform: rotate(1deg); }
-.coupon::before { content: "✂"; position: absolute; top: -.95rem; left: 1.1rem; padding: 0 .35rem; background: var(--papier); font-size: 1.3rem; }
-.coupon-titre { display: inline-block; margin-bottom: 1rem; padding: .2rem .55rem; background: var(--jaune); border: 2.5px solid var(--encre); border-radius: 7px 10px 6px 11px; font: 900 1.5rem/1 var(--police-titre); text-transform: uppercase; transform: rotate(-2deg); }
-.coupon-champs { margin: 0 0 1.25rem; }
-.coupon-champs > div { padding: .6rem 0; border-bottom: 2px dotted rgba(22, 22, 27, .28); }
-.coupon-champs dt { font-size: .85rem; font-weight: 700; color: var(--encre-2); }
-.coupon-champs dd { margin: .15rem 0 0; font-size: 1.05rem; line-height: 1.4; }
-.coupon-ecrire { font: 700 1.35rem/1.1 var(--police-main); color: var(--stylo); }
-.coupon-action { margin-bottom: 1rem; }
-.pronostic-clos { margin: 0; font-weight: 700; }
-@media (min-width: 60rem) { .pronostic-grille { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 3.5rem; align-items: start; } }
 
 /* ═════════════════ LA TOMBOLA ═════════════════ */
 .tombola-grille { display: grid; gap: 1.75rem; align-items: center; margin-bottom: 1rem; }
@@ -912,3 +757,150 @@ body.modale-ouverte { overflow: hidden; }
   .point-direct { animation: clignote 1.3s ease-in-out infinite; }
 }
 @keyframes clignote { 50% { opacity: .3; } }
+
+/* ═════════════════ COMMENT ÇA MARCHE (la chaîne) ═════════════════ */
+.chaine { list-style: none; display: grid; gap: 0; max-width: 46rem; }
+.chaine li { position: relative; display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: .9rem; padding-bottom: 1.5rem; }
+.chaine li::before { /* le fil entre les étapes */
+  content: ""; position: absolute; left: 1.45rem; top: 3rem; bottom: .2rem; width: 3px;
+  background: repeating-linear-gradient(180deg, var(--encre) 0 6px, transparent 6px 12px);
+}
+.chaine li:last-child { padding-bottom: 0; }
+.chaine li:last-child::before { display: none; }
+.chaine-num {
+  display: grid; place-items: center; width: 3rem; height: 3rem;
+  background: var(--fluo); border: 3px solid var(--encre); border-radius: 50% 48% 52% 50%;
+  font: 900 1.35rem/1 var(--police-titre); transform: rotate(-4deg);
+}
+.chaine p { margin: .35rem 0 0; line-height: 1.5; }
+.chaine-note { max-width: 42rem; margin-top: 1.75rem; padding: .85rem 1rem; background: var(--blanc); border: 2.5px solid var(--encre); border-radius: var(--coins); box-shadow: 3px 3px 0 var(--encre); font-weight: 700; }
+.todo-deux { gap: 1.75rem; }
+@media (min-width: 52rem) { .todo-deux { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ═════════════════ DEVENIR COUREUR ═════════════════ */
+.coureur-grille { display: grid; gap: 2.5rem; }
+.encadre { padding: 1.2rem 1.15rem; background: var(--blanc); border: var(--bord); border-radius: var(--coins); box-shadow: 4px 4px 0 var(--fluo); }
+.encadre-titre { margin-bottom: .6rem; font: 800 1.35rem/1.1 var(--police-titre); text-transform: uppercase; }
+.encadre p:last-child { margin-bottom: 0; }
+.encadre-strava { box-shadow: 4px 4px 0 #fc5200; }
+.infos-course { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.75rem; }
+.infos-course li { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .8rem; background: var(--blanc); border: 2.5px solid var(--encre); border-radius: 999px; font-size: .95rem; font-weight: 700; }
+@media (min-width: 60rem) { .coureur-grille { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 3rem; align-items: start; } }
+
+/* ═════════════════ LES COUREURS ═════════════════ */
+.recherche { max-width: 26rem; margin-bottom: 1.5rem; }
+.recherche-label { display: block; margin-bottom: .35rem; font-weight: 700; }
+.recherche-champ {
+  width: 100%; min-height: 3rem; padding: .55rem .8rem; font: inherit; color: var(--encre);
+  background: var(--blanc); border: 3px solid var(--encre); border-radius: 10px 13px 9px 14px;
+}
+.recherche-resultat { margin: .5rem 0 0; font-size: .92rem; color: var(--encre-2); }
+.coureurs { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1rem; }
+.coureur-carte { position: relative; display: flex; flex-direction: column; gap: .55rem; padding: 1rem .9rem 1.1rem; background: var(--blanc); border: 3px solid var(--encre); border-radius: 12px 15px 11px 16px; box-shadow: 4px 4px 0 var(--encre); }
+.coureur-dossard { position: absolute; top: -.8rem; right: -.5rem; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--fluo); border: 3px solid var(--encre); font: 900 1.05rem/1 var(--police-titre); }
+.coureur-haut { display: flex; align-items: center; gap: .6rem; }
+.coureur-silhouette { flex: none; width: 2.6rem; height: 2.6rem; color: var(--encre); }
+.coureur-prenom { font: 900 1.4rem/1 var(--police-titre); text-transform: uppercase; }
+.coureur-detail { margin: 0; font-size: .92rem; color: var(--encre-2); }
+.coureur-km { display: flex; align-items: baseline; gap: .35rem; margin: 0; }
+.coureur-km strong { font: 900 1.9rem/1 var(--police-titre); }
+.coureur-barre { height: .55rem; border: 2px solid var(--encre); border-radius: 999px; overflow: hidden; background: var(--blanc); }
+.coureur-barre span { display: block; height: 100%; width: calc(var(--p) * 100%); background: var(--vert-vif); }
+.coureur-promesses { margin: 0; font-size: .92rem; font-weight: 700; }
+.coureur-promesses strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
+.coureur-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: auto; padding-top: .35rem; }
+.coureur-actions .bouton { flex: 1 1 auto; min-height: 2.8rem; padding: .5rem .8rem .45rem; font-size: 1rem; }
+.lien-strava { display: inline-flex; align-items: center; min-height: 2.8rem; padding: .4rem .7rem; border: 2px solid #fc5200; border-radius: 999px; color: #b23c00; font-size: .88rem; font-weight: 700; text-decoration: none; }
+.coureur-engage { border-color: var(--rose); box-shadow: 4px 4px 0 var(--rose); }
+.badge-engage { display: inline-block; padding: .2rem .5rem .16rem; background: var(--rose); border: 2px solid var(--encre); border-radius: 6px; font: 800 .8rem/1 var(--police-titre); text-transform: uppercase; }
+.vide { padding: 1.4rem 1.2rem; background: var(--blanc); border: 3px dashed var(--encre); border-radius: var(--coins); }
+.vide p:last-child { margin-bottom: 0; }
+
+/* ═════════════════ FORMULAIRES (engagement, document) ═════════════════ */
+.champ { margin-bottom: 1.1rem; padding: 0; border: 0; }
+fieldset.champ { border: 0; }
+.champ legend, .champ-label { display: block; margin-bottom: .4rem; padding: 0; font-weight: 700; }
+.champ-saisie { width: 100%; max-width: 14rem; min-height: 3rem; padding: .5rem .7rem; font: inherit; color: var(--encre); background: var(--blanc); border: 3px solid var(--encre); border-radius: 10px 13px 9px 14px; }
+.aide { margin: .45rem 0 0; font-size: .9rem; color: var(--encre-2); }
+.montants { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .8rem; }
+.montant-choix { min-height: 2.9rem; padding: .45rem .9rem .4rem; background: var(--blanc); border: 3px solid var(--encre); border-radius: 999px; font: 800 1.1rem/1 var(--police-titre); cursor: pointer; }
+.montant-choix[aria-pressed="true"] { background: var(--rose); box-shadow: 3px 3px 0 var(--encre); }
+.estimation { margin: 0 0 .75rem; padding: .8rem .9rem; background: var(--fluo); border: 2.5px solid var(--encre); border-radius: var(--coins); font-weight: 700; }
+.estimation strong { font: 900 1.6rem/1 var(--police-titre); }
+.alerte { margin: 0 0 1rem; padding: .8rem .9rem; background: #ffe2e8; border: 2.5px solid var(--rouge); border-radius: var(--coins); font-weight: 700; color: #7a1418; }
+.modale-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; margin-top: 1.25rem; }
+.champs-doc { display: grid; gap: 0 1rem; }
+.champs-doc .champ-saisie { max-width: none; }
+@media (min-width: 34rem) { .champs-doc { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.apercu-doc { padding: 1rem 1.1rem; background: var(--blanc); border: 2.5px dashed var(--encre); border-radius: 8px; font-size: .95rem; }
+.apercu-doc table { width: 100%; border-collapse: collapse; margin: .6rem 0; }
+.apercu-doc th, .apercu-doc td { padding: .4rem .3rem; text-align: left; border-bottom: 1px dashed rgba(22, 22, 27, .25); }
+.apercu-doc th { font-size: .82rem; color: var(--encre-2); }
+
+/* ═════════════════ MES ENGAGEMENTS ═════════════════ */
+.panier { display: grid; gap: 1rem; }
+.panier-liste { list-style: none; display: grid; gap: .9rem; }
+.engagement-ligne { display: grid; gap: .5rem; padding: 1rem 1.05rem; background: var(--blanc); border: 3px solid var(--encre); border-radius: var(--coins); box-shadow: 4px 4px 0 var(--encre); }
+.engagement-haut { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem; }
+.engagement-nom { font: 900 1.35rem/1 var(--police-titre); text-transform: uppercase; }
+.engagement-parkm { font-weight: 700; }
+.engagement-detail { margin: 0; font-size: .95rem; color: var(--encre-2); }
+.engagement-montant { display: flex; align-items: baseline; gap: .4rem; margin: 0; }
+.engagement-montant strong { font: 900 1.8rem/1 var(--police-titre); }
+.statut { display: inline-block; padding: .2rem .5rem .16rem; border: 2px solid currentColor; border-radius: 6px; font: 800 .8rem/1 var(--police-titre); text-transform: uppercase; }
+.statut-attente { color: var(--encre-2); }
+.statut-verifie { color: var(--vert-vif); }
+.engagement-actions { display: flex; flex-wrap: wrap; gap: .5rem .9rem; }
+.panier-total { display: grid; gap: .35rem; padding: 1.1rem 1.15rem; background: var(--fluo); border: var(--bord); border-radius: var(--coins); box-shadow: var(--ombre); }
+.panier-total-montant { margin: 0; font: 900 clamp(2.4rem, 11vw, 3.4rem)/1 var(--police-titre); }
+.panier-total p { margin: 0; }
+.panier-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.engager-bas { display: grid; gap: 1.25rem; margin-top: 2rem; }
+@media (min-width: 52rem) { .engager-bas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ═════════════════ LA COURSE EN DIRECT ═════════════════ */
+.direct-grille { display: grid; gap: 1.75rem; }
+.live-ecran { position: relative; display: grid; place-items: center; aspect-ratio: 16 / 9; overflow: hidden; background: #0b0b0f; border: 4px solid var(--encre); border-radius: 12px; }
+.live-ecran.a-info { aspect-ratio: auto; min-height: 12rem; }
+.live-iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.live-info { padding: 1.4rem 1.1rem; text-align: center; max-width: 30rem; color: #fff; }
+.live-info-titre { margin-bottom: .5rem; font: 800 1.15rem/1.15 var(--police-titre); text-transform: uppercase; }
+.live-info p { font-size: .95rem; color: rgba(255, 255, 255, .85); }
+.live-lancer { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: .9rem; width: 100%; padding: 1rem; background: none; border: 0; color: #fff; cursor: pointer; }
+.live-play { position: relative; width: 4.2rem; height: 4.2rem; border-radius: 50%; background: var(--rouge); border: 3px solid #fff; transition: transform .15s ease; }
+.live-play::after { content: ""; position: absolute; left: 54%; top: 50%; transform: translate(-50%, -50%); border-style: solid; border-width: .75rem 0 .75rem 1.2rem; border-color: transparent transparent transparent #fff; }
+.live-lancer:hover .live-play { transform: scale(1.07); }
+.live-lancer-texte { max-width: 20rem; font: 800 1.05rem/1.2 var(--police-titre); text-transform: uppercase; }
+.classement-liste { list-style: none; display: grid; gap: .5rem; }
+.classement-liste li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; align-items: center; gap: .6rem; padding: .55rem .7rem; background: var(--blanc); border: 2.5px solid var(--encre); border-radius: 10px; }
+.classement-rang { font: 900 1.15rem/1 var(--police-titre); }
+.classement-km { font: 900 1.2rem/1 var(--police-titre); }
+.classement-total { margin: 1rem 0 0; padding: .85rem 1rem; background: var(--blanc); border: 2.5px solid var(--encre); border-radius: var(--coins); font-weight: 700; }
+.classement-total strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
+@media (min-width: 60rem) { .direct-grille { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); align-items: start; } }
+
+/* ═════════════════ CAGNOTTE : compléments ═════════════════ */
+.paliers-note { margin-top: 1.5rem; font: 700 1.25rem/1.2 var(--police-main); color: var(--stylo); }
+.widget-cagnotte { margin-top: 2rem; }
+.widget-cagnotte iframe { display: block; width: 100%; height: 42rem; border: 3px solid var(--encre); border-radius: 12px; background: var(--blanc); }
+.carton-clair { background-color: var(--carton-clair); }
+
+/* ═════════════════ Impression du document d'engagement ═════════════════ */
+.document-imprimable { padding: 1.5rem; }
+.doc-titre { margin-bottom: .3rem; font: 900 1.8rem/1 var(--police-titre); text-transform: uppercase; }
+.doc-soustitre { margin-bottom: 1.2rem; color: var(--encre-2); }
+.doc-bloc { margin-bottom: 1.2rem; }
+.doc-bloc h3 { margin-bottom: .4rem; font: 800 1.1rem/1 var(--police-titre); text-transform: uppercase; }
+.doc-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.doc-table th, .doc-table td { padding: .45rem .4rem; text-align: left; border-bottom: 1px solid rgba(22, 22, 27, .3); }
+.doc-total { font-weight: 700; }
+.doc-signature { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.doc-case { min-height: 6rem; padding: .5rem .6rem; border: 2px solid var(--encre); border-radius: 6px; }
+.doc-case span { font-size: .85rem; color: var(--encre-2); }
+@media print {
+  body { background: #fff; }
+  body > *:not(.document-imprimable) { display: none !important; }
+  .document-imprimable { display: block !important; padding: 0; }
+  .document-imprimable[hidden] { display: block !important; }
+  a[href]::after { content: ""; }
+}

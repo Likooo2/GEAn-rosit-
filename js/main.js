@@ -3,10 +3,11 @@
    Pas besoin de toucher à ce fichier : tout se règle dans js/config.js.
 
    Astuces pour tester l'affichage sans rien modifier :
-     index.html?etat=avant    → avant le tournoi
-     index.html?etat=direct   → « en direct »
-     index.html?etat=apres    → après le tournoi
-     index.html?maintenant=2026-11-20T19:30  → simule une date et une heure
+     index.html?etat=avant    → avant la course
+     index.html?etat=direct   → pendant la course
+     index.html?etat=apres    → après la course
+     index.html?maintenant=2026-11-21T10:30  → simule une date et une heure
+     index.html?coureur=3     → ouvre directement l'engagement pour le dossard 3
    ════════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -14,9 +15,7 @@
   const $ = (sel, racine = document) => racine.querySelector(sel);
   const $$ = (sel, racine = document) => Array.from(racine.querySelectorAll(sel));
   const html = document.documentElement;
-  const mouvementReduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Le menu et les fenêtres marchent même si config.js a un problème
   initMenu();
   initModales();
   initBandeaux();
@@ -31,9 +30,11 @@
   const C = CONFIG;
   const L = C.liens || {};
   const K = C.compteurs || {};
+  const E = C.engagement || {};
   const TZ = "Europe/Paris";
   const params = new URLSearchParams(window.location.search);
   const brouillon = !!C.modeBrouillon;
+  const CLE_STOCKAGE = "geanerosite-engagements";
 
 
   /* ───────────────────── Petits outils ───────────────────── */
@@ -52,21 +53,21 @@
   const texte = (v) => String(v ?? "").trim();
 
   const formatNombre = new Intl.NumberFormat("fr-FR");
+  const formatDecimal = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 1 });
   const formatEuros0 = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", minimumFractionDigits: 0, maximumFractionDigits: 0 });
   const formatEuros2 = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const sansEspaceFine = (s) => s.replace(/[\u202F\u2009]/g, "\u00A0"); // nos polices n'ont pas l'espace fine
+  const sansEspaceFine = (s) => s.replace(/[\u202F\u2009]/g, "\u00A0");
   function euros(v) {
     const n = Math.round((Number(v) || 0) * 100) / 100;
     return sansEspaceFine(Number.isInteger(n) ? formatEuros0.format(n) : formatEuros2.format(n));
   }
   const entier = (v) => sansEspaceFine(formatNombre.format(Math.round(Number(v) || 0)));
+  const km = (v) => sansEspaceFine(formatDecimal.format(Math.max(0, Number(v) || 0)));
 
-  // « à confirmer » : une note manuscrite, visible par tout le monde
   function aConfirmer(mot) {
     return `<span class="a-confirmer"${brouillon ? " data-exemple" : ""}>${esc(mot || "à confirmer")}</span>`;
   }
 
-  // Dates : "2026-11-20T18:00" → objet Date (heure de Paris)
   function lireDate(v) {
     if (!v) return null;
     let s = texte(v);
@@ -77,11 +78,10 @@
     return isNaN(d.getTime()) ? null : d;
   }
   const dates = C.dates || {};
-  const debut = lireDate(dates.debutTournoi);
-  const fin = lireDate(dates.finTournoi) || (debut ? new Date(debut.getTime() + 4 * 3600 * 1000) : null);
+  const debut = lireDate(dates.debutCourse);
+  const fin = lireDate(dates.finCourse) || (debut ? new Date(debut.getTime() + 3 * 3600 * 1000) : null);
   const dateConfirmee = !!dates.dateConfirmee;
 
-  // Horloge (simulable avec ?maintenant=2026-11-20T19:30)
   let decalage = 0;
   const simulation = lireDate(params.get("maintenant"));
   if (simulation) decalage = simulation.getTime() - Date.now();
@@ -109,7 +109,6 @@
     }
   }
 
-  // Avant / pendant / après le tournoi
   function etatForce() {
     const v = texte(params.get("etat") || C.forcerEtat).toLowerCase().replace("è", "e");
     return ["avant", "direct", "apres"].includes(v) ? v : "";
@@ -123,13 +122,11 @@
     if (fin && t < fin) return "direct";
     return "apres";
   }
-  const pronosticClos = () => etatActuel() !== "avant";
 
-  // Espaces insécables à la française
   function typographie(racine) {
     if (!racine) return;
     const marcheur = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT, {
-      acceptNode: (n) => (n.parentElement && !n.parentElement.closest("script, style, code") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT),
+      acceptNode: (n) => (n.parentElement && !n.parentElement.closest("script, style, code, input, textarea") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT),
     });
     const noeuds = [];
     while (marcheur.nextNode()) noeuds.push(marcheur.currentNode);
@@ -139,7 +136,7 @@
         .replace(/ ([!?;»])/g, "\u00A0$1")
         .replace(/« /g, "«\u00A0")
         .replace(/ :/g, "\u00A0:")
-        .replace(/(\d) (€|%|kg\b)/g, "$1\u00A0$2");
+        .replace(/(\d) (€|%|km\b)/g, "$1\u00A0$2");
       if (apres !== avant) n.nodeValue = apres;
     });
   }
@@ -167,17 +164,16 @@
   /* ───────────────────── Les liens (jamais de faux lien) ───────────────────── */
 
   const NOMS_LIENS = {
-    cagnotte: "la cagnotte", inscriptionTournoi: "l'inscription au tournoi", pronostic: "le pronostic",
-    tombola: "la tombola", live: "le live", instagram: "Instagram", email: "l'adresse e-mail",
+    inscriptionCoureur: "l'inscription des coureurs", engagement: "le formulaire d'engagement",
+    cagnotte: "la cagnotte", tombola: "la tombola", live: "le live", strava: "Strava",
+    instagram: "Instagram", email: "l'adresse e-mail",
   };
-
   function urlValide(cle) {
     const v = texte(L[cle]);
     if (!v) return "";
     if (cle === "email") return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? v : "";
     return /^https:\/\/[^\s]+\.[^\s]+$/.test(v) ? v : "";
   }
-
   function appliquerLiens(racine = document) {
     $$("[data-lien]", racine).forEach((a) => {
       const cle = a.dataset.lien;
@@ -200,7 +196,6 @@
         if (a.hasAttribute("data-afficher")) a.textContent = "adresse bientôt disponible";
       }
     });
-
     $$("[data-destination]", racine).forEach((p) => {
       const cle = p.dataset.destination;
       const url = urlValide(cle);
@@ -223,13 +218,32 @@
       }
     });
   }
-
   function appliquerTextes() {
     $$("[data-bind]").forEach((el) => {
       const v = lire(el.dataset.bind);
       if (v !== undefined && v !== null && v !== "") el.textContent = v;
     });
   }
+
+
+  /* ───────────────────── Les coureurs ───────────────────── */
+
+  const coureurs = (Array.isArray(C.coureurs) ? C.coureurs : [])
+    .map((c, i) => ({
+      prenom: texte(c.prenom) || "Coureur " + (i + 1),
+      dossard: nombre(c.dossard) !== null ? String(Math.round(Number(c.dossard))) : String(i + 1),
+      objectifKm: Math.max(0, nombre(c.objectifKm) || 0),
+      km: Math.max(0, nombre(c.km) || 0),
+      kmVerifies: !!c.kmVerifies,
+      strava: /^https:\/\/\S+\.\S+$/.test(texte(c.strava)) ? texte(c.strava) : "",
+      promesseParKm: Math.max(0, nombre(c.promesseParKm) || 0),
+    }));
+  const parDossard = new Map(coureurs.map((c) => [c.dossard, c]));
+  const kmTotal = coureurs.reduce((t, c) => t + c.km, 0);
+  const kmReference = Math.max(1, nombre(E.kmReference) || 15);
+  const maxParKm = Math.max(1, nombre(E.maxParKm) || 20);
+  const seuilAlerte = Math.max(1, nombre(E.seuilAlerte) || 50);
+  const seuilFort = Math.max(seuilAlerte, nombre(E.seuilFort) || 100);
 
 
   /* ───────────────────── Le tableau d'affichage ───────────────────── */
@@ -305,8 +319,6 @@
     });
   }
   const deux = (n) => String(n).padStart(2, "0");
-  const point = (t) => (/[.!?…]$/.test(t) ? "" : ".");
-
   function ledNombre(el, valeur) {
     const t = String(Math.max(0, Math.round(Number(valeur) || 0)));
     el.textContent = "";
@@ -339,43 +351,38 @@
     const boutonLive = $("#panneau-live");
 
     if (e === "avant") {
-      titre.textContent = "Coup d'envoi dans";
+      titre.textContent = "Départ dans";
       construireEcran([{ label: "jours" }, { label: "heures" }, { label: "min" }, { label: "sec" }]);
+      majEcran(["--", "--", "--", "--"]);
       if (debut) {
-        majEcran(["--", "--", "--", "--"]);
         message.innerHTML = `<p class="panneau-date">${esc(formaterDate(debut, "Jour"))} à ${esc(heure(debut))}${dateConfirmee ? "" : " " + aConfirmer("date provisoire")}</p>`;
-        zone.setAttribute("aria-label", `Compte à rebours jusqu'au coup d'envoi, le ${formaterDate(debut, "jour")} à ${heure(debut)}`);
+        zone.setAttribute("aria-label", `Compte à rebours jusqu'au départ, le ${formaterDate(debut, "jour")} à ${heure(debut)}`);
         if (agenda) agenda.hidden = false;
       } else {
-        majEcran(["--", "--", "--", "--"]);
-        message.innerHTML = `<span class="sticker sticker-jaune"${brouillon ? " data-exemple" : ""}>Date à confirmer</span><p class="panneau-date">La date du tournoi sera annoncée ici.</p>`;
+        message.innerHTML = `<span class="sticker sticker-jaune"${brouillon ? " data-exemple" : ""}>Date à confirmer</span><p class="panneau-date">La date de la course sera annoncée ici.</p>`;
         zone.removeAttribute("aria-label");
         if (agenda) agenda.hidden = true;
       }
       if (boutonLive) boutonLive.hidden = true;
     } else if (e === "direct") {
-      titre.innerHTML = '<span class="point-direct" aria-hidden="true"></span>En direct';
+      titre.innerHTML = '<span class="point-direct" aria-hidden="true"></span>En course';
       construireEcran([{ label: "h", nb: 1 }, { label: "min" }, { label: "sec" }]);
-      message.innerHTML = `<p class="panneau-date">de tournoi déjà joué${fin ? `, fin prévue à ${esc(heure(fin))}` : ""}.</p>`;
-      zone.setAttribute("aria-label", "Le tournoi est en cours");
+      message.innerHTML = `<p class="panneau-date">de course déjà parcourue${fin ? `, arrivée prévue à ${esc(heure(fin))}` : ""}. Déjà ${esc(km(kmTotal))} km au compteur.</p>`;
+      zone.setAttribute("aria-label", "La course est en cours");
       if (agenda) agenda.hidden = true;
       if (boutonLive) { boutonLive.hidden = false; boutonLive.textContent = "Regarder le live"; }
     } else {
       titre.textContent = "Merci !";
       construireEcran([]);
-      const champion = championNom();
-      message.innerHTML = champion
-        ? `<p class="panneau-date">🏆 Champion du tournoi : <strong>${esc(champion)}</strong></p>`
-        : `<p class="panneau-date">Le tournoi est terminé. Merci à toutes et à tous !</p>`;
+      message.innerHTML = `<p class="panneau-date">${kmTotal > 0 ? `🏁 <strong>${esc(km(kmTotal))} km</strong> parcourus par ${esc(entier(coureurs.length))} coureurs` : "La course est terminée. Merci à toutes et à tous !"}</p>`;
       zone.removeAttribute("aria-label");
       if (agenda) agenda.hidden = true;
       if (boutonLive) { boutonLive.hidden = false; boutonLive.textContent = "Revoir le live"; }
     }
 
     document.title = e === "direct" ? "🔴 EN DIRECT : " + titreOriginal : titreOriginal;
-    appliquerLiens($("#panneau-live") ? $("#panneau-live").parentElement : document);
+    appliquerLiens($(".panneau"));
     rendreLive(e);
-    rendrePronosticEtat();
     typographie($(".panneau"));
   }
 
@@ -400,11 +407,11 @@
   function initAgenda() {
     if (!debut || !fin) return;
     const asso = texte(lire("association.nom")) || "l'association";
-    const titre = "GEAnérosité : tournoi FIFA solidaire";
-    const details = `Tournoi FIFA en live au profit de ${asso}.` + (urlValide("live") ? " Le live : " + urlValide("live") : "");
+    const titre = "GEAnérosité : course solidaire";
+    const details = `Course solidaire au profit de ${asso}.` + (urlValide("live") ? " Le live : " + urlValide("live") : "");
     const ics = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
     const google = new URLSearchParams({
-      action: "TEMPLATE", text: titre, details, location: urlValide("live") || "En ligne",
+      action: "TEMPLATE", text: titre, details, location: texte((C.course || {}).lieu) || urlValide("live") || "En ligne",
       dates: `${ics(debut)}/${ics(fin)}`,
     });
     $("#agenda-google").href = "https://calendar.google.com/calendar/render?" + google.toString();
@@ -413,8 +420,9 @@
       "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//GEAnerosite//FR", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
       "BEGIN:VEVENT", "UID:geanerosite-" + ics(debut) + "@geanerosite",
       "DTSTAMP:" + ics(new Date()), "DTSTART:" + ics(debut), "DTEND:" + ics(fin),
-      "SUMMARY:" + echap(titre), "DESCRIPTION:" + echap(details), "LOCATION:" + echap(urlValide("live") || "En ligne"),
-      "BEGIN:VALARM", "TRIGGER:-PT30M", "ACTION:DISPLAY", "DESCRIPTION:" + echap("Le tournoi commence dans 30 minutes !"), "END:VALARM",
+      "SUMMARY:" + echap(titre), "DESCRIPTION:" + echap(details),
+      "LOCATION:" + echap(texte((C.course || {}).lieu) || "À confirmer"),
+      "BEGIN:VALARM", "TRIGGER:-PT30M", "ACTION:DISPLAY", "DESCRIPTION:" + echap("La course commence dans 30 minutes !"), "END:VALARM",
       "END:VEVENT", "END:VCALENDAR",
     ].join("\r\n");
     try {
@@ -428,12 +436,14 @@
   /* ───────────────────── Les compteurs ───────────────────── */
 
   function rendreCompteurs() {
+    const inscrits = coureurs.length || Math.max(0, nombre(K.coureursInscrits) || 0);
+    const distance = coureurs.length ? kmTotal : Math.max(0, nombre(K.kmParcourus) || 0);
     const items = [
       { emoji: "💰", label: "Cagnotte", valeur: montant, unite: "€", uniteLongue: "euros", principal: true },
-      { emoji: "🥫", label: "Denrées collectées", valeur: nombre(K.denreesKg) || 0, unite: "kg", uniteLongue: "kilos" },
+      { emoji: "🏃", label: "Coureurs inscrits", valeur: inscrits, unite: "", uniteLongue: inscrits > 1 ? "coureurs inscrits" : "coureur inscrit" },
+      { emoji: "🛣️", label: "Kilomètres parcourus", valeur: distance, unite: "km", uniteLongue: "kilomètres" },
       { emoji: "👕", label: "Vêtements collectés", valeur: nombre(K.vetements) || 0, unite: "", uniteLongue: "vêtements" },
-      { emoji: "🎮", label: "Participants au tournoi", valeur: nombre(K.participantsTournoi) || 0, unite: "", uniteLongue: "joueurs inscrits" },
-      { emoji: "🎟️", label: "Participants à la tombola", valeur: nombre(K.participantsTombola) || 0, unite: "", uniteLongue: "participants" },
+      { emoji: "🎟️", label: "Participants à la tombola", valeur: nombre(K.participantsTombola) || 0, unite: "", uniteLongue: (nombre(K.participantsTombola) || 0) > 1 ? "participants" : "participant" },
     ];
     $("#tableau-scores").innerHTML = items.map((it) => `
       <div class="score${it.principal ? " score-principal" : ""}">
@@ -445,12 +455,11 @@
         </p>
       </div>`).join("");
     $$("#tableau-scores .score-led").forEach((el) => ledNombre(el, el.dataset.valeur));
-    const maj = texte(K.miseAJour);
-    $("#maj-compteurs").hidden = !maj;
+    $("#maj-compteurs").hidden = !texte(K.miseAJour);
   }
 
 
-  /* ───────────────────── La cagnotte : le parcours vers le but ───────────────────── */
+  /* ───────────────────── La cagnotte : la piste vers l'arrivée ───────────────────── */
 
   const paliers = (Array.isArray(C.paliers) ? C.paliers : [])
     .filter((p) => p && nombre(p.montant) !== null)
@@ -470,7 +479,6 @@
     const bilan = $("#jauge-bilan");
     if (!n) { bilan.hidden = true; return; }
 
-    // Hauteur atteinte sur le terrain (−0,5 = coup d'envoi, n−0,5 = but)
     let niveau;
     if (montant <= 0) niveau = -0.5;
     else if (montant < paliers[0].montant) niveau = -0.5 + 0.5 * (montant / paliers[0].montant);
@@ -483,263 +491,454 @@
     const iProchain = paliers.findIndex((p) => montant < p.montant);
     const nbDebloques = paliers.filter((p) => montant >= p.montant).length;
     const tout = montant >= paliers[n - 1].montant;
-    const ligneBallon = tout ? -1 : Math.max(0, Math.min(n - 1, Math.floor(niveau + 0.5)));
+    const ligneCoureur = tout ? -1 : Math.max(0, Math.min(n - 1, Math.floor(niveau + 0.5)));
 
     $("#paliers").innerHTML = paliers.map((p, i) => {
-      const debloque = montant >= p.montant;
+      const atteint = montant >= p.montant;
       const prochain = i === iProchain;
       const fill = Math.max(0, Math.min(1, niveau - (i - 0.5)));
       const tier = i < n * 0.42 ? 1 : i < n * 0.72 ? 2 : 3;
-      const etat = debloque ? "est-debloque" : prochain ? "est-prochain" : "est-verrouille";
-      const tampon = debloque ? "Débloqué" : prochain ? "Prochain objectif" : "À débloquer";
-      const ballon = i === ligneBallon ? '<svg class="ballon" aria-hidden="true" focusable="false"><use href="#ballon"></use></svg>' : "";
+      const etat = atteint ? "est-debloque" : prochain ? "est-prochain" : "est-verrouille";
+      const tampon = atteint ? "Atteint" : prochain ? "Prochain palier" : "À atteindre";
+      const coureurJauge = i === ligneCoureur ? '<svg class="coureur-jauge" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#coureur"></use></svg>' : "";
       let progression = "";
       if (prochain) {
         const precedent = i > 0 ? paliers[i - 1].montant : 0;
         const k = Math.max(0, Math.min(1, (montant - precedent) / (p.montant - precedent)));
         progression = `<div class="palier-progression">
             <div class="mini-barre" aria-hidden="true"><span style="--p:${k.toFixed(3)}"></span></div>
-            <p class="palier-reste">Plus que ${euros(p.montant - montant)} pour le débloquer</p>
+            <p class="palier-reste">Plus que ${euros(p.montant - montant)} pour l'atteindre</p>
           </div>`;
       }
       return `<li class="palier tier-${tier} ${etat}" style="--fill:${fill.toFixed(3)};--ordre:${i}">
-          <div class="bande" aria-hidden="true"><span class="bande-trace"></span><span class="bande-ligne"></span>${ballon}</div>
+          <div class="couloir" aria-hidden="true"><span class="couloir-trace"></span><span class="couloir-ligne"></span>${coureurJauge}</div>
           <div class="palier-carte">
             <div class="palier-haut">
               <span class="palier-montant">${euros(p.montant)}</span>
               <span class="tampon">${tampon}</span>
             </div>
-            <p class="palier-texte">${p.emoji ? `<span class="palier-emoji" aria-hidden="true">${esc(p.emoji)}</span>` : ""}${esc(p.texte)} ${p.aConfirmer ? aConfirmer("à confirmer") : ""}</p>
+            <p class="palier-texte">${p.emoji ? `<span class="palier-emoji" aria-hidden="true">${esc(p.emoji)}</span>` : ""}${esc(p.texte)}</p>
             ${progression}
           </div>
         </li>`;
     }).reverse().join("");
 
     if (tout) {
-      const but = $("#but");
-      but.classList.add("marque");
-      but.innerHTML = '<span class="but-texte">But !</span>';
+      const arrivee = $("#arrivee");
+      arrivee.classList.add("marque");
+      arrivee.innerHTML = '<span class="arrivee-texte">Objectif atteint !</span>';
     }
 
-    // L'animation démarre quand le ballon (ou le but, si tout est débloqué) arrive à l'écran
     const liste = $("#paliers");
-    const ballonEl = liste.querySelector(".ballon");
-    const cible = (ballonEl && ballonEl.closest(".palier")) || liste.firstElementChild || liste;
+    const coureurEl = liste.querySelector(".coureur-jauge");
+    const cible = (coureurEl && coureurEl.closest(".palier")) || liste.firstElementChild || liste;
     quandVisible(cible, () => liste.classList.add("revele"), 0.4);
 
-    if (iProchain === -1) {
-      bilan.innerHTML = "<strong>Tous les objectifs sont débloqués !</strong> Merci : le live va être mémorable.";
-    } else if (nbDebloques === 0) {
-      bilan.innerHTML = `<strong>Premier objectif à ${euros(paliers[0].montant)}.</strong> Il reste ${euros(paliers[0].montant - montant)} pour le débloquer.`;
-    } else {
-      bilan.innerHTML = `<strong>${nbDebloques} objectif${nbDebloques > 1 ? "s" : ""} débloqué${nbDebloques > 1 ? "s" : ""} sur ${n}.</strong> Prochain à ${euros(paliers[iProchain].montant)} : plus que ${euros(paliers[iProchain].montant - montant)}.`;
-    }
+    if (iProchain === -1) bilan.innerHTML = "<strong>Tous les paliers sont atteints !</strong> Merci : tout le surplus part à l'association.";
+    else if (nbDebloques === 0) bilan.innerHTML = `<strong>Premier palier à ${euros(paliers[0].montant)}.</strong> Il reste ${euros(paliers[0].montant - montant)} pour l'atteindre.`;
+    else bilan.innerHTML = `<strong>${nbDebloques} palier${nbDebloques > 1 ? "s" : ""} atteint${nbDebloques > 1 ? "s" : ""} sur ${n}.</strong> Prochain à ${euros(paliers[iProchain].montant)} : plus que ${euros(paliers[iProchain].montant - montant)}.`;
     bilan.hidden = false;
-  }
 
-
-  /* ───────────────────── Le tournoi ───────────────────── */
-
-  const T = C.tournoi || {};
-  const participants = Array.isArray(T.participants) ? T.participants : [];
-  const matchs = Array.isArray(T.matchs) ? T.matchs : [];
-  const groupes = Array.isArray(T.groupes) ? T.groupes : [];
-  const MAILLOTS = [
-    { fond: "#ff4f9a", texte: "#16161b" }, { fond: "#2c55d4", texte: "#ffffff" },
-    { fond: "#ffd43b", texte: "#16161b" }, { fond: "#1f9d55", texte: "#ffffff" },
-    { fond: "#ff8a3d", texte: "#16161b" }, { fond: "#8b5cf6", texte: "#ffffff" },
-    { fond: "#00b5d8", texte: "#16161b" }, { fond: "#e5383b", texte: "#ffffff" },
-  ];
-
-  function joueur(ref) {
-    const num = typeof ref === "number" ? ref : (/^\d+$/.test(texte(ref)) ? Number(ref) : null);
-    if (num) {
-      const p = participants[num - 1] || {};
-      const nom = texte(p.nom);
-      return { num, nom: nom || "Joueur " + num, equipe: texte(p.equipe), connu: !!nom };
+    // Cagnotte en direct : widget HelloAsso (facultatif)
+    const widget = texte(L.widgetCagnotte);
+    if (/^https:\/\/([a-z0-9-]+\.)*helloasso\.com\//i.test(widget)) {
+      const bloc = $("#widget-cagnotte");
+      const iframe = document.createElement("iframe");
+      iframe.src = widget;
+      iframe.title = "Cagnotte HelloAsso en direct";
+      iframe.loading = "lazy";
+      bloc.appendChild(iframe);
+      bloc.hidden = false;
     }
-    return { num: null, nom: texte(ref) || "À déterminer", equipe: "", connu: false };
-  }
-  function lireScore(m) {
-    const s = texte(m && m.score).match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (!s) return null;
-    const r = { a: Number(s[1]), b: Number(s[2]) };
-    const t = texte(m.tab).match(/^(\d+)\s*[-–:]\s*(\d+)$/);
-    if (t) { r.tabA = Number(t[1]); r.tabB = Number(t[2]); }
-    return r;
-  }
-  function gagnant(m) {
-    const s = lireScore(m);
-    if (!s) return null;
-    if (s.a !== s.b) return s.a > s.b ? "a" : "b";
-    if (s.tabA != null && s.tabA !== s.tabB) return s.tabA > s.tabB ? "a" : "b";
-    return "nul";
-  }
-  const estFinale = (m) => /^finale/i.test(texte(m.phase));
-  function championNom() {
-    const f = matchs.find(estFinale);
-    if (!f) return "";
-    const g = gagnant(f);
-    return g === "a" || g === "b" ? joueur(f[g]).nom : "";
   }
 
-  function classement(groupe) {
-    const lignes = (groupe.joueurs || []).map((ref, i) => ({ ref, ordre: i, j: 0, g: 0, n: 0, p: 0, bp: 0, bc: 0, pts: 0 }));
-    const parRef = new Map(lignes.map((l) => [String(l.ref), l]));
-    matchs.filter((m) => texte(m.phase) === texte(groupe.nom)).forEach((m) => {
-      const s = lireScore(m);
-      if (!s) return;
-      const A = parRef.get(String(m.a));
-      const B = parRef.get(String(m.b));
-      if (!A || !B) return;
-      A.j++; B.j++; A.bp += s.a; A.bc += s.b; B.bp += s.b; B.bc += s.a;
-      if (s.a > s.b) { A.g++; B.p++; A.pts += 3; }
-      else if (s.a < s.b) { B.g++; A.p++; B.pts += 3; }
-      else { A.n++; B.n++; A.pts++; B.pts++; }
+
+  /* ───────────────────── Les engagements (enregistrés sur l'appareil) ───────────────────── */
+
+  function lireStock() {
+    try { const d = JSON.parse(localStorage.getItem(CLE_STOCKAGE) || "{}"); return d && typeof d === "object" ? d : {}; }
+    catch (err) { return {}; }
+  }
+  function ecrireStock() {
+    try { localStorage.setItem(CLE_STOCKAGE, JSON.stringify(stock)); }
+    catch (err) { console.warn("GEAnérosité : impossible d'enregistrer sur cet appareil.", err); }
+  }
+  const stock = lireStock();
+  if (!Array.isArray(stock.engagements)) stock.engagements = [];
+  if (!stock.infos || typeof stock.infos !== "object") stock.infos = {};
+
+  function montantEngagement(e) {
+    const c = parDossard.get(e.dossard);
+    const kmFaits = c ? c.km : 0;
+    const brut = e.parKm * kmFaits;
+    const total = e.plafond ? Math.min(brut, e.plafond) : brut;
+    return { coureur: c, kmFaits, brut, total, verifie: !!(c && c.kmVerifies), plafonne: !!(e.plafond && brut > e.plafond) };
+  }
+  function estimationEngagement(coureur, parKm, plafond) {
+    const base = coureur && coureur.objectifKm ? coureur.objectifKm : kmReference;
+    const brut = parKm * base;
+    return { base, brut, total: plafond ? Math.min(brut, plafond) : brut, plafonne: !!(plafond && brut > plafond) };
+  }
+
+  /* ── La liste des coureurs ── */
+
+  function carteCoureur(c) {
+    const engage = stock.engagements.find((e) => e.dossard === c.dossard);
+    const statut = c.km > 0
+      ? `<span class="statut ${c.kmVerifies ? "statut-verifie" : "statut-attente"}">${c.kmVerifies ? "vérifié" : "en attente"}</span>`
+      : "";
+    const barre = c.objectifKm
+      ? `<div class="coureur-barre" aria-hidden="true"><span style="--p:${Math.min(1, c.km / c.objectifKm).toFixed(3)}"></span></div>`
+      : "";
+    return `<li class="coureur-carte${engage ? " coureur-engage" : ""}" data-prenom="${esc(c.prenom.toLowerCase())}" data-dossard="${esc(c.dossard)}">
+        <span class="coureur-dossard" aria-hidden="true">${esc(c.dossard)}</span>
+        <div class="coureur-haut">
+          <svg class="coureur-silhouette" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#coureur"></use></svg>
+          <p class="coureur-prenom">${esc(c.prenom)}<span class="sr-only"> — dossard ${esc(c.dossard)}</span></p>
+        </div>
+        ${c.km > 0
+          ? `<p class="coureur-km"><strong>${esc(km(c.km))}</strong> km ${statut}</p>`
+          : `<p class="coureur-detail">${c.objectifKm ? `Objectif : ${esc(km(c.objectifKm))} km` : "Objectif à annoncer"}</p>`}
+        ${barre}
+        ${c.promesseParKm ? `<p class="coureur-promesses">Déjà <strong>${esc(euros(c.promesseParKm))} par km</strong> promis</p>` : ""}
+        ${engage ? `<p class="coureur-detail"><span class="badge-engage">Mon engagement</span> ${esc(euros(engage.parKm))} par km</p>` : ""}
+        <div class="coureur-actions">
+          <button class="bouton ${engage ? "bouton-contour" : "bouton-rose"}" type="button" data-engager="${esc(c.dossard)}">${engage ? "Modifier" : "🤝 Je m'engage"}</button>
+          ${c.strava ? `<a class="lien-strava" href="${esc(c.strava)}" target="_blank" rel="noopener">Strava</a>` : ""}
+        </div>
+      </li>`;
+  }
+
+  function rendreCoureurs() {
+    const liste = $("#liste-coureurs");
+    const vide = $("#coureurs-vide");
+    const recherche = $(".recherche");
+    if (!coureurs.length) {
+      liste.innerHTML = "";
+      recherche.hidden = true;
+      vide.hidden = false;
+      vide.innerHTML = `<p><strong>Aucun coureur inscrit pour l'instant.</strong> Soyez le premier : l'inscription est gratuite et ouverte à tout le monde, quel que soit le niveau.</p>
+        <div class="cta-bloc">
+          <a class="bouton bouton-vert" data-lien="inscriptionCoureur">🏃 Je m'inscris comme coureur</a>
+          <p class="destination" data-destination="inscriptionCoureur"></p>
+        </div>`;
+      appliquerLiens(vide);
+      return;
+    }
+    recherche.hidden = false;
+    vide.hidden = true;
+    liste.innerHTML = coureurs.map(carteCoureur).join("");
+    typographie(liste);
+    filtrerCoureurs($("#recherche-coureur").value);
+  }
+
+  function filtrerCoureurs(valeur) {
+    const q = texte(valeur).toLowerCase();
+    const cartes = $$("#liste-coureurs .coureur-carte");
+    let visibles = 0;
+    cartes.forEach((carte) => {
+      const ok = !q || carte.dataset.prenom.includes(q) || carte.dataset.dossard.includes(q);
+      carte.hidden = !ok;
+      if (ok) visibles++;
     });
-    return lignes.sort((x, y) => y.pts - x.pts || (y.bp - y.bc) - (x.bp - x.bc) || y.bp - x.bp || x.ordre - y.ordre);
+    const info = $("#recherche-resultat");
+    info.textContent = !q
+      ? `${entier(cartes.length)} coureur${cartes.length > 1 ? "s" : ""} inscrit${cartes.length > 1 ? "s" : ""}.`
+      : visibles === 0 ? "Aucun coureur ne correspond à cette recherche."
+      : `${entier(visibles)} coureur${visibles > 1 ? "s" : ""} trouvé${visibles > 1 ? "s" : ""}.`;
   }
 
-  const TOURS = [
-    { test: /^(huiti|8e)/i, nom: "Huitièmes de finale" },
-    { test: /^quart/i, nom: "Quarts de finale" },
-    { test: /^demi/i, nom: "Demi-finales" },
-    { test: /^petite/i, nom: "Petite finale" },
-    { test: /^finale/i, nom: "Finale" },
-  ];
-  const estPhaseFinale = (m) => TOURS.some((t) => t.test.test(texte(m.phase)));
+  /* ── La fenêtre « mon engagement » ── */
 
-  function rendreTournoi() {
-    // Les informations pratiques
-    const live = urlValide("live");
-    let hoteLive = "";
-    try { hoteLive = live ? new URL(live).hostname.replace(/^www\./, "") : ""; } catch (err) { hoteLive = ""; }
-    const infos = [
-      { emoji: "📅", valeur: debut ? majuscule(formaterDate(debut, "jourCourt")) + (dateConfirmee ? "" : " " + aConfirmer("date provisoire")) : aConfirmer("date à confirmer") },
-      { emoji: "🕖", valeur: debut ? `${heure(debut)}${fin ? " – " + heure(fin) : ""}` : aConfirmer("horaire à confirmer") },
-      { emoji: "📍", valeur: texte(T.lieu) ? esc(T.lieu) : aConfirmer("lieu à confirmer") },
-      { emoji: "🎮", valeur: texte(T.jeu) ? esc(T.jeu) : aConfirmer("jeu à confirmer") },
-      { emoji: "🏟️", valeur: texte(T.format) ? esc(T.format) : aConfirmer("format à confirmer") },
-      { emoji: "📺", valeur: live ? `Live sur ${esc(hoteLive)}` : aConfirmer("lien du live à venir") },
-    ];
-    $("#infos-tournoi").innerHTML = infos.map((i) => `<li><span aria-hidden="true">${i.emoji}</span> ${i.valeur}</li>`).join("");
+  let dossardEnCours = null;
 
-    // Les joueurs
-    const aucunNom = participants.every((p) => !texte(p.nom));
-    $("#note-tableau").hidden = !aucunNom;
-    $("#joueurs").innerHTML = participants.map((p, i) => {
-      const num = i + 1;
-      const j = joueur(num);
-      const m = MAILLOTS[i % MAILLOTS.length];
-      return `<li class="joueur${j.connu ? "" : " est-inconnu"}">
-          <span class="joueur-num">${num}</span>
-          <svg class="joueur-maillot" viewBox="0 0 100 92" aria-hidden="true" focusable="false">
-            <path d="M31 6 L43 2 Q50 11 57 2 L69 6 L94 21 L84 39 L74 33 L74 88 L26 88 L26 33 L16 39 L6 21 Z" fill="${m.fond}" stroke="#16161b" stroke-width="4" stroke-linejoin="round"/>
-            <text x="50" y="74" text-anchor="middle" font-family="Big Shoulders, Arial Narrow, sans-serif" font-weight="900" font-size="40" fill="${m.texte}">${num}</text>
-          </svg>
-          <p class="joueur-nom">${j.connu ? esc(j.nom) : aConfirmer("nom à venir")}</p>
-          <p class="joueur-equipe">${j.equipe ? esc(j.equipe) : aConfirmer("équipe à choisir")}</p>
+  function ouvrirEngagement(dossard) {
+    const c = parDossard.get(String(dossard));
+    if (!c) return;
+    dossardEnCours = c.dossard;
+    const existant = stock.engagements.find((e) => e.dossard === c.dossard);
+    $("#engagement-coureur").innerHTML = `Je soutiens <strong>${esc(c.prenom)}</strong> (dossard ${esc(c.dossard)})${c.objectifKm ? `, qui vise ${esc(km(c.objectifKm))} km` : ""}.`;
+    const suggeres = Array.isArray(E.montantsSuggeres) ? E.montantsSuggeres : [0.5, 1, 2];
+    $("#montants-suggeres").innerHTML = suggeres.map((m) =>
+      `<button class="montant-choix" type="button" data-montant="${m}" aria-pressed="false">${esc(euros(m))}</button>`).join("");
+    $("#par-km").value = existant ? existant.parKm : "";
+    $("#plafond").value = existant && existant.plafond ? existant.plafond : (nombre(E.plafondConseille) || "");
+    $("#valider-engagement").textContent = existant ? "Mettre à jour mon engagement" : "Ajouter à mes engagements";
+    majEstimation();
+    const d = $("#modale-engagement");
+    if (typeof d.showModal === "function") { d.showModal(); document.body.classList.add("modale-ouverte"); }
+    else d.setAttribute("open", "");
+    requestAnimationFrame(() => { const b = $("#montants-suggeres button"); if (b) b.focus(); });
+  }
+
+  function majEstimation() {
+    const c = parDossard.get(dossardEnCours);
+    const parKm = nombre($("#par-km").value) || 0;
+    const plafond = nombre($("#plafond").value) || 0;
+    const zone = $("#estimation");
+    const alerte = $("#alerte-engagement");
+    $$("#montants-suggeres .montant-choix").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.montant) === parKm)));
+
+    if (parKm <= 0) {
+      zone.innerHTML = "Choisissez un montant par kilomètre pour voir ce que cela représente.";
+      alerte.hidden = true;
+      return;
+    }
+    const est = estimationEngagement(c, parKm, plafond);
+    zone.innerHTML = `Si ${esc(c ? c.prenom : "le coureur")} parcourt ${esc(km(est.base))} km, vous verserez <strong>${esc(euros(est.total))}</strong>${est.plafonne ? ` (plafonné à ${esc(euros(plafond))})` : ""}.`;
+    let message = "";
+    if (parKm > maxParKm) message = `Le simulateur est limité à ${euros(maxParKm)} par kilomètre. Au-delà, contactez-nous directement.`;
+    else if (est.total >= seuilFort) message = `Attention : cet engagement peut dépasser ${euros(seuilFort)}. N'engagez que ce que vous pourrez verser sans difficulté, et pensez au plafond.`;
+    else if (est.total >= seuilAlerte) message = `Cela représente déjà plus de ${euros(seuilAlerte)}. Vérifiez que cela reste raisonnable pour vous, ou ajoutez un plafond.`;
+    else if (!plafond) message = "";
+    alerte.textContent = message;
+    alerte.hidden = !message;
+  }
+
+  function validerEngagement() {
+    const c = parDossard.get(dossardEnCours);
+    const parKm = nombre($("#par-km").value) || 0;
+    const plafond = nombre($("#plafond").value) || 0;
+    if (!c || parKm <= 0) { majEstimation(); $("#par-km").focus(); return; }
+    if (parKm > maxParKm) { majEstimation(); $("#par-km").focus(); return; }
+    const autres = stock.engagements.filter((e) => e.dossard !== c.dossard);
+    stock.engagements = autres.concat([{ dossard: c.dossard, prenom: c.prenom, parKm: Math.round(parKm * 100) / 100, plafond: plafond > 0 ? Math.round(plafond) : 0 }]);
+    ecrireStock();
+    const d = $("#modale-engagement");
+    if (typeof d.close === "function") d.close(); else d.removeAttribute("open");
+    rendreCoureurs();
+    rendrePanier();
+    const panier = $("#panier");
+    if (panier) panier.scrollIntoView({ block: "center" });
+  }
+
+  /* ── Mes engagements ── */
+
+  function rendrePanier() {
+    const bloc = $("#panier");
+    if (!stock.engagements.length) {
+      bloc.innerHTML = `<div class="vide">
+          <p><strong>Vous n'avez pas encore d'engagement.</strong> Choisissez un coureur dans la liste, puis le montant que vous vous engagez à verser par kilomètre.</p>
+          <a class="bouton bouton-rose" href="#coureurs">🤝 Choisir un coureur</a>
+        </div>`;
+      return;
+    }
+    const lignes = stock.engagements.map((e) => {
+      const m = montantEngagement(e);
+      const detail = m.coureur
+        ? `${esc(km(m.kmFaits))} km ${m.verifie ? "vérifiés" : "relevés"}${m.plafonne ? `, plafonné à ${esc(euros(e.plafond))}` : ""}`
+        : "Ce coureur n'est plus dans la liste.";
+      return `<li class="engagement-ligne">
+          <div class="engagement-haut">
+            <span class="engagement-nom">${esc(e.prenom)}</span>
+            <span class="engagement-parkm">${esc(euros(e.parKm))} par km${e.plafond ? `, plafond ${esc(euros(e.plafond))}` : ""}</span>
+          </div>
+          <p class="engagement-detail">${detail}</p>
+          <p class="engagement-montant"><strong>${esc(euros(m.total))}</strong>
+            <span class="statut ${m.verifie ? "statut-verifie" : "statut-attente"}">${m.verifie ? "à verser" : "en attente"}</span>
+          </p>
+          <div class="engagement-actions">
+            <button class="lien-bouton" type="button" data-engager="${esc(e.dossard)}">Modifier</button>
+            <button class="lien-bouton" type="button" data-retirer="${esc(e.dossard)}">Retirer</button>
+          </div>
         </li>`;
     }).join("");
-
-    // Les groupes et leur classement
-    const blocGroupes = $("#bloc-groupes");
-    if (!groupes.length) { blocGroupes.hidden = true; } else {
-      $("#groupes").innerHTML = groupes.map((g) => {
-        const lignes = classement(g);
-        return `<div class="groupe">
-            <h4 class="groupe-titre">${esc(g.nom)}</h4>
-            <table>
-              <thead><tr><th scope="col"><span class="sr-only">Position</span>#</th><th scope="col">Joueur</th><th scope="col" title="Matchs joués">J</th><th scope="col">Pts</th><th scope="col" title="Différence de buts">+/−</th></tr></thead>
-              <tbody>${lignes.map((l, i) => {
-                const j = joueur(l.ref);
-                const diff = l.bp - l.bc;
-                return `<tr><td>${i + 1}</td><td>${esc(j.nom)}</td><td>${l.j}</td><td class="pts">${l.pts}</td><td>${diff > 0 ? "+" : ""}${diff}</td></tr>`;
-              }).join("")}</tbody>
-            </table>
-          </div>`;
-      }).join("");
-    }
-
-    // La phase finale
-    const blocFinal = $("#bloc-final");
-    const finales = matchs.filter(estPhaseFinale);
-    const dernier = paliers.length ? paliers[paliers.length - 1] : null;
-    if (!finales.length && !dernier) { blocFinal.hidden = true; } else {
-      const colonnes = [];
-      TOURS.forEach((tour) => {
-        const liste = finales.filter((m) => tour.test.test(texte(m.phase)));
-        if (liste.length) colonnes.push({ nom: tour.nom, liste });
-      });
-      const champion = championNom();
-      let sortie = champion ? `<p class="champion"><span aria-hidden="true">🏆</span> Champion : ${esc(champion)}</p>` : "";
-      sortie += colonnes.map((col) => `<div class="tour">
-          <h4 class="tour-titre">${esc(col.nom)}</h4>
-          <div class="tour-matchs">${col.liste.map((m) => carteMatch(m)).join("")}</div>
-        </div>`).join("");
-      if (dernier) {
-        const ouvert = montant >= dernier.montant;
-        sortie += `<div class="tour">
-            <h4 class="tour-titre">Bonus</h4>
-            <div class="tour-matchs"><div class="match-carte match-bonus">
-              <p class="match-ligne">${ouvert ? "🔓 Débloqué" : "🔒 Si la cagnotte atteint " + euros(dernier.montant)}</p>
-              <p class="match-info">${esc(dernier.texte)}</p>
-            </div></div>
-          </div>`;
-      }
-      $("#tableau-final").innerHTML = sortie;
-      $("#tableau-final").style.setProperty("--tours", Math.max(1, colonnes.length + (dernier ? 1 : 0)));
-    }
-
-    // Tous les matchs, par phase
-    const phases = [];
-    matchs.forEach((m) => { const p = texte(m.phase) || "Matchs"; if (!phases.includes(p)) phases.push(p); });
-    $("#matchs").innerHTML = phases.map((p) => `<div class="phase-bloc">
-        <h4>${esc(p)}</h4>
-        <ul class="phase-liste">${matchs.filter((m) => (texte(m.phase) || "Matchs") === p).map((m) => {
-          const a = joueur(m.a), b = joueur(m.b), s = lireScore(m);
-          return `<li><span>${esc(a.nom)} – ${esc(b.nom)}</span><span class="m-score">${s ? `${s.a} – ${s.b}${s.tabA != null ? ` (${s.tabA}–${s.tabB} t.a.b.)` : ""}` : (texte(m.heure) || "à venir")}</span></li>`;
-        }).join("")}</ul>
-      </div>`).join("");
-
-    rendreProchainMatch();
+    const total = stock.engagements.reduce((t, e) => t + montantEngagement(e).total, 0);
+    const tousVerifies = stock.engagements.every((e) => montantEngagement(e).verifie);
+    bloc.innerHTML = `<div class="panier">
+        <ul class="panier-liste">${lignes}</ul>
+        <div class="panier-total">
+          <p>Total ${tousVerifies ? "à verser" : "en attente"}</p>
+          <p class="panier-total-montant">${esc(euros(total))}</p>
+          <p>${tousVerifies
+            ? "Les kilomètres sont vérifiés : vous pouvez verser votre participation."
+            : "Ce montant évoluera avec les kilomètres réellement parcourus, puis vérifiés sur Strava."}</p>
+        </div>
+        <div class="panier-actions">
+          <div class="cta-bloc">
+            <a class="bouton bouton-rose" data-lien="${tousVerifies ? "cagnotte" : "engagement"}">${tousVerifies ? "💰 Verser ma participation" : "🤝 Valider mes engagements"}</a>
+            <p class="destination" data-destination="${tousVerifies ? "cagnotte" : "engagement"}"></p>
+          </div>
+          <button class="lien-bouton" type="button" id="vider-panier">Tout effacer</button>
+        </div>
+      </div>`;
+    appliquerLiens(bloc);
+    typographie(bloc);
+    const vider = $("#vider-panier");
+    if (vider) vider.addEventListener("click", () => {
+      stock.engagements = [];
+      ecrireStock();
+      rendreCoureurs();
+      rendrePanier();
+    });
   }
 
-  function carteMatch(m) {
-    const a = joueur(m.a), b = joueur(m.b), s = lireScore(m), g = gagnant(m);
-    const ligne = (j, score, gagne) => `<p class="match-ligne${gagne ? " gagne" : ""}"><span>${esc(j.nom)}</span><span class="match-score">${score}</span></p>`;
-    const info = s && s.tabA != null ? `Tirs au but : ${s.tabA} – ${s.tabB}` : (texte(m.heure) ? "Coup d'envoi : " + esc(m.heure) : "Horaire à confirmer");
-    return `<div class="match-carte">
-        ${ligne(a, s ? s.a : "–", g === "a")}
-        ${ligne(b, s ? s.b : "–", g === "b")}
-        <p class="match-info">${info}</p>
+  /* ── Le document d'engagement ── */
+
+  function texteRecapitulatif() {
+    const i = stock.infos || {};
+    const lignes = stock.engagements.map((e) => {
+      const m = montantEngagement(e);
+      return `- ${e.prenom} (dossard ${e.dossard}) : ${euros(e.parKm)} par km${e.plafond ? `, plafond ${euros(e.plafond)}` : ""} → ${euros(m.total)} ${m.verifie ? "à verser" : "en attente"}`;
+    });
+    const total = stock.engagements.reduce((t, e) => t + montantEngagement(e).total, 0);
+    return [
+      "Document d'engagement — GEAnérosité, course solidaire",
+      `Nom : ${texte(i.nom) || "…"}`,
+      `Prénom : ${texte(i.prenom) || "…"}`,
+      `E-mail : ${texte(i.email) || "…"}`,
+      `Téléphone : ${texte(i.tel) || "…"}`,
+      "",
+      "Mes engagements :",
+      ...lignes,
+      "",
+      `Total ${stock.engagements.every((e) => montantEngagement(e).verifie) ? "à verser" : "en attente"} : ${euros(total)}`,
+    ].join("\n");
+  }
+
+  function rendreApercuDocument() {
+    const i = stock.infos || {};
+    const apercu = $("#apercu-doc");
+    if (!stock.engagements.length) {
+      apercu.innerHTML = "<p>Ajoutez d'abord au moins un engagement pour générer votre document.</p>";
+      return;
+    }
+    const total = stock.engagements.reduce((t, e) => t + montantEngagement(e).total, 0);
+    const lignes = stock.engagements.map((e) => {
+      const m = montantEngagement(e);
+      return `<tr><td>${esc(e.prenom)} (${esc(e.dossard)})</td><td>${esc(euros(e.parKm))} / km</td><td>${e.plafond ? esc(euros(e.plafond)) : "—"}</td><td>${esc(euros(m.total))}</td></tr>`;
+    }).join("");
+    apercu.innerHTML = `<p><strong>${esc(texte(i.prenom))} ${esc(texte(i.nom))}</strong>${texte(i.email) ? ` — ${esc(i.email)}` : ""}${texte(i.tel) ? ` — ${esc(i.tel)}` : ""}</p>
+      <table><thead><tr><th>Coureur</th><th>Engagement</th><th>Plafond</th><th>Montant</th></tr></thead><tbody>${lignes}</tbody></table>
+      <p class="doc-total">Total : ${esc(euros(total))}</p>`;
+  }
+
+  function construireDocumentImprimable() {
+    const i = stock.infos || {};
+    const asso = texte(lire("association.nom")) || "l'association";
+    const total = stock.engagements.reduce((t, e) => t + montantEngagement(e).total, 0);
+    const tousVerifies = stock.engagements.length > 0 && stock.engagements.every((e) => montantEngagement(e).verifie);
+    const lignes = stock.engagements.map((e) => {
+      const m = montantEngagement(e);
+      return `<tr><td>${esc(e.prenom)} (dossard ${esc(e.dossard)})</td><td>${esc(euros(e.parKm))} par km</td><td>${e.plafond ? esc(euros(e.plafond)) : "sans plafond"}</td><td>${esc(km(m.kmFaits))} km</td><td>${esc(euros(m.total))}</td></tr>`;
+    }).join("");
+    const aujourdHui = formaterDate(maintenant(), "jour");
+    $("#document-imprimable").innerHTML = `
+      <h2 class="doc-titre">Document d'engagement</h2>
+      <p class="doc-soustitre">GEAnérosité — course solidaire au profit de ${esc(asso)}${debut ? `, course du ${esc(formaterDate(debut, "jour"))}` : ""}.</p>
+      <div class="doc-bloc">
+        <h3>La personne qui s'engage</h3>
+        <p>Nom : ${esc(texte(i.nom) || "…………………………")}<br>
+           Prénom : ${esc(texte(i.prenom) || "…………………………")}<br>
+           E-mail : ${esc(texte(i.email) || "…………………………")}<br>
+           Téléphone : ${esc(texte(i.tel) || "…………………………")}</p>
+      </div>
+      <div class="doc-bloc">
+        <h3>Mes engagements</h3>
+        <table class="doc-table">
+          <thead><tr><th>Coureur soutenu</th><th>Montant par km</th><th>Plafond</th><th>Km relevés</th><th>Montant</th></tr></thead>
+          <tbody>${lignes}</tbody>
+        </table>
+        <p class="doc-total">Total ${tousVerifies ? "à verser" : "en attente de vérification"} : ${esc(euros(total))}</p>
+      </div>
+      <div class="doc-bloc">
+        <p>Je m'engage à verser, après la course et la vérification des kilomètres sur Strava, le montant correspondant à chacun de mes engagements ci-dessus, sur la cagnotte du projet. Cet engagement est une promesse de don : il n'entraîne aucun prélèvement automatique.</p>
+      </div>
+      <div class="doc-signature">
+        <div class="doc-case"><span>Fait le ${esc(aujourdHui)}, à</span></div>
+        <div class="doc-case"><span>Signature</span></div>
       </div>`;
   }
 
-  function rendreProchainMatch() {
-    const bloc = $("#prochain-match");
-    const prochain = matchs.find((m) => !lireScore(m));
-    if (!matchs.length) { bloc.hidden = true; return; }
-    if (!prochain) {
-      const champion = championNom();
-      bloc.innerHTML = `<p class="pm-haut"><span class="pm-etiquette">Tournoi terminé</span></p>
-        <p class="pm-fini">${champion ? `🏆 Champion : <strong>${esc(champion)}</strong>` : "Tous les matchs ont été joués. Merci à tous !"}</p>`;
-      return;
-    }
-    const a = joueur(prochain.a), b = joueur(prochain.b);
-    bloc.innerHTML = `<p class="pm-haut">
-        <span class="pm-etiquette">Prochain match</span>
-        <span class="pm-phase">${esc(texte(prochain.phase) || "Tournoi")}</span>
-      </p>
-      <div class="pm-affiche">
-        <div><p class="pm-nom">${esc(a.nom)}</p><p class="pm-equipe">${a.equipe ? esc(a.equipe) : "équipe à choisir"}</p></div>
-        <span class="pm-vs" aria-hidden="true">VS</span>
-        <div><p class="pm-nom">${esc(b.nom)}</p><p class="pm-equipe">${b.equipe ? esc(b.equipe) : "équipe à choisir"}</p></div>
-      </div>
-      <p class="pm-heure">${texte(prochain.heure) ? "Coup d'envoi : " + esc(prochain.heure) : (debut ? "Le " + esc(formaterDate(debut, "jourCourt")) + " à " + esc(heure(debut)) : "Date " + aConfirmer("à confirmer"))}</p>`;
+  function initDocument() {
+    const champs = { prenom: $("#doc-prenom"), nom: $("#doc-nom"), email: $("#doc-email"), tel: $("#doc-tel") };
+    Object.keys(champs).forEach((cle) => {
+      if (!champs[cle]) return;
+      champs[cle].value = texte((stock.infos || {})[cle]);
+      champs[cle].addEventListener("input", () => {
+        stock.infos[cle] = champs[cle].value;
+        ecrireStock();
+        rendreApercuDocument();
+      });
+    });
+    const message = $("#doc-message");
+    $("#imprimer-document").addEventListener("click", () => {
+      if (!stock.engagements.length) { message.textContent = "Ajoutez d'abord un engagement."; return; }
+      construireDocumentImprimable();
+      const doc = $("#document-imprimable");
+      doc.hidden = false;
+      window.print();
+      setTimeout(() => { doc.hidden = true; }, 500);
+    });
+    $("#copier-document").addEventListener("click", () => {
+      const t = texteRecapitulatif();
+      const fini = () => { message.textContent = "Récapitulatif copié : vous pouvez le coller dans un message."; };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(fini).catch(() => { message.textContent = "Copie impossible sur cet appareil."; });
+      else message.textContent = "Copie impossible sur cet appareil.";
+    });
   }
 
-  // Le lecteur du live ne se charge que si on appuie dessus
+  function rendreEnvoiDocument() {
+    const bloc = $("#doc-envoi");
+    const mail = urlValide("email");
+    const formulaire = urlValide("engagement");
+    if (formulaire) {
+      bloc.innerHTML = `<a class="bouton bouton-rose" data-lien="engagement">🤝 Valider mes engagements</a><p class="destination" data-destination="engagement"></p>`;
+    } else if (mail) {
+      const sujet = encodeURIComponent("Mon engagement — GEAnérosité");
+      bloc.innerHTML = `<a class="bouton bouton-rose" href="mailto:${esc(mail)}?subject=${sujet}&body=${encodeURIComponent(texteRecapitulatif())}">✉️ Envoyer mes engagements par e-mail</a>`;
+    } else {
+      bloc.innerHTML = `<a class="bouton bouton-rose" data-lien="engagement">🤝 Valider mes engagements</a><p class="destination" data-destination="engagement"></p>`;
+    }
+    appliquerLiens(bloc);
+  }
+
+
+  /* ───────────────────── La course : infos, live, classement ───────────────────── */
+
+  function infosCourse() {
+    const co = C.course || {};
+    const live = urlValide("live");
+    let hote = "";
+    try { hote = live ? new URL(live).hostname.replace(/^www\./, "") : ""; } catch (err) { hote = ""; }
+    return [
+      { emoji: "📅", valeur: debut ? majuscule(formaterDate(debut, "jourCourt")) + (dateConfirmee ? "" : " " + aConfirmer("date provisoire")) : aConfirmer("date à confirmer") },
+      { emoji: "🕙", valeur: debut ? `${heure(debut)}${fin ? " – " + heure(fin) : ""}` : aConfirmer("horaire à confirmer") },
+      { emoji: "📍", valeur: texte(co.lieu) ? esc(co.lieu) : aConfirmer("lieu à confirmer") },
+      { emoji: "🏁", valeur: texte(co.format) ? esc(co.format) : aConfirmer("format à confirmer") },
+      { emoji: "📺", valeur: live ? `Live sur ${esc(hote)}` : aConfirmer("lien du live à venir") },
+    ];
+  }
+  function rendreInfosCourse() {
+    const html2 = infosCourse().map((i) => `<li><span aria-hidden="true">${i.emoji}</span> ${i.valeur}</li>`).join("");
+    $("#infos-course").innerHTML = html2;
+    $("#infos-direct").innerHTML = html2;
+    const co = C.course || {};
+    if (texte(co.depart)) {
+      $("#infos-course").insertAdjacentHTML("beforeend", `<li><span aria-hidden="true">🚦</span> ${esc(co.depart)}</li>`);
+    }
+    const strava = urlValide("strava");
+    if (strava) {
+      const p = $("#strava-lien");
+      p.innerHTML = `<a class="lien-strava" href="${esc(strava)}" target="_blank" rel="noopener">Rejoindre le club Strava du projet</a>`;
+      p.hidden = false;
+    }
+  }
+
+  function rendreClassement() {
+    const bloc = $("#classement-km");
+    if (!coureurs.length) {
+      bloc.innerHTML = `<div class="vide"><p>Les kilomètres s'afficheront ici dès que les premiers coureurs seront inscrits.</p></div>`;
+      return;
+    }
+    const tries = coureurs.slice().sort((a, b) => b.km - a.km || a.prenom.localeCompare(b.prenom));
+    bloc.innerHTML = `<ol class="classement-liste">${tries.slice(0, 10).map((c, i) => `
+        <li><span class="classement-rang" aria-hidden="true">${i + 1}</span>
+          <span>${esc(c.prenom)} <span class="statut ${c.kmVerifies ? "statut-verifie" : "statut-attente"}">${c.kmVerifies ? "vérifié" : "en attente"}</span></span>
+          <span class="classement-km">${esc(km(c.km))} km</span></li>`).join("")}</ol>
+      <p class="classement-total"><strong>${esc(km(kmTotal))} km</strong> parcourus au total par ${esc(entier(coureurs.length))} coureur${coureurs.length > 1 ? "s" : ""}.</p>`;
+  }
+
   function rendreLive(e) {
     const ecran = $("#live-ecran");
     if (!ecran || ecran.querySelector("iframe")) return;
@@ -748,7 +947,6 @@
     try { hote = live ? new URL(live).hostname.replace(/^www\./, "") : ""; } catch (err) { hote = ""; }
     const twitch = /(^|\.)twitch\.tv$/.test(hote);
     ecran.classList.remove("a-info");
-
     if (!live) {
       ecran.classList.add("a-info");
       ecran.innerHTML = `<div class="live-info">
@@ -770,8 +968,8 @@
     const apres = e === "apres";
     ecran.classList.add("a-info");
     ecran.innerHTML = `<div class="live-info">
-        <p class="live-info-titre">${apres ? "Le tournoi est terminé. Merci !" : e === "direct" ? "Le live est en cours" : "Rendez-vous le jour du tournoi"}</p>
-        <p>${apres ? "Le replay peut rester disponible quelques jours sur la chaîne." : "Suivez la chaîne pour être prévenu du lancement."}</p>
+        <p class="live-info-titre">${apres ? "La course est terminée. Merci !" : e === "direct" ? "Le live est en cours" : "Rendez-vous le jour de la course"}</p>
+        <p>${apres ? "Le replay peut rester disponible quelques jours sur la chaîne." : "Suivez la chaîne pour être prévenu du départ."}</p>
         <a class="bouton bouton-rouge" href="${esc(live)}" target="_blank" rel="noopener">${apres ? "Revoir le live" : "Ouvrir le live"}</a>
       </div>`;
   }
@@ -789,63 +987,22 @@
       return;
     }
     ecran.classList.remove("a-info");
-    ecran.innerHTML = `<iframe class="live-iframe" src="https://player.twitch.tv/?channel=${encodeURIComponent(chaine)}&parent=${encodeURIComponent(domaine)}&autoplay=true" title="Live du tournoi" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+    ecran.innerHTML = `<iframe class="live-iframe" src="https://player.twitch.tv/?channel=${encodeURIComponent(chaine)}&parent=${encodeURIComponent(domaine)}&autoplay=true" title="Live de la course" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
   }
 
 
-  /* ───────────────────── Le pronostic ───────────────────── */
-
-  function rendrePronostic() {
-    const P = C.pronostic || {};
-    $("#pronostic-participation").innerHTML = texte(P.participation) ? esc(P.participation) : aConfirmer("montant à confirmer");
-    $("#pronostic-surprise").innerHTML = texte(P.surprise) ? esc(P.surprise) : aConfirmer("surprise à confirmer");
-    $("#pronostic-cloture").innerHTML = debut
-      ? `Au coup d'envoi, le ${esc(formaterDate(debut, "jourCourt"))} à ${esc(heure(debut))}`
-      : `Au coup d'envoi du tournoi ${aConfirmer("date à confirmer")}`;
-    rendrePronosticEtat();
-  }
-
-  function rendrePronosticEtat() {
-    const action = $("#pronostic-action");
-    if (!action) return;
-    if (pronosticClos()) {
-      action.innerHTML = '<p class="pronostic-clos">Les pronostics sont clos. Merci à toutes les personnes qui ont joué !</p>';
-    } else {
-      action.innerHTML = `<div class="cta-bloc">
-          <a class="bouton bouton-jaune" data-lien="pronostic">🔮 Faire son pronostic</a>
-          <p class="destination" data-destination="pronostic"></p>
-        </div>`;
-      appliquerLiens(action);
-    }
-    const resultat = $("#pronostic-resultat");
-    if (!resultat) return;
-    const champion = championNom();
-    const bons = texte((C.pronostic || {}).bonsPronostics);
-    if (etatActuel() === "apres" && (champion || bons)) {
-      resultat.innerHTML = `<p class="resultat-titre">Résultat</p>
-        ${champion ? `<p>🏆 Champion du tournoi : <strong>${esc(champion)}</strong></p>` : ""}
-        ${bons ? `<p>Bon pronostic : <strong>${esc(bons)}</strong>${point(bons)} Bravo !</p>` : "<p>Les bons pronostics seront annoncés ici.</p>"}`;
-      resultat.hidden = false;
-    } else {
-      resultat.hidden = true;
-    }
-  }
-
-
-  /* ───────────────────── La tombola ───────────────────── */
+  /* ───────────────────── Tombola, collecte, transparence, équipe ───────────────────── */
 
   function rendreTombola() {
     const B = C.tombola || {};
     const prix = nombre(B.prixBillet);
     $("#ticket-prix").innerHTML = prix !== null ? `${esc(euros(prix))} le billet` : `Prix du billet : ${aConfirmer("à confirmer")}`;
     $("#ticket-tirage").innerHTML = texte(B.tirage) ? `Tirage au sort : ${esc(B.tirage)}` : `Date du tirage : ${aConfirmer("à confirmer")}`;
-
     const lots = Array.isArray(B.lots) ? B.lots : [];
     const gagnants = Array.isArray(B.gagnants) ? B.gagnants : [];
     const tousConfirmes = lots.length > 0 && lots.every((l) => texte(l.statut) === "confirme");
     $("#titre-lots").textContent = tousConfirmes ? "Les lots à gagner" : "Exemples de lots recherchés";
     $("#avertissement-lots").hidden = tousConfirmes;
-
     $("#lots").innerHTML = lots.map((lot, i) => {
       const confirme = texte(lot.statut) === "confirme";
       const numero = texte(gagnants[i]);
@@ -857,7 +1014,6 @@
           ${numero ? `<p class="lot-gagnant">Gagnant : ${esc(numero)}</p>` : ""}
         </li>`;
     }).join("");
-
     const resultat = $("#tombola-resultat");
     if (gagnants.some((g) => texte(g))) {
       resultat.innerHTML = '<p class="resultat-titre">Le tirage a eu lieu</p><p>Les gagnants sont indiqués sous chaque lot. Nous contactons chaque personne avec les coordonnées laissées lors de la participation.</p>';
@@ -867,14 +1023,9 @@
     }
   }
 
-
-  /* ───────────────────── La collecte ───────────────────── */
-
   function rendreCollecte() {
     const col = C.collecte || {};
-    $("#compteur-kg").textContent = entier(nombre(K.denreesKg) || 0);
     $("#compteur-vetements").textContent = entier(nombre(K.vetements) || 0);
-    $("#liste-alimentaire").innerHTML = (col.alimentaire || []).map((x) => `<li>${esc(x)}</li>`).join("");
     $("#liste-vetements").innerHTML = (col.vetements || []).map((x) => `<li>${esc(x)}</li>`).join("");
     $("#liste-eviter").innerHTML = (col.aEviter || []).map((x) => `<li>${esc(x)}</li>`).join("");
     const points = Array.isArray(col.points) ? col.points.filter((p) => texte(p.ou)) : [];
@@ -882,9 +1033,6 @@
       ? `<ul class="liste-lieux">${points.map((p) => `<li><strong>${esc(p.ou)}</strong><span>${texte(p.quand) ? esc(p.quand) : "dates à confirmer"}</span></li>`).join("")}</ul>`
       : `<p>Les lieux et les dates de collecte sont ${aConfirmer("à confirmer")}. Ils seront annoncés ici et sur Instagram.</p>`;
   }
-
-
-  /* ───────────────────── Transparence, association, équipe ───────────────────── */
 
   function rendreTransparence() {
     const t = texte((C.transparence || {}).encaissement);
@@ -898,10 +1046,9 @@
     const secours = `<span class="asso-logo-texte"${brouillon ? " data-exemple" : ""}>${esc(nom)}</span>`;
     logo.innerHTML = texte(a.logo) ? `<img src="${esc(a.logo)}" alt="Logo de ${esc(nom)}" loading="lazy" decoding="async">` : secours;
     secoursImages(logo, ".asso-logo", secours);
-
     if (texte(a.nomComplet)) { $("#asso-sigle").textContent = a.nomComplet; $("#asso-sigle").hidden = false; }
     $("#asso-presentation").innerHTML = (a.presentation || []).map((p) => `<p>${esc(p)}</p>`).join("");
-    const site = urlValide("siteAsso") || (/^https:\/\/\S+\.\S+$/.test(texte(a.site)) ? texte(a.site) : "");
+    const site = /^https:\/\/\S+\.\S+$/.test(texte(a.site)) ? texte(a.site) : "";
     if (site) { $("#asso-site").href = site; $("#asso-site-ligne").hidden = false; }
 
     const rotations = [-2, 1.5, -1.2, 2];
@@ -921,7 +1068,6 @@
 
     logoPied($("#logo-iut"), C.logoIUT, "Logo de l'IUT d'Amiens", "IUT d'Amiens");
     logoPied($("#logo-asso"), a.logo, "Logo de " + nom, nom);
-
     const resp = texte((C.mentionsLegales || {}).responsable);
     $("#mentions-responsable").innerHTML = resp ? esc(resp) : `Nom ${aConfirmer("à compléter")}`;
   }
@@ -998,6 +1144,48 @@
     if (croix) croix.addEventListener("click", () => { bandeau.hidden = true; });
   }
 
+  function initInteractions() {
+    // Boutons « je m'engage » et « retirer », où qu'ils soient
+    document.addEventListener("click", (e) => {
+      const engager = e.target.closest("[data-engager]");
+      if (engager) { ouvrirEngagement(engager.dataset.engager); return; }
+      const retirer = e.target.closest("[data-retirer]");
+      if (retirer) {
+        stock.engagements = stock.engagements.filter((x) => x.dossard !== retirer.dataset.retirer);
+        ecrireStock();
+        rendreCoureurs();
+        rendrePanier();
+      }
+    });
+    const recherche = $("#recherche-coureur");
+    if (recherche) recherche.addEventListener("input", () => filtrerCoureurs(recherche.value));
+
+    $("#montants-suggeres").addEventListener("click", (e) => {
+      const b = e.target.closest(".montant-choix");
+      if (!b) return;
+      $("#par-km").value = b.dataset.montant;
+      majEstimation();
+    });
+    $("#par-km").addEventListener("input", majEstimation);
+    $("#plafond").addEventListener("input", majEstimation);
+    $("#valider-engagement").addEventListener("click", validerEngagement);
+    $("#annuler-engagement").addEventListener("click", () => {
+      const d = $("#modale-engagement");
+      if (typeof d.close === "function") d.close(); else d.removeAttribute("open");
+    });
+    const boutonDoc = $("[data-ouvre='modale-document']");
+    if (boutonDoc) boutonDoc.addEventListener("click", () => { rendreApercuDocument(); rendreEnvoiDocument(); });
+    initDocument();
+
+    // Lien de partage d'un coureur : ?coureur=7
+    const demande = texte(params.get("coureur"));
+    if (demande && parDossard.has(demande)) {
+      const carte = $(`#liste-coureurs [data-dossard="${CSS.escape(demande)}"]`);
+      if (carte) carte.scrollIntoView({ block: "center" });
+      ouvrirEngagement(demande);
+    }
+  }
+
 
   /* ───────────────────── C'est parti ───────────────────── */
 
@@ -1008,21 +1196,24 @@
   if (brouillon) {
     html.classList.add("brouillon");
     $("#bandeau-brouillon").hidden = false;
-    console.info("GEAnérosité (mode brouillon) : pour tester, ajoute ?etat=direct ou ?etat=apres à l'adresse.");
+    console.info("GEAnérosité (mode brouillon) : pour tester, ajoute ?etat=direct, ?etat=apres ou ?coureur=1 à l'adresse.");
   }
 
   lancer("textes", appliquerTextes);
   lancer("liens", () => appliquerLiens(document));
   lancer("tableau d'affichage", rendreLedCagnotte);
   lancer("compteurs", rendreCompteurs);
-  lancer("cagnotte et objectifs", rendreCagnotte);
-  lancer("tournoi", rendreTournoi);
-  lancer("pronostic", rendrePronostic);
+  lancer("cagnotte et paliers", rendreCagnotte);
+  lancer("infos de la course", rendreInfosCourse);
+  lancer("liste des coureurs", rendreCoureurs);
+  lancer("mes engagements", rendrePanier);
+  lancer("classement des kilomètres", rendreClassement);
   lancer("tombola", rendreTombola);
   lancer("collecte", rendreCollecte);
   lancer("transparence", rendreTransparence);
   lancer("association et équipe", rendreQui);
   lancer("agenda", initAgenda);
   lancer("compte à rebours", () => { tic(); setInterval(tic, 1000); });
+  lancer("interactions", initInteractions);
   lancer("typographie", () => typographie(document.body));
 })();
