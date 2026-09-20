@@ -1,10 +1,11 @@
 Polices utilisées sur ce site
 ============================
 
-Bungee : Copyright 2023 The Bungee Project Authors (https://github.com/djrrb/Bungee)
+Big Shoulders : Copyright 2019 The Big Shoulders Project Authors (https://github.com/xotypeco/big_shoulders)
+Caveat : Copyright 2014 The Caveat Project Authors (https://github.com/googlefonts/caveat)
 Atkinson Hyperlegible : Copyright 2020 Braille Institute of America, Inc.
 
-Les deux polices sont distribuées sous la licence SIL Open Font License 1.1,
+Ces trois polices sont distribuées sous la licence SIL Open Font License 1.1,
 reproduite ci-dessous. Les fichiers .woff2 de ce dossier sont des sous-ensembles
 (caractères latins uniquement) des polices originales.
 

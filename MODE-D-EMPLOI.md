@@ -1,141 +1,120 @@
-# Mode d'emploi : site VÉLO CHAOS
+# Mode d'emploi : site GEAnérosité
 
-**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Montant de la cagnotte, paris, résultats, liens, lots, équipe… tout est dedans, en français et commenté. Tu n'as pas besoin de toucher au reste.
+**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Compteurs, liens HelloAsso, tournoi, lots, collecte, équipe : tout est dedans, en français et commenté.
 
-Pour l'ouvrir et le modifier : un éditeur de texte simple (Bloc-notes, TextEdit en mode « texte brut », ou mieux, [VS Code](https://code.visualstudio.com), gratuit). Une fois le site en ligne, tu peux même le modifier directement sur GitHub (voir plus bas).
+Le site est déjà en ligne : **https://likooo2.github.io/GEAn-rosit-/**
+Pour le modifier, ouvre le lien ci-dessous, clique sur le crayon ✏️, change ce que tu veux, puis **Commit changes**. C'est publié une à deux minutes plus tard, et ça marche aussi depuis un téléphone :
+👉 https://github.com/Likooo2/GEAn-rosit-/edit/main/js/config.js
 
-> Si le site devient vide ou affiche un bandeau rouge après une modification : c'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier. Compare avec les lignes voisines.
-
----
-
-## 1. Avant le lancement : remplacer les exemples
-
-Le site est livré en **mode brouillon** : tout ce qui est inventé est entouré de **pointillés bleus** quand tu ouvres `index.html`, et marqué `⚠️ EXEMPLE` dans `config.js`.
-
-À remplacer par vos vraies infos :
-
-- [ ] **L'association** : nom, logo, présentation, 3 chiffres clés (à demander à l'asso)
-- [ ] **Les liens** : les 3 formulaires HelloAsso (dons, paris, tombola), la chaîne Twitch, Instagram, l'e-mail
-- [ ] **L'objectif** de la cagnotte
-- [ ] **Le défi** : prénom du cycliste, textes des 8 paliers, cartes sabotage/boost et leurs prix (à caler sur votre liste définitive)
-- [ ] **Le pari** : le lot et le **n° d'autorisation de la mairie**
-- [ ] **La tombola** : prix du billet, lots, commerçants partenaires, points de vente des billets papier
-- [ ] **Le retrait des lots** (texte affiché dans la FAQ)
-- [ ] **Les dons** : les équivalences « 5 € = … » (à valider avec l'asso) et la déduction fiscale : `deductible: true` seulement si l'asso délivre des reçus fiscaux ; taux de 66 %, ou 75 % pour certaines aides aux personnes en difficulté (à confirmer avec elle)
-- [ ] **La collecte** : lieux, dates, liste de ce que vous prenez
-- [ ] **L'équipe** : prénoms, rôles, phrases, photos (voir `img/LISEZ-MOI-PHOTOS.txt`)
-- [ ] **Les mentions légales** : nom de la personne responsable de la publication
-
-Quand tout est rempli, passe `modeBrouillon: true` à **`modeBrouillon: false`**. Les pointillés et le bandeau disparaissent.
+> Si le site affiche un bandeau rouge après une modification : c'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier. Compare avec les lignes voisines.
 
 ---
 
-## 2. Pendant la campagne : mettre à jour la jauge et les paris
+## 1. La règle du projet : ne rien inventer
 
-### La jauge (la cagnotte)
+Tout ce qui n'est pas confirmé reste **vide** (`""`) dans `config.js`. Le site affiche alors tout seul « à confirmer », ou grise le bouton avec « lien bientôt disponible ». Personne n'est induit en erreur, et vous remplissez au fur et à mesure.
 
-Dans `config.js`, partie **LA CAGNOTTE** :
+Le site est livré en **mode brouillon** : ce qui reste à compléter est entouré de pointillés bleus, et chaque bouton sans lien indique la ligne exacte à remplir. Quand tout est prêt, passe `modeBrouillon: true` à **`false`**.
+
+---
+
+## 2. Avant le lancement
+
+- [ ] **Les 4 liens HelloAsso** : `cagnotte`, `inscriptionTournoi`, `pronostic`, `tombola`. Copie l'adresse complète du formulaire (elle commence par `https://www.helloasso.com/…`). Tant qu'un lien est vide, le bouton reste grisé.
+- [ ] **Le lien du live** (Twitch ou YouTube), l'**Instagram** et l'**e-mail** de contact.
+- [ ] **La date du tournoi** : `dates.debutTournoi`, par exemple `"2026-11-20T18:00"`. Tant qu'elle est vide, le site affiche « date à confirmer ». Quand elle est définitive, passe `dateConfirmee` à `true` (sinon le site précise « date provisoire »).
+- [ ] **Le tournoi** : lieu, format, noms des joueurs et équipes choisies.
+- [ ] **Le pronostic** : montant de la participation et nature de la surprise.
+- [ ] **La tombola** : prix du billet et date du tirage. Pour chaque lot obtenu, passe `statut` de `"recherche"` à `"confirme"` et écris le nom du partenaire.
+- [ ] **La collecte** : lieux et dates de dépôt dans `collecte.points`.
+- [ ] **L'association** : présentation, signification du sigle et logo (avec l'accord d'A.V.A.).
+- [ ] **L'équipe** : prénoms, rôles, photos.
+- [ ] **La transparence** : `transparence.encaissement`, pour dire qui encaisse l'argent (par exemple : les paiements arrivent directement sur le compte HelloAsso d'A.V.A.).
+- [ ] **Les mentions légales** : prénom et nom de la personne responsable de la publication.
+- [ ] Passer `modeBrouillon` à `false`.
+
+---
+
+## 3. Pendant le projet : les compteurs
+
+Partie **LES COMPTEURS** de `config.js` :
 
 ```js
-cagnotte: {
-  montant: 340,                               // ← le nouveau total en €
+compteurs: {
+  cagnotte: 0,              // ← le total récolté en €
   objectif: 1000,
-  miseAJour: "vendredi 6 novembre à 18h30",   // ← la date de ta mise à jour
+  denreesKg: 0,             // ← kg de denrées collectées
+  vetements: 0,             // ← nombre de vêtements
+  participantsTournoi: 0,
+  participantsTombola: 0,
+  miseAJour: "",            // ← ex : "lundi 16 novembre à 18h"
 },
 ```
 
-Le total, c'est ce que vous décidez de compter (conseil : l'addition de tous les formulaires HelloAsso + les espèces). Écris le nombre **sans espace ni €** : `1250`, pas `"1 250 €"`. Les paliers se débloquent tout seuls.
-
-### Le graphique des paris
-
-HelloAsso ne donne pas le détail par tranche : il faut compter. Exporte la liste des participants du formulaire de paris (fichier Excel), puis compte les pronostics de chaque tranche. Avec les pronostics en colonne C, par exemple :
-
-```
-=NB.SI.ENS(C:C;">=40";C:C;"<=49")
-```
-
-Puis reporte les chiffres dans `config.js` :
-
-```js
-tranches: [
-  { de: 0,  a: 39,   parieurs: 6  },
-  { de: 40, a: 49,   parieurs: 14 },   // ← change juste ces nombres
-  …
-],
-```
-
-Le total de parieurs se calcule tout seul. Tu peux aussi changer les tranches (`de` et `a`), en ajouter ou en retirer.
+Écris les nombres **sans espace ni €** : `1250`, pas `"1 250 €"`. Les objectifs du live se débloquent tout seuls et le ballon avance sur le terrain.
 
 ---
 
-## 3. Après le live : les résultats
+## 4. Le tournoi, pendant le live
 
-Partie **LES RÉSULTATS** :
+Dans `tournoi.matchs`, remplis le champ `score` au fur et à mesure :
 
 ```js
-resultat: {
-  km: 63,                            // la distance officielle
-  gagnant: "Camille B.",             // prénom + initiale, jamais le nom complet
-  tombola: ["0427", "0112", "0035"], // numéros gagnants, dans l'ordre des lots
-},
+{ phase: "Groupe A", a: 1, b: 2, score: "3-1", heure: "18h15" },
 ```
 
-Le site affiche alors « Merci ! » avec la distance sur l'écran du compteur, le gagnant, la tranche gagnante en vert dans le graphique, et les numéros sous chaque lot.
+- `a` et `b` sont les **numéros des joueurs** (leur position dans `participants`).
+- Le classement des groupes, le prochain match et le champion se calculent tout seuls.
+- Pour la phase finale, remplace les textes (`"1er du groupe A"`) par les numéros des joueurs qualifiés, par exemple `a: 3`.
+- En cas d'égalité en phase finale, ajoute les tirs au but : `tab: "4-3"`.
 
-Le reste change **tout seul** selon la date et l'heure : compte à rebours avant le live, « EN DIRECT » pendant, « Merci ! » après, et les paris affichés « clos » à partir de l'heure de clôture.
+Quand la finale a un score, le champion s'affiche en haut de la page et dans la partie tournoi.
 
-### Tester l'affichage sans attendre le 13 novembre
+---
+
+## 5. Après le tournoi
+
+```js
+pronostic: { bonsPronostics: "Camille B." },     // prénom + initiale
+tombola:   { gagnants: ["0427", "0112"] },       // dans l'ordre des lots
+```
+
+### Tester l'affichage sans attendre
 
 Ajoute ceci à la fin de l'adresse du site :
 
 - `?etat=direct` : le site comme pendant le live
-- `?etat=apres` : le site comme après le live
-- `?maintenant=2026-11-13T20:30` : simule n'importe quelle date et heure
+- `?etat=apres` : le site comme après le tournoi
+- `?maintenant=2026-11-20T19:30` : simule une date et une heure
 
-Personne d'autre ne voit ces tests : ils ne changent rien au site.
-
----
-
-## 4. Mettre le site en ligne (gratuit)
-
-Choisis **une** des deux options. GitHub Pages est la plus pratique pour les mises à jour ; Netlify est la plus rapide pour démarrer.
-
-### Option A : GitHub Pages (recommandé)
-
-1. Crée un compte gratuit sur [github.com](https://github.com).
-2. En haut à droite, clique sur **+** puis **New repository**. Nom : `velo-chaos`. Laisse **Public** coché. Clique sur **Create repository**.
-3. Sur la page qui s'affiche, clique sur le lien **uploading an existing file**.
-4. Ouvre le dossier du site sur ton ordinateur, sélectionne **tout son contenu** (`index.html` et les dossiers `css`, `js`, `fonts`, `img`) et glisse-le dans la page. Clique sur **Commit changes**.
-5. Va dans **Settings** puis **Pages** (menu de gauche). Dans **Branch**, choisis `main` et `/ (root)`, puis **Save**.
-6. Attends une ou deux minutes et recharge la page : l'adresse de ton site s'affiche, du type `https://ton-pseudo.github.io/velo-chaos/`.
-7. **Une seule fois** : ouvre `index.html` (sur GitHub, clique sur le fichier puis sur le crayon ✏️) et remplace les **2 adresses** `https://ton-pseudo.github.io/velo-chaos/` en haut du fichier par la vraie adresse. C'est ce qui affiche la belle image d'aperçu quand vous partagez le lien sur WhatsApp ou Instagram.
-
-**Mettre à jour ensuite** (jauge, paris, résultats) : sur GitHub, ouvre `js/config.js`, clique sur le crayon ✏️, modifie, puis **Commit changes**. En ligne en une à deux minutes.
-
-### Option B : Netlify
-
-1. Crée un compte gratuit sur [app.netlify.com](https://app.netlify.com).
-2. Dans **Projects**, ouvre le menu **Add new project** et choisis **Deploy manually** (ou va directement sur [app.netlify.com/drop](https://app.netlify.com/drop)).
-3. Glisse **le dossier du site entier** dans la zone prévue. En quelques secondes, le site est en ligne à une adresse en `.netlify.app`.
-4. Clique sur **Customize** sous l'adresse provisoire pour choisir une jolie adresse, par exemple `velo-chaos-amiens.netlify.app`.
-5. Remplace les 2 adresses de partage dans `index.html` (comme l'étape 7 ci-dessus), et dans `config.js`, partie **MENTIONS LÉGALES**, remplace l'hébergeur par Netlify.
-
-**Mettre à jour ensuite** : modifie `config.js` sur ton ordinateur, puis glisse à nouveau **tout le dossier** dans la zone de dépôt en bas de la page **Deploys** de ton projet.
-
-### Bon à savoir
-
-- **Le lecteur Twitch** ne s'affiche que sur le site en ligne, pas quand tu ouvres le fichier sur ton ordinateur : c'est une règle de Twitch, pas un bug.
-- **Tu ne vois pas ta modification ?** Recharge la page (sur téléphone, ferme et rouvre l'onglet). Le navigateur garde parfois l'ancienne version quelques minutes.
-- **Afficher le formulaire de don HelloAsso directement dans la page** (facultatif) : dans HelloAsso, cherche l'option pour intégrer le formulaire à un site, copie l'adresse qui suit `src="` dans le code proposé, et colle-la dans `liens.donsWidget`.
-- **Aucun paiement ne passe par le site** : tous les boutons mènent aux formulaires HelloAsso de l'association.
+Ces tests ne changent rien pour les autres visiteurs.
 
 ---
 
-## 5. En cas de pépin
+## 6. Trois points à faire valider avant d'ouvrir les participations
+
+Nous ne sommes pas juristes : faites confirmer ces points par A.V.A., qui a l'habitude.
+
+1. **Le pronostic payant.** En France, un jeu avec participation payante et lot à gagner est encadré. La solution la plus simple est souvent un pronostic **gratuit**, avec un don libre à côté. Les textes du site sont déjà prudents (« ce n'est pas un pari d'argent »), mais la forme juridique doit être validée.
+2. **La tombola.** Une tombola organisée par une association et ouverte au public demande en général une **autorisation de la mairie**. Les lots doivent être des objets ou des bons, jamais de l'argent.
+3. **Le règlement.** Celui du site est présenté comme un **projet à valider**. Faites-le relire, puis retirez la mention « à valider » dans `index.html` quand c'est fait.
+
+Pensez aussi à l'accord des personnes photographiées, et à l'accord d'A.V.A. pour son logo et sa présentation.
+
+---
+
+## 7. En cas de pépin
 
 | Ce que tu vois | La solution |
 |---|---|
 | Bandeau rouge « config.js contient une erreur » | Une virgule ou un guillemet manque à l'endroit modifié. Sur ordinateur, la touche **F12** (onglet *Console*) donne le numéro de la ligne. |
-| Une photo ne s'affiche pas | Vérifie le chemin (`img/equipe/hugo.jpg`) et le nom exact du fichier, sans espace ni accent. En attendant, le site affiche l'emoji à la place. |
-| Un bouton ne mène nulle part | Le lien correspondant est vide ou mal copié dans `liens` (il doit commencer par `https://`). |
-| L'aperçu du lien sur WhatsApp est vide | Les 2 adresses de partage dans `index.html` n'ont pas été remplacées. |
+| Un bouton reste grisé | Le lien correspondant est vide ou mal copié dans `liens` (il doit commencer par `https://`). |
+| Le lecteur du live ne s'affiche pas | Il ne fonctionne que sur le site en ligne, et seulement pour un lien Twitch. Sinon, le bouton ouvre le live dans un nouvel onglet. |
+| Une photo ne s'affiche pas | Vérifie le chemin (`img/equipe/prenom.jpg`) et le nom exact du fichier, sans espace ni accent. |
+| Ta modification n'apparaît pas | Recharge la page. GitHub met une à deux minutes à publier, et le navigateur garde parfois l'ancienne version. |
+
+---
+
+## 8. Remettre le site en ligne ailleurs (si besoin)
+
+Le dossier complet fonctionne sur n'importe quel hébergeur de fichiers statiques. Sur **Netlify** : crée un compte, puis dans **Projects**, ouvre **Add new project**, choisis **Deploy manually** et dépose le dossier entier. Pense alors à remplacer les 2 adresses de partage en haut de `index.html`, ainsi que l'hébergeur dans `config.js`.

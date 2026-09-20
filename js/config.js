@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════════
-   VÉLO CHAOS : la soirée maudite — FICHIER DE CONFIGURATION
+   GEAnérosité — FICHIER DE CONFIGURATION
    ════════════════════════════════════════════════════════════════════
 
    👉 C'est LE SEUL fichier à modifier pour mettre le site à jour.
@@ -9,233 +9,225 @@
         Besoin de guillemets DANS un texte ? Utilise les français : « comme ça ».
      2. Chaque ligne se termine par une virgule, comme dans les exemples.
      3. Les nombres s'écrivent SANS guillemets ni espaces : 1250 (pas "1 250").
-        Pour les décimales, un point : 12.5
      4. Tout ce qui suit // est un commentaire : le site l'ignore.
 
-   ⚠️ EXEMPLE = valeur inventée pour la démo. À remplacer avant de partager !
-
-   Si le site devient vide ou bizarre après une modif : c'est presque
-   toujours une virgule ou un guillemet oublié juste à l'endroit modifié.
+   🚫 RÈGLE DU PROJET : NE RIEN INVENTER.
+   Tant qu'une info n'est pas confirmée, laisse "" (vide) : le site affiche
+   automatiquement « à confirmer » ou « bientôt disponible ».
    ════════════════════════════════════════════════════════════════════ */
 
 const CONFIG = {
 
   /* 🚧 MODE BROUILLON
-     true  = les exemples à remplacer sont entourés de pointillés bleus
-             et un bandeau s'affiche en bas de l'écran.
+     true  = ce qu'il reste à compléter est entouré de pointillés bleus,
+             et chaque bouton sans lien indique quelle ligne remplir.
      false = site propre, prêt à être partagé. */
   modeBrouillon: true,
 
 
   /* ══════════════════════════════════════════════════════════════════
-     PARTIE 1 — À METTRE À JOUR PENDANT LA CAMPAGNE
+     PARTIE 1 — LES COMPTEURS (à mettre à jour pendant le projet)
      ══════════════════════════════════════════════════════════════════ */
 
-  // 💰 LA CAGNOTTE
-  cagnotte: {
-    montant: 340,                              // Total récolté en € (HelloAsso + espèces). Ex : 1250
-    objectif: 1000,                            // ⚠️ EXEMPLE : votre objectif en €
-    miseAJour: "vendredi 6 novembre à 18h30",  // Texte libre, affiché tel quel sous la jauge
-  },
-
-  // 🎲 LES PARIS : combien de pronostics dans chaque tranche de km ?
-  // Tu peux ajouter, supprimer ou modifier les tranches.
-  //   de : km minimum de la tranche
-  //   a  : km maximum de la tranche (mets null pour « et plus »)
-  compteurParis: {
-    tranches: [
-      { de: 0,  a: 39,   parieurs: 6  },   // → « moins de 40 km »
-      { de: 40, a: 49,   parieurs: 14 },
-      { de: 50, a: 59,   parieurs: 23 },
-      { de: 60, a: 69,   parieurs: 19 },
-      { de: 70, a: 79,   parieurs: 9  },
-      { de: 80, a: null, parieurs: 4  },   // → « 80 km et plus »
-    ],
-    // Nombre total de parieurs affiché.
-    // null = somme automatique des tranches. Sinon, écris le nombre (ex : 58).
-    totalParieurs: null,
-  },
-
-  // 🏁 LES RÉSULTATS : à remplir APRÈS le live (laisse null / vide avant)
-  resultat: {
-    km: null,        // Distance officielle, arrondie au km. Ex : 63
-    gagnant: "",     // Prénom + initiale du gagnant du pari. Ex : "Camille B."
-    tombola: [],     // Numéros des billets gagnants, dans l'ordre des lots. Ex : ["0427", "0112", "0035"]
+  compteurs: {
+    cagnotte: 0,              // € récoltés au total (HelloAsso + espèces)
+    objectif: 1000,           // € : le dernier palier du live
+    denreesKg: 0,             // kg de denrées alimentaires collectées
+    vetements: 0,             // nombre de vêtements collectés
+    participantsTournoi: 0,   // joueurs inscrits au tournoi
+    participantsTombola: 0,   // personnes ayant pris un billet de tombola
+    miseAJour: "",            // ex : "lundi 16 novembre à 18h" (vide = ligne masquée)
   },
 
 
   /* ══════════════════════════════════════════════════════════════════
-     PARTIE 2 — À REMPLIR UNE FOIS (asso, liens, lots, équipe…)
+     PARTIE 2 — LES LIENS
+     ⚠️ Ne mets QUE de vrais liens, copiés depuis HelloAsso (avec https://).
+     Lien vide = le bouton s'affiche grisé avec « Lien bientôt disponible ».
      ══════════════════════════════════════════════════════════════════ */
 
-  // 🤝 L'ASSOCIATION
-  association: {
-    nom: "L'Épi Solidaire",   // ⚠️ EXEMPLE : nom de l'association
-    logo: "",                 // Chemin du logo, ex : "img/logo-asso.png" (vide = nom écrit à la place)
-    site: "",                 // Site de l'asso, ex : "https://www.site-asso.fr" (optionnel)
-
-    // ⚠️ EXEMPLE : présentation de l'asso (un texte = un paragraphe)
-    presentation: [
-      "Depuis 2012, L'Épi Solidaire accompagne à Amiens des familles, des étudiants et des personnes seules qui traversent une période difficile.",
-      "Ses bénévoles tiennent une épicerie solidaire et un vestiaire, où les adhérents trouvent des produits du quotidien et des vêtements, mais aussi un accueil chaleureux, une oreille attentive et un coup de main pour leurs démarches.",
-      "Ici, pas de jugement : l'asso aide chacun à passer un cap, le temps qu'il faut.",
-    ],
-
-    // ⚠️ EXEMPLE : 3 chiffres clés (demandez les vrais à l'asso)
-    chiffres: [
-      { valeur: "350", texte: "foyers accompagnés chaque année" },
-      { valeur: "45",  texte: "bénévoles toute l'année" },
-      { valeur: "2",   texte: "ouvertures par semaine à Amiens" },
-    ],
-  },
-
-  // 🔗 LES LIENS (copie-colle les adresses complètes, avec https://)
   liens: {
-    donsHelloAsso:     "https://www.helloasso.com/associations/l-epi-solidaire/formulaires/1",                 // ⚠️ EXEMPLE
-    parisHelloAsso:    "https://www.helloasso.com/associations/l-epi-solidaire/evenements/velo-chaos-paris",   // ⚠️ EXEMPLE
-    tombolaHelloAsso:  "https://www.helloasso.com/associations/l-epi-solidaire/evenements/tombola-vendredi-13", // ⚠️ EXEMPLE
-    // Optionnel : boutique HelloAsso « un article = un sabotage ou un boost ». Vide = lien des dons.
-    sabotagesHelloAsso: "",
-    // Optionnel : adresse du widget HelloAsso pour afficher le formulaire de don dans la page
-    // (voir le mode d'emploi). Vide = simple bouton.
-    donsWidget: "",
-    twitch:    "https://www.twitch.tv/velochaos_amiens",      // ⚠️ EXEMPLE : lien de la chaîne
-    instagram: "https://www.instagram.com/velochaos.amiens/", // ⚠️ EXEMPLE
-    email:     "contact@velochaos-exemple.fr",                // ⚠️ EXEMPLE (sans « mailto: »)
+    cagnotte: "",            // 💰 HelloAsso : formulaire de don / cagnotte
+    inscriptionTournoi: "",  // 🎮 HelloAsso (ou autre formulaire) : inscription des joueurs
+    pronostic: "",           // 🔮 HelloAsso : formulaire de pronostic
+    tombola: "",             // 🎟️ HelloAsso : billetterie de la tombola
+    live: "",                // 📺 Lien du live (Twitch ou YouTube)
+    instagram: "",           // Compte Instagram du projet
+    email: "",               // Adresse e-mail de contact (sans « mailto: »)
   },
 
-  // 🗓️ LES DATES (heure de Paris). « +01:00 » = heure d'hiver française, ne le supprime pas.
+
+  /* ══════════════════════════════════════════════════════════════════
+     PARTIE 3 — LE TOURNOI
+     ══════════════════════════════════════════════════════════════════ */
+
+  // 🗓️ DATES (heure de Paris). Format : "2026-11-20T18:00". Vide = « date à confirmer ».
   dates: {
-    debutLive:    "2026-11-13T19:00:00+01:00",
-    finLive:      "2026-11-13T22:00:00+01:00",
-    clotureParis: "2026-11-13T18:00:00+01:00",
-    distribution: "2026-11-21T10:00:00+01:00",   // seul le jour est affiché
+    debutTournoi: "",       // coup d'envoi du live (clôture aussi les pronostics)
+    finTournoi: "",         // fin prévue du live (vide = 4 h après le début)
+    dateConfirmee: false,   // true quand la date est définitive (sinon affichée « provisoire »)
   },
 
   // 🧪 POUR TESTER L'AFFICHAGE : "" (automatique), "avant", "direct" ou "apres"
   // Astuce : sans rien modifier, ajoute ?etat=direct à la fin de l'adresse du site.
   forcerEtat: "",
 
-  // 🪜 LES PALIERS (sub goals) : montant en €, emoji, texte.
-  // ⚠️ À VÉRIFIER : remplace les textes par votre liste définitive de défis.
-  // Tu peux en ajouter ou en retirer : le site s'adapte tout seul.
+  tournoi: {
+    jeu: "EA FC",           // jeu utilisé (précise la version quand elle est connue)
+    lieu: "",               // lieu d'où le live est diffusé (vide = à confirmer)
+    format: "",             // ex : "8 joueurs, 2 groupes, demi-finales et finale" (vide = à confirmer)
+
+    // 👥 LES JOUEURS : nom (ou pseudo) et équipe choisie. Vide = « à confirmer ».
+    // Leur numéro (1, 2, 3…) sert dans les groupes et les matchs ci-dessous.
+    participants: [
+      { nom: "", equipe: "" },   // Joueur 1
+      { nom: "", equipe: "" },   // Joueur 2
+      { nom: "", equipe: "" },   // Joueur 3
+      { nom: "", equipe: "" },   // Joueur 4
+      { nom: "", equipe: "" },   // Joueur 5
+      { nom: "", equipe: "" },   // Joueur 6
+      { nom: "", equipe: "" },   // Joueur 7
+      { nom: "", equipe: "" },   // Joueur 8
+    ],
+
+    // ⚠️ EXEMPLE DE FORMAT (2 groupes de 4) : adapte-le à votre vrai format.
+    // Le classement de chaque groupe se calcule tout seul à partir des scores.
+    groupes: [
+      { nom: "Groupe A", joueurs: [1, 2, 3, 4] },
+      { nom: "Groupe B", joueurs: [5, 6, 7, 8] },
+    ],
+
+    // ⚽ LES MATCHS : a et b = numéros des joueurs (ou un texte tant qu'on ne sait pas).
+    // score : "2-1" une fois le match joué. tab : tirs au but si égalité, ex : "4-3".
+    // heure : "18h15" (vide = à confirmer). Le premier match sans score = « prochain match ».
+    matchs: [
+      { phase: "Groupe A", a: 1, b: 2, score: "", heure: "" },
+      { phase: "Groupe A", a: 3, b: 4, score: "", heure: "" },
+      { phase: "Groupe B", a: 5, b: 6, score: "", heure: "" },
+      { phase: "Groupe B", a: 7, b: 8, score: "", heure: "" },
+      { phase: "Groupe A", a: 1, b: 3, score: "", heure: "" },
+      { phase: "Groupe A", a: 2, b: 4, score: "", heure: "" },
+      { phase: "Groupe B", a: 5, b: 7, score: "", heure: "" },
+      { phase: "Groupe B", a: 6, b: 8, score: "", heure: "" },
+      { phase: "Groupe A", a: 1, b: 4, score: "", heure: "" },
+      { phase: "Groupe A", a: 2, b: 3, score: "", heure: "" },
+      { phase: "Groupe B", a: 5, b: 8, score: "", heure: "" },
+      { phase: "Groupe B", a: 6, b: 7, score: "", heure: "" },
+      // Phase finale : remplace les textes par les numéros des joueurs qualifiés (ex : a: 3)
+      { phase: "Demi-finale 1", a: "1er du groupe A", b: "2e du groupe B", score: "", tab: "", heure: "" },
+      { phase: "Demi-finale 2", a: "1er du groupe B", b: "2e du groupe A", score: "", tab: "", heure: "" },
+      { phase: "Finale", a: "Vainqueur demi-finale 1", b: "Vainqueur demi-finale 2", score: "", tab: "", heure: "" },
+    ],
+  },
+
+  // 🪜 LES OBJECTIFS DU LIVE (subgoals) : montant en €, emoji, texte.
+  // aConfirmer: true affiche « à confirmer » à côté (quand ça dépend d'une autre personne).
   paliers: [
-    { montant: 50,   emoji: "🎭", texte: "Le chat Twitch choisit mon déguisement pour tout le live" },
-    { montant: 100,  emoji: "🗣️", texte: "Tout le live avec l'accent picard" },
-    { montant: 200,  emoji: "👨‍🏫", texte: "Un prof de GEA vient pédaler 15 minutes en direct" },
-    { montant: 300,  emoji: "🥄", texte: "Dégustation à l'aveugle de produits bizarres choisis par le chat" },
-    { montant: 400,  emoji: "📼", texte: "On tourne en live une pub façon années 90 pour l'association" },
-    { montant: 500,  emoji: "💇", texte: "Une mèche de cheveux teinte de la couleur votée par le chat" },
-    { montant: 750,  emoji: "🎤", texte: "Karaoké dans le hall de l'IUT sur une chanson choisie par les donateurs" },
-    { montant: 1000, emoji: "👠", texte: "Grand final : défilé de mode en live avec les tenues les plus improbables" },
+    { montant: 50,   emoji: "🎮", texte: "Un joueur doit jouer avec une équipe 3 étoiles." },
+    { montant: 100,  emoji: "🔄", texte: "Le perdant d'un match obtient une revanche." },
+    { montant: 200,  emoji: "🎙️", texte: "Un commentateur invité rejoint les matchs." },
+    { montant: 300,  emoji: "👨‍🏫", texte: "Un professeur de BUT GEA participe au tournoi.", aConfirmer: true },
+    { montant: 500,  emoji: "🏆", texte: "Grande finale organisée en plein milieu d'Amiens.", aConfirmer: true },
+    { montant: 750,  emoji: "🎯", texte: "Le public choisit les équipes de la finale, avec des équipes de niveau équivalent." },
+    { montant: 1000, emoji: "🥇", texte: "Match exhibition final : le gagnant du tournoi affronte l'équipe choisie par le public." },
   ],
 
-  // 🚴 LE DÉFI
-  // ⚠️ À VÉRIFIER : noms, effets et prix des cartes (ajoute ou retire des cartes librement).
-  defi: {
-    cycliste: "Hugo",   // ⚠️ EXEMPLE : prénom de la personne qui pédale
-    // prix en € — ⚠️ EXEMPLES de prix
-    sabotages: [
-      { nom: "Pédaler avec des palmes",                  emoji: "🤿", prix: 5,  effet: "Je ressemble à un canard en détresse. Vitesse divisée par deux, dignité par dix." },
-      { nom: "Résistance au max pendant 5 minutes",      emoji: "🥵", prix: 5,  effet: "Mes cuisses portent plainte. Le compteur ralentit, mes cris accélèrent." },
-      { nom: "Pédaler avec un plateau de verres d'eau",  emoji: "🥛", prix: 7,  effet: "Une goutte renversée et je passe la serpillière. En direct." },
-      { nom: "Manger un citron entier sans s'arrêter",   emoji: "🍋", prix: 10, effet: "Zeste compris. Grimaces garanties, pédales interdites de repos." },
-    ],
-    boosts: [
-      { nom: "Musique de motivation",                    emoji: "🎧", prix: 3,  effet: "Tu choisis le son, je pédale en rythme. Même si c'est la Macarena." },
-      { nom: "Boisson énergisante",                      emoji: "⚡", prix: 5,  effet: "Turbo activé pendant 10 minutes. Enfin, en théorie." },
-      { nom: "Un pote pédale 5 minutes à ma place",      emoji: "🦸", prix: 10, effet: "Je souffle 5 minutes, les kilomètres continuent de tourner." },
-    ],
+
+  /* ══════════════════════════════════════════════════════════════════
+     PARTIE 4 — PRONOSTIC ET TOMBOLA
+     ══════════════════════════════════════════════════════════════════ */
+
+  pronostic: {
+    participation: "",    // ex : "Participation libre, à partir de 1 €" (vide = à confirmer)
+    surprise: "",         // la surprise pour le bon pronostic (vide = à confirmer)
+    bonsPronostics: "",   // APRÈS le tournoi : prénom + initiale du ou des gagnants
   },
 
-  // 🎯 LE PARI
-  paris: {
-    lot: "Un panier gourmand 100 % picard : macarons d'Amiens, tuiles au chocolat et jus de pomme de la Somme", // ⚠️ EXEMPLE
-    numeroAutorisation: "2026-117",   // ⚠️ EXEMPLE : n° d'autorisation de la mairie d'Amiens
-  },
-
-  // 🎟️ LA TOMBOLA
   tombola: {
-    prixBillet: 2,   // ⚠️ EXEMPLE : prix d'un billet en €
-    // photo : chemin de l'image (ex : "img/lots/macarons.jpg"). Vide = emoji à la place.
-    lots: [ // ⚠️ EXEMPLES de lots et de commerçants
-      { nom: "Un coffret de macarons d'Amiens",           partenaire: "Pâtisserie Le Beffroi Gourmand", photo: "", emoji: "🍪" },
-      { nom: "Un sweat brodé aux couleurs de l'IUT",      partenaire: "Atelier Brod'Amiens",            photo: "", emoji: "🧥" },
-      { nom: "Un panier de légumes des hortillonnages",   partenaire: "Les Jardins de la Somme",        photo: "", emoji: "🥬" },
-      { nom: "Une plante verte et son pot en céramique",  partenaire: "Fleuriste L'Herbe Folle",        photo: "", emoji: "🪴" },
-      { nom: "Un jeu de société pour les soirées entre potes", partenaire: "Le Repaire du Dé",          photo: "", emoji: "🎲" },
+    prixBillet: null,     // prix d'un billet en € (null = à confirmer). Ex : 2
+    tirage: "",           // ex : "Pendant le live, avant la finale" (vide = à confirmer)
+    // statut : "recherche" (on cherche un partenaire) ou "confirme" (lot obtenu).
+    // partenaire : nom du commerce, à remplir SEULEMENT quand le lot est confirmé.
+    lots: [
+      { nom: "Carte cadeau Amazon",                                   emoji: "🎁", statut: "recherche", partenaire: "" },
+      { nom: "Carte cadeau Steam, PlayStation ou Xbox",               emoji: "🕹️", statut: "recherche", partenaire: "" },
+      { nom: "Places de cinéma",                                      emoji: "🎬", statut: "recherche", partenaire: "" },
+      { nom: "Repas ou menu offert dans un restaurant d'Amiens",      emoji: "🍔", statut: "recherche", partenaire: "" },
+      { nom: "Carte cadeau Uber Eats ou Deliveroo",                   emoji: "🛵", statut: "recherche", partenaire: "" },
+      { nom: "Écouteurs Bluetooth",                                   emoji: "🎧", statut: "recherche", partenaire: "" },
+      { nom: "Enceinte Bluetooth",                                    emoji: "🔊", statut: "recherche", partenaire: "" },
+      { nom: "Accessoires gaming : manette, casque, tapis de souris",  emoji: "🎮", statut: "recherche", partenaire: "" },
+      { nom: "Session bowling, laser game ou escape game",            emoji: "🎳", statut: "recherche", partenaire: "" },
+      { nom: "Carte cadeau d'un magasin de vêtements",                emoji: "👟", statut: "recherche", partenaire: "" },
+      { nom: "Abonnement musique ou streaming (1 à 3 mois)",          emoji: "🎵", statut: "recherche", partenaire: "" },
+      { nom: "Goodies et bons d'achat de commerces locaux",           emoji: "🛍️", statut: "recherche", partenaire: "" },
     ],
-    // Où acheter des billets papier
-    pointsDeVente: [
-      "Sur notre stand dans le hall de l'IUT d'Amiens, tous les midis",
-      "À l'épicerie Au Coin Gourmand, rue des Trois-Cailloux", // ⚠️ EXEMPLE
-    ],
+    gagnants: [],         // APRÈS le tirage : numéros ou prénoms gagnants, dans l'ordre des lots
   },
 
-  // 🎁 RETRAIT DES LOTS (pari + tombola) — ⚠️ EXEMPLE
-  retraitDesLots: "Les gagnants sont contactés par e-mail dans les 7 jours (grâce aux coordonnées laissées sur HelloAsso). Les lots se récupèrent sur notre stand à l'IUT ou au local de l'association, jusqu'au 21 novembre. Billet papier ? Garde-le bien : on vérifie les numéros sur le site.",
 
-  // 💚 LES DONS
-  dons: {
-    deductible: true,     // true si l'asso est d'intérêt général (elle délivre des reçus fiscaux). Sinon false.
-    tauxDeduction: 66,    // 66 % en général. 75 % si l'asso fournit gratuitement repas, soins ou logement
-                          // à des personnes en difficulté : vérifiez avec elle !
-    exempleDeduction: 30, // Montant pris en exemple : « 30 € donnés ne te coûtent que… »
-    // ⚠️ EXEMPLES : montants et objets à caler avec l'asso
-    equivalences: [
-      { montant: 5,  emoji: "🧼", objet: "un kit d'hygiène : savon, dentifrice, brosse à dents" },
-      { montant: 10, emoji: "🥣", objet: "un colis petit-déjeuner pour une famille" },
-      { montant: 20, emoji: "🥕", objet: "un panier de fruits et légumes frais" },
-      { montant: 50, emoji: "🍼", objet: "un kit bébé : couches et lait infantile" },
-    ],
-  },
+  /* ══════════════════════════════════════════════════════════════════
+     PARTIE 5 — LA COLLECTE
+     ══════════════════════════════════════════════════════════════════ */
 
-  // 📦 LA COLLECTE (nourriture et vêtements)
   collecte: {
-    lieux: [
-      { ou: "Supermarché du quartier Saint-Leu", quand: "vendredi 6 et samedi 7 novembre, de 9h à 19h" }, // ⚠️ EXEMPLE
-      { ou: "Hall de l'IUT d'Amiens",            quand: "tous les midis, du 2 au 20 novembre" },
-    ],
-    onCollecte: [
+    // Où et quand déposer. Vide = « lieux et dates à confirmer ».
+    // Ex : { ou: "Hall de l'IUT d'Amiens", quand: "du 2 au 20 novembre, le midi" },
+    points: [],
+    // Listes indicatives : à ajuster selon les besoins d'A.V.A.
+    alimentaire: [
       "Conserves : légumes, poisson, plats cuisinés",
       "Pâtes, riz, semoule, lentilles",
-      "Café, thé, sucre, biscuits, céréales",
-      "Hygiène : savon, dentifrice, shampoing, protections périodiques",
-      "Vêtements chauds, propres et en bon état : manteaux, pulls, écharpes",
+      "Huile, sucre, farine",
+      "Café, thé, céréales, biscuits",
     ],
-    onNeCollectePas: [
-      "Produits frais ou surgelés",
-      "Produits ouverts ou périmés",
+    vetements: [
+      "Vêtements propres et en bon état",
+      "Manteaux, pulls, vêtements chauds",
+      "Vêtements pour enfants",
+      "Chaussures en bon état",
+    ],
+    aEviter: [
+      "Produits frais, ouverts ou périmés",
       "Vêtements abîmés ou tachés",
     ],
   },
 
-  // 🗺️ LA FRISE CHRONOLOGIQUE
-  // debut / fin au format année-mois-jour : sert à surligner l'étape en cours.
-  frise: [
-    { quand: "2 nov.",     titre: "Lancement",             texte: "Le site, la cagnotte, les paris et la tombola ouvrent.", debut: "2026-11-02", fin: "2026-11-02" },
-    { quand: "6 et 7 nov.", titre: "Collecte en magasin",  texte: "On remplit les caddies avec toi.",                      debut: "2026-11-06", fin: "2026-11-07" },
-    { quand: "13 nov.",    titre: "Vélo Chaos",            texte: "3 heures de live, de sueur et de sabotages.",          debut: "2026-11-13", fin: "2026-11-13" },
-    { quand: "14–20 nov.", titre: "Préparation des colis", texte: "On trie, on range, on emballe.",                       debut: "2026-11-14", fin: "2026-11-20" },
-    { quand: "21 nov.",    titre: "Distribution",          texte: "Tout est remis aux adhérents de l'association.",        debut: "2026-11-21", fin: "2026-11-21" },
-  ],
 
-  // 👥 L'ÉQUIPE — ⚠️ EXEMPLES
-  // photo : chemin de l'image carrée (ex : "img/equipe/hugo.jpg"). Vide = avatar rigolo.
+  /* ══════════════════════════════════════════════════════════════════
+     PARTIE 6 — L'ASSOCIATION, L'ÉQUIPE, LA TRANSPARENCE
+     ══════════════════════════════════════════════════════════════════ */
+
+  association: {
+    nom: "A.V.A. – Amiens",
+    nomComplet: "",   // signification du sigle A.V.A. (à compléter avec l'asso)
+    logo: "",         // ex : "img/logo-ava.png" (vide = nom écrit à la place)
+    site: "",         // site ou page de l'asso, avec https:// (optionnel)
+    // Présentation : un texte = un paragraphe. Faites-la relire par A.V.A.
+    presentation: [
+      "A.V.A. – Amiens est l'association que nous soutenons. Elle prépare notamment un voyage ou une sortie pour des enfants issus de situations très précaires.",
+      "Les aliments et les vêtements que nous collectons lui sont remis, pour être donnés gratuitement à des personnes dans le besoin.",
+    ],
+  },
+
+  transparence: {
+    // Qui encaisse l'argent ? À préciser, ex : "Les paiements arrivent directement
+    // sur le compte HelloAsso d'A.V.A." (vide = « modalités précisées prochainement »)
+    encaissement: "",
+  },
+
+  // 👥 L'ÉQUIPE (4 étudiants). photo : ex "img/equipe/prenom.jpg" (vide = silhouette)
   equipe: [
-    { prenom: "Hugo",    role: "Le cycliste maudit", emoji: "🚴", photo: "", phrase: "S'entraîne depuis trois semaines. Enfin, il a acheté un cuissard." },
-    { prenom: "Inès",    role: "Trésorière",         emoji: "🧮", photo: "", phrase: "Compte chaque centime. Même ceux que tu n'as pas encore donnés." },
-    { prenom: "Camille", role: "Com' et réseaux",    emoji: "📱", photo: "", phrase: "Poste quatorze stories par jour. Minimum." },
-    { prenom: "Théo",    role: "Logistique",         emoji: "📦", photo: "", phrase: "Porte six packs de lait d'un coup. Il l'a prouvé. Deux fois." },
+    { prenom: "", role: "", photo: "" },
+    { prenom: "", role: "", photo: "" },
+    { prenom: "", role: "", photo: "" },
+    { prenom: "", role: "", photo: "" },
   ],
 
-  // 🏫 LOGO DE L'IUT (pied de page)
-  logoIUT: "",   // Ex : "img/logo-iut.png" (vide = nom écrit à la place)
+  logoIUT: "",   // ex : "img/logo-iut.png" (vide = nom écrit à la place)
 
-  // ⚖️ MENTIONS LÉGALES
   mentionsLegales: {
-    responsable: "Inès Martin, pour l'équipe Vélo Chaos", // ⚠️ EXEMPLE : prénom + nom d'une personne de l'équipe
-    // Si vous passez par Netlify, remplacez par : "Netlify, Inc. (adresse sur netlify.com)"
+    responsable: "",   // prénom + nom d'une personne de l'équipe (obligatoire)
     hebergeur: "GitHub Pages, service de GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis",
   },
 };
