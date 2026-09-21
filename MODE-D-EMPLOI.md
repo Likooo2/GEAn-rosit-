@@ -1,125 +1,108 @@
-# Mode d'emploi : site GEAnérosité (course solidaire)
+# Mode d'emploi : site GEAnérosité (collecte de vêtements)
 
-**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Compteurs, coureurs, liens, projets financés, lots, collecte, équipe : tout est dedans, en français et commenté.
+**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Le compteur de kilos, l'objectif, les horaires, la tombola, les listes, l'association : tout est dedans, en français et commenté.
 
 Le site est en ligne : **https://likooo2.github.io/GEAn-rosit-/**
-Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change ce que tu veux, puis **Commit changes**. C'est publié une à deux minutes plus tard, et ça marche aussi depuis un téléphone :
+Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change ce que tu veux, puis **Commit changes**. C'est publié une à deux minutes plus tard, et ça marche depuis un téléphone :
 👉 https://github.com/Likooo2/GEAn-rosit-/edit/main/js/config.js
 
 > Bandeau rouge après une modification ? C'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier.
 
-Ce qui est déjà renseigné : la date (mercredi 11 novembre 2026, à partir de 14h), le lieu (piste d'athlétisme de l'UPJV), l'objectif de 1 000 €, les 4 noms de l'équipe, la chaîne Twitch, le sigle d'A.V.A. (Accompagnement Vers l'Autonomie), l'encaissement direct sur le compte HelloAsso de l'association, la tombola à 1 € avec tirage le 21 novembre, les dons en nature récupérés par l'équipe, la distribution du 21 novembre, le logotype d'A.V.A. (extrait de votre visuel, dans `img/logo-ava.png`), sa présentation et ses deux numéros de téléphone.
+Déjà renseigné : les horaires (8h → 19h), l'IUT d'Amiens, l'objectif de 300 kg, la tombola à 1 € avec billets papier sur place et tirage le 21 novembre, les listes de ce qu'on accepte et de ce qu'on refuse, le logotype et la présentation d'A.V.A., l'encaissement, et vos quatre noms.
 
 ---
 
-## 1. Les tableaux se mettent-ils à jour automatiquement ?
-
-**Oui, si tu passes par une feuille de calcul.** Deux façons de faire, au choix :
-
-### A. Automatique (recommandé) : un Google Sheet publié
-
-1. Crée un Google Sheet avec une ligne par coureur et ces colonnes (l'ordre n'a pas d'importance, les majuscules et les accents non plus) :
-
-   | prenom | dossard | objectif | km | verifie | strava | promesse |
-   |---|---|---|---|---|---|---|
-   | Julien | 1 | 15 | 15.2 | oui | https://… | 3.5 |
-
-   - `km` : kilomètres réalisés · `verifie` : `oui` quand c'est vérifié sur Strava
-   - `promesse` : total des engagements reçus pour ce coureur, en € par km
-2. Dans Google Sheets : **Fichier → Partager → Publier sur le web**, choisis la feuille et le format **.csv**, puis copie l'adresse.
-3. Colle-la dans `config.js`, ligne `liens.feuilleCoureurs`.
-
-À partir de là, **il n'y a plus rien à recopier** : tu modifies la feuille, et le site affiche les nouveaux coureurs et les nouveaux kilomètres au chargement suivant. Astuce : si ton formulaire d'inscription est un Google Form, ses réponses arrivent déjà dans un Sheet — ajoute simplement les colonnes `km` et `verifie` à côté.
-
-Si la feuille est indisponible ou mal formée, le site utilise la liste de `config.js` : il n'y a jamais d'écran vide.
-
-### B. Manuelle : la liste dans `config.js`
+## 1. Le jour J : la seule ligne qui compte
 
 ```js
-coureurs: [
-  { prenom: "Julien", dossard: 1, objectifKm: 15, km: 0, kmVerifies: false, strava: "", promesseParKm: 0 },
-],
+compteurs: {
+  kg: 0,             // ← le poids collecté, en kg
+  objectifKg: 300,
+  donateurs: 0,      // nombre de personnes venues déposer
+  billets: 0,        // billets de tombola vendus
+  cagnotte: 0,       // € récoltés
+  miseAJour: "",     // ex : "16h10"
+},
 ```
 
-Le `dossard` doit être unique : il sert aussi de **lien de partage**. Julien peut envoyer `…/GEAn-rosit-/?coureur=1`, la page s'ouvre directement sur son engagement.
+Tu changes `kg`, tu valides, et tout suit : le pourcentage, le carton qui se remplit, le compte à rebours, le message « plus que X kg », l'estimation en nombre de vêtements et les compteurs.
 
-### Ce qui reste manuel dans tous les cas
+**Conseil pour la journée** : une mise à jour par heure suffit, avec l'heure dans `miseAJour`. Depuis un téléphone, il faut moins d'une minute : lien ci-dessus, crayon, tu changes le chiffre, **Commit changes**.
 
-- Le **montant de la cagnotte** (`compteurs.cagnotte`), sauf si tu ajoutes le widget HelloAsso (`liens.widgetCagnotte`) qui affiche le montant réel en direct, en plus de la jauge.
-- Les **denrées et vêtements collectés**, et les **participants à la tombola**.
-
----
-
-## 2. Ce que le site ne peut pas faire
-
-Ce site est **statique** : il affiche, il calcule, mais il ne reçoit rien.
-
-| Ce qu'il faut faire | Comment ça marche ici |
-|---|---|
-| Inscrire les coureurs | Un formulaire externe (Google Forms ou HelloAsso) : lien `liens.inscriptionCoureur`. |
-| Recevoir les dons en nature | Rien à gérer sur le site : vous passez vous-mêmes dans les commerces. Le bouton « Nous proposer un don » ouvre simplement votre messagerie. |
-| Recueillir les engagements | Le site **simule et récapitule** (montant par km, plafond, total), puis renvoie vers le formulaire officiel : `liens.engagement`. Le visiteur peut aussi imprimer son **document d'engagement** signé. |
-| Encaisser | HelloAsso uniquement : `liens.cagnotte` et `liens.tombola`. |
-
-Les engagements simulés restent **sur l'appareil du visiteur** : le site ne les reçoit pas. C'est le formulaire ou le document signé qui fait foi.
-
-### Ce qu'il faut demander dans les formulaires
-
-- **Inscription coureur** : prénom affiché, nom, e-mail, téléphone, objectif en km, lien Strava, accord parental si mineur.
-- **Engagement** : nom, prénom, e-mail, téléphone, coureur soutenu (prénom + dossard), montant par kilomètre, plafond éventuel, case « je m'engage sur l'honneur », signature.
+Les décimales s'écrivent avec un point : `182.5` pour 182,5 kg.
 
 ---
 
-## 3. Ce qu'il reste à compléter
+## 2. L'objectif
 
-- [ ] **Les 4 liens HelloAsso ou formulaires** : `cagnotte`, `tombola`, `inscriptionCoureur`, `engagement`. Tant qu'un lien est vide, le bouton reste grisé avec « bientôt disponible » : aucun faux lien sur le site.
-- [ ] **L'Instagram** (`instagram`) et l'**adresse e-mail** de contact (`email`). L'e-mail sert aussi au bouton « Nous proposer un don » destiné aux commerces.
+`objectifKg: 300` est un choix, pas une vérité. Repère utile : un sac de courses bien rempli fait environ 5 kg, et 1 kg représente à peu près 4 vêtements.
+
+| Objectif | Ce que ça représente | Pour qui |
+|---|---|---|
+| 150 kg | 30 sacs, environ 600 vêtements | prudent |
+| **300 kg** | 60 sacs, environ 1 200 vêtements | **ambitieux mais atteignable sur une journée** |
+| 500 kg | 100 sacs, environ 2 000 vêtements | seulement si tout l'IUT relaie |
+
+Mieux vaut un objectif atteint et dépassé qu'une jauge bloquée à 40 % toute la journée. Tu peux le changer jusqu'au dernier moment, et même en cours de journée si vous explosez le compteur.
+
+---
+
+## 3. L'affiche pour la salle
+
+Dans la partie **L'objectif**, le bouton « Imprimer l'affiche de la salle » génère une **affiche A4** prête à imprimer : le titre, la date, les horaires, le lieu, ce qu'on accepte et ce qu'on refuse, et une **grande jauge graduée à colorier au marqueur** au fil de la journée, avec une case « déjà collecté : ____ kg ».
+
+Imprime-la en deux exemplaires : une sur la table d'accueil, une à l'entrée du bâtiment.
+
+---
+
+## 4. Ce qu'il reste à compléter
+
+- [ ] **La date de la collecte** : `dates.jourCollecte`, par exemple `"2026-11-18"`. Tant qu'elle est vide, le site affiche « date à confirmer » et le compte à rebours reste à zéro. Quand elle est définitive, passe `dateConfirmee` à `true`.
+- [ ] **La salle** : `collecte.salle`, par exemple `"Hall du bâtiment A"`.
+- [ ] **L'adresse e-mail** (`liens.email`) : elle sert au bouton « Proposer un lot » des commerces et à la FAQ.
+- [ ] **L'Instagram** (`liens.instagram`), si vous en ouvrez un.
 - [ ] **Le responsable de publication** (`mentionsLegales.responsable`) : obligatoire, un prénom et un nom.
-- [ ] **Le lieu de la distribution** du 21 novembre (`collecte.lieuDistribution`).
-- [ ] **Les projets financés** (`projetsFinances`) : à faire valider par A.V.A. avant de les annoncer.
 - [ ] **Les lots** : quand un lot est obtenu, passe son `statut` de `"recherche"` à `"confirme"` et ajoute le partenaire.
-- [ ] **La présentation d'A.V.A. et ses numéros de téléphone** : à faire relire par l'association (`association.presentation`, `association.telephone` ; laisse `""` pour masquer les numéros).
-- [ ] Facultatif : `course.depart` (retrait des dossards), `course.info`, les rôles de l'équipe, le club `strava`.
-
-Le mode brouillon est désactivé (`modeBrouillon: false`). Passe-le à `true` pendant que tu travailles : tout ce qui manque est alors entouré de pointillés bleus.
+- [ ] Facultatif : `liens.tombola` (billets en ligne) et `liens.cagnotte` (dons en ligne). Sans ces liens, le site explique simplement que tout se passe sur place, sans bouton mort.
+- [ ] Facultatif : les rôles de l'équipe, le logo de l'IUT (`logoIUT`), la présentation d'A.V.A. relue par l'association.
 
 ---
 
-## 4. Pendant et après la course
+## 5. Tester l'affichage sans attendre
 
-1. Pendant la course, mets les `km` à jour de temps en temps (feuille de calcul ou `config.js`) : classement, compteurs et montants suivent automatiquement.
-2. Après la course, relève la distance de chaque activité Strava, corrige les `km`, puis passe `verifie` / `kmVerifies` à `oui` / `true`.
-3. Les montants passent alors de « en attente » à « à verser ». Contacte les personnes engagées avec les coordonnées de ton formulaire, et envoie-leur le lien de la cagnotte.
-4. Mets à jour `compteurs.cagnotte`, `denreesKg`, `vetements`, `participantsTombola` et `miseAJour`. Les denrées et les vêtements sont ceux que vous récupérez auprès des commerces, avant la distribution du 21 novembre.
+- `?etat=direct` : le site comme pendant la collecte
+- `?etat=apres` : le site comme après la collecte
+- `?maintenant=2026-11-18T10:30` : simule une date et une heure
 
-### Tester l'affichage sans attendre
-
-- `?etat=direct` : le site comme pendant la course · `?etat=apres` : comme après
-- `?maintenant=2026-11-11T15:30` : simule une date et une heure
-- `?coureur=1` : ouvre directement l'engagement pour le dossard 1
+Ces tests ne changent rien pour les autres visiteurs.
 
 ---
 
-## 5. Quatre points à faire valider
+## 6. Cinq points à régler avant le jour J
 
-Nous ne sommes pas juristes : fais confirmer ces points par A.V.A. et, si besoin, par l'UPJV et la mairie.
-
-1. **La sécurité et l'accès à la piste.** Autorisation d'utiliser la piste de l'UPJV, assurance, encadrement des mineurs, présence de secours, point d'eau. C'est le point le plus important.
-2. **La promesse de don.** Un engagement au kilomètre repose sur la confiance : personne ne peut être contraint de payer. Le site le dit clairement, et le plafond aide à rester raisonnable.
-3. **La tombola.** Une tombola ouverte au public demande en général une **autorisation de la mairie**. Les lots doivent être des objets ou des bons, jamais de l'argent.
-4. **Le règlement.** Celui du site est présenté comme un **projet à valider**. Fais-le relire, puis retire la mention « à valider » dans `index.html`.
+1. **L'autorisation de l'IUT** : la salle ou le hall, une table, deux chaises, l'affichage dans les couloirs, et le droit de stocker les sacs jusqu'au 21 novembre. C'est le point le plus important.
+2. **La balance** : une balance de cuisine ne suffira pas. Un pèse-personne fait très bien l'affaire : vous pesez un sac dans les bras, ou vous montez avec le sac puis sans.
+3. **Le stockage et le transport** : où entassez-vous 300 kg de sacs, et avec quelle voiture allez-vous les remettre à A.V.A. le 21 novembre ?
+4. **La tombola** : une tombola ouverte au public demande en général une autorisation de la mairie, et les lots doivent être des objets ou des bons, jamais de l'argent. À voir avec A.V.A., qui a l'habitude. Le règlement du site est un projet à valider.
+5. **L'argent en espèces** : annoncez comment vous le gérez (le site le dit déjà : compté à deux, noté au fur et à mesure, remis avec les vêtements).
 
 Pense aussi à l'accord d'A.V.A. pour son logo et sa présentation.
 
 ---
 
-## 6. En cas de pépin
+## 7. En cas de pépin
 
 | Ce que tu vois | La solution |
 |---|---|
 | Bandeau rouge « config.js contient une erreur » | Une virgule ou un guillemet manque à l'endroit modifié. Sur ordinateur, la touche **F12** (onglet *Console*) donne le numéro de la ligne. |
-| Un bouton reste grisé | Le lien correspondant est vide ou mal copié dans `liens` (il doit commencer par `https://`). |
-| La feuille de calcul n'est pas prise en compte | Vérifie qu'elle est **publiée au format .csv** et qu'une colonne s'appelle bien `prenom`. La console (F12) affiche les colonnes trouvées. |
-| Un coureur n'apparaît pas | Son `prenom` est vide, ou son `dossard` est déjà utilisé par un autre. |
-| Le lecteur du live ne s'affiche pas | Il ne fonctionne que sur le site en ligne, et seulement pour un lien Twitch. Sinon le bouton ouvre le live dans un nouvel onglet. |
+| Le carton ne bouge pas | Vérifie que `kg` est bien un nombre, sans guillemets ni « kg » : `182.5`, pas `"182,5 kg"`. |
+| Un bouton reste grisé | Le lien correspondant est vide dans `liens` (il doit commencer par `https://`). C'est normal tant que vous n'avez pas de lien. |
+| Le logo d'A.V.A. n'apparaît pas | Le fichier doit s'appeler exactement comme dans `association.logo` (`img/logo-ava.png`). |
 | Ta modification n'apparaît pas | Recharge la page. GitHub met une à deux minutes à publier. |
+| L'affiche s'imprime avec le site autour | Choisis « Imprimer » depuis le bouton du site, pas depuis le menu du navigateur. |
+
+---
+
+## 8. Remettre le site en ligne ailleurs (si besoin)
+
+Le dossier complet fonctionne sur n'importe quel hébergeur de fichiers statiques. Sur **Netlify** : crée un compte, puis dans **Projects**, ouvre **Add new project**, choisis **Deploy manually** et dépose le dossier entier. Pense alors à remplacer les 2 adresses de partage en haut de `index.html`, ainsi que l'hébergeur dans `config.js`.

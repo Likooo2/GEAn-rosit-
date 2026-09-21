@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GEAnérosité : une course solidaire où chaque kilomètre rapporte</title>
-  <meta name="description" content="4 étudiants en BUT GEA organisent une course solidaire le mercredi 11 novembre, en direct sur Twitch. Chacun peut courir, ou s'engager à donner une somme par kilomètre parcouru, au profit des projets de l'association A.V.A. à Amiens. Collecte alimentaire et vestimentaire en parallèle.">
+  <title>GEAnérosité : une journée de collecte de vêtements à l'IUT d'Amiens</title>
+  <meta name="description" content="4 étudiants en BUT GEA organisent une collecte de vêtements à l'IUT d'Amiens, de 8h à 19h. Apportez les vêtements que vous ne mettez plus : tout est remis gratuitement à l'association A.V.A. Tombola à 1 € au profit de ses projets.">
   <meta name="theme-color" content="#fcfdff">
 
   <!-- ════════════════════════════════════════════════════════════════
@@ -15,13 +15,13 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="GEAnérosité">
-  <meta property="og:title" content="GEAnérosité : chaque kilomètre rapporte">
-  <meta property="og:description" content="Une course solidaire en direct, le mercredi 11 novembre. Vous courez, ou vous vous engagez à donner une somme par kilomètre parcouru. Pour les projets d'A.V.A. à Amiens.">
+  <meta property="og:title" content="GEAnérosité : vos vêtements resservent">
+  <meta property="og:description" content="Une journée de collecte de vêtements à l'IUT d'Amiens, de 8h à 19h. Tout est remis gratuitement à l'association A.V.A. Tombola à 1 € sur place.">
   <meta property="og:url" content="https://likooo2.github.io/GEAn-rosit-/">
   <meta property="og:image" content="https://likooo2.github.io/GEAn-rosit-/img/partage.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Affiche GEAnérosité : une course solidaire en direct, chaque kilomètre rapporte.">
+  <meta property="og:image:alt" content="Affiche GEAnérosité : une journée de collecte de vêtements à l'IUT d'Amiens.">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
@@ -36,18 +36,21 @@
 </head>
 <body>
 
-<!-- Dessins réutilisés : coureur et flèche à la main -->
+<!-- Dessins réutilisés : vêtements et flèche à la main -->
 <svg class="sprites" aria-hidden="true" focusable="false">
   <defs>
-    <symbol id="coureur" viewBox="0 0 100 100">
-      <circle cx="63" cy="19" r="10" fill="currentColor"/>
-      <g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M57 33 L45 55"/>
-        <path d="M55 38 L72 45 L67 58"/>
-        <path d="M52 41 L33 33"/>
-        <path d="M45 55 L35 74 L40 88"/>
-        <path d="M45 55 L60 68 L76 66"/>
-      </g>
+    <symbol id="tshirt" viewBox="0 0 100 92">
+      <path d="M31 6 L43 2 Q50 11 57 2 L69 6 L94 21 L84 39 L74 33 L74 88 L26 88 L26 33 L16 39 L6 21 Z"
+            fill="currentColor" stroke="#16161b" stroke-width="5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="pull" viewBox="0 0 100 92">
+      <path d="M30 8 L50 3 L70 8 L96 26 L86 44 L76 38 L76 86 L24 86 L24 38 L14 44 L4 26 Z"
+            fill="currentColor" stroke="#16161b" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M38 8 Q50 20 62 8" fill="none" stroke="#16161b" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="pantalon" viewBox="0 0 100 92">
+      <path d="M26 4 L74 4 L78 88 L58 88 L50 44 L42 88 L22 88 Z"
+            fill="currentColor" stroke="#16161b" stroke-width="5" stroke-linejoin="round"/>
     </symbol>
     <symbol id="fleche-courbe" viewBox="0 0 120 70">
       <path d="M6 8 C 40 1, 92 9, 104 52" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
@@ -61,22 +64,21 @@
 <header class="entete">
   <div class="entete-barre">
     <a class="entete-logo" href="#accueil" aria-label="GEAnérosité, retour en haut de page">
-      <span class="logo-rond" aria-hidden="true"><svg viewBox="0 0 100 100" focusable="false"><use href="#coureur"></use></svg></span>
+      <span class="logo-rond" aria-hidden="true"><svg viewBox="0 0 100 92" focusable="false"><use href="#tshirt"></use></svg></span>
       <span class="entete-nom" aria-hidden="true"><span class="entete-gea">GEA</span>nérosité</span>
     </a>
     <nav class="nav" id="nav" aria-label="Menu principal">
       <ul class="nav-liste">
         <li><a href="#fonctionnement">Comment ça marche</a></li>
-        <li><a href="#coureurs">Les coureurs</a></li>
-        <li><a href="#engager">M'engager</a></li>
-        <li><a href="#cagnotte">Cagnotte</a></li>
-        <li><a href="#collecte">Distribution</a></li>
+        <li><a href="#objectif">L'objectif</a></li>
+        <li><a href="#infos">Infos pratiques</a></li>
+        <li><a href="#vetements">Ce qu'on accepte</a></li>
         <li><a href="#tombola">Tombola</a></li>
-        <li><a href="#transparence">Où va l'argent</a></li>
+        <li><a href="#transparence">Où va tout ça</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
     </nav>
-    <a class="bouton bouton-rose bouton-mini" href="#participer">Je soutiens ❤️</a>
+    <a class="bouton bouton-rose bouton-mini" href="#infos">Je participe ❤️</a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu">
       <span></span><span></span><span></span>
     </button>
@@ -92,46 +94,45 @@
       <div class="affiche">
         <p class="affiche-haut">
           <span class="sticker sticker-rose">GEAnérosité</span>
-          <span class="annotation">un projet solidaire de 4 étudiants en BUT GEA 🏃💨</span>
+          <span class="annotation">un projet solidaire de 4 étudiants en BUT GEA 👕</span>
         </p>
         <div class="titre-cadre">
           <h1 class="hero-titre" id="titre-hero">
-            <span class="l1">Une course solidaire en direct</span>
-            <span class="l2">chaque kilomètre</span>
-            <span class="l3">rapporte.</span>
+            <span class="l1">Une journée de collecte à l'IUT</span>
+            <span class="l2">vos vêtements</span>
+            <span class="l3">resservent.</span>
           </h1>
         </div>
-        <p class="hero-phrase"><strong>Tout le monde peut courir.</strong> Et tout le monde peut s'engager à verser une somme par kilomètre parcouru par le coureur de son choix.</p>
+        <p class="hero-phrase"><strong id="hero-quand">De 8h à 19h</strong>, apportez les vêtements que vous ne mettez plus. Tout est remis gratuitement à l'association <strong data-bind="association.nom">A.V.A. – Amiens</strong>, qui les redonne à des personnes dans le besoin.</p>
         <ul class="hero-concret">
-          <li><span class="hero-concret-emoji" aria-hidden="true">🌊</span><span><strong>L'argent récolté finance les projets de <span data-bind="association.nom">A.V.A. – Amiens</span></strong> : des sorties, des voyages et des activités pour les enfants et les familles accompagnées.</span></li>
-          <li><span class="hero-concret-emoji" aria-hidden="true">🥫👕</span><span><strong>En parallèle, nous récupérons des denrées et des vêtements</strong> auprès des commerces et des entreprises, pour une distribution le <span data-date="distribution">samedi 21 novembre</span> avec l'association.</span></li>
+          <li><span class="hero-concret-emoji" aria-hidden="true">⚖️</span><span><strong>Un objectif : <span id="hero-objectif">300 kg</span> de vêtements</strong> d'ici la fin de la journée. Le compteur monte à chaque sac déposé.</span></li>
+          <li><span class="hero-concret-emoji" aria-hidden="true">🎟️</span><span><strong>Une tombola à <span id="hero-prix">1 €</span></strong>, billets papier sur place, au profit des projets de l'association.</span></li>
         </ul>
         <div class="hero-cta">
-          <a class="bouton bouton-vert bouton-geant" href="#coureur">🏃 Je veux être coureur</a>
-          <a class="bouton bouton-rose bouton-geant" href="#engager">🤝 Je m'engage pour un coureur</a>
+          <a class="bouton bouton-vert bouton-geant" href="#infos">👕 Je viens déposer</a>
+          <a class="bouton bouton-bleu bouton-geant" href="#tombola">🎟️ Je prends un billet</a>
         </div>
         <p class="annotation annotation-cta">
           <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-courbe"></use></svg>
-          on peut faire les deux, bien sûr
+          même un seul pull compte
         </p>
       </div>
 
-      <!-- Le tableau d'affichage : compte à rebours, puis « en direct », puis « merci » -->
+      <!-- Le tableau d'affichage : ouverture, collecte en cours, puis merci -->
       <aside class="panneau" aria-labelledby="panneau-titre">
-        <p class="panneau-titre" id="panneau-titre">Départ dans</p>
+        <p class="panneau-titre" id="panneau-titre">La collecte ouvre dans</p>
         <div class="lcd-chiffres" id="lcd-chiffres" role="timer" aria-live="off"></div>
         <div class="panneau-message" id="panneau-message"></div>
         <div class="panneau-cagnotte">
-          <p class="panneau-ligne"><span>Cagnotte</span><span id="panneau-pourcent">0 %</span></p>
+          <p class="panneau-ligne"><span>Vêtements</span><span id="panneau-pourcent">0 %</span></p>
           <div class="led-barre" id="led-barre" aria-hidden="true"></div>
-          <p class="panneau-texte"><span id="panneau-montant">0 €</span> récoltés sur <span id="panneau-objectif">1 000 €</span></p>
+          <p class="panneau-texte"><span id="panneau-kg">0 kg</span> collectés sur <span id="panneau-objectif">300 kg</span></p>
         </div>
         <p class="panneau-agenda" id="panneau-agenda" hidden>
-          <span>Ne ratez pas le départ :</span>
+          <span>Pour ne pas oublier :</span>
           <a class="lien-agenda" id="agenda-google" target="_blank" rel="noopener">Google Agenda</a>
-          <a class="lien-agenda" id="agenda-ics" download="geanerosite-course.ics">Apple ou Outlook</a>
+          <a class="lien-agenda" id="agenda-ics" download="geanerosite-collecte.ics">Apple ou Outlook</a>
         </p>
-        <a class="bouton bouton-rouge panneau-live" id="panneau-live" data-lien="live" hidden>Regarder le live</a>
       </aside>
 
     </div>
@@ -142,231 +143,99 @@
   <section class="section section-fonctionnement" id="fonctionnement" aria-labelledby="titre-fonctionnement">
     <div class="conteneur">
       <h2 class="titre-section" id="titre-fonctionnement">Comment ça marche ?</h2>
-      <p class="intro">Un exemple : Léa s'engage à 1 € par kilomètre pour Julien. Julien court 15 km, Léa verse 15 €. C'est tout.</p>
+      <p class="intro">Rien à réserver, rien à payer : vous passez, vous déposez, c'est tout.</p>
       <ol class="chaine">
-        <li><span class="chaine-num" aria-hidden="true">1</span><p><strong>Vous vous inscrivez comme coureur</strong>, gratuitement, quel que soit votre niveau.</p></li>
-        <li><span class="chaine-num" aria-hidden="true">2</span><p><strong>Des personnes vous choisissent</strong> et s'engagent sur un montant par kilomètre : 0,50 €, 1 €, 2 €…</p></li>
-        <li><span class="chaine-num" aria-hidden="true">3</span><p><strong>Le jour J, tout le monde court en même temps</strong>, à son rythme, en direct sur Twitch.</p></li>
-        <li><span class="chaine-num" aria-hidden="true">4</span><p><strong>Vos kilomètres sont vérifiés avec Strava</strong>, l'application qui enregistre les parcours.</p></li>
-        <li><span class="chaine-num" aria-hidden="true">5</span><p><strong>Chaque engagement est calculé</strong> : montant par kilomètre × kilomètres vérifiés.</p></li>
-        <li><span class="chaine-num" aria-hidden="true">6</span><p><strong>Les personnes engagées versent leur montant</strong> sur la cagnotte HelloAsso.</p></li>
-        <li><span class="chaine-num" aria-hidden="true">7</span><p><strong>L'argent finance les projets de <span data-bind="association.nom">A.V.A. – Amiens</span></strong> : sorties, voyages, activités.</p></li>
+        <li><span class="chaine-num" aria-hidden="true">1</span><p><strong>Vous faites le tri chez vous</strong> et vous mettez dans un sac ce que vous ne mettez plus.</p></li>
+        <li><span class="chaine-num" aria-hidden="true">2</span><p><strong>Vous passez à l'IUT dans la journée</strong>, entre <span class="quand-ouverture">8h</span> et <span class="quand-fermeture">19h</span>, quand ça vous arrange : entre deux cours, à la pause déjeuner, en partant.</p></li>
+        <li><span class="chaine-num" aria-hidden="true">3</span><p><strong>On pèse votre sac devant vous</strong> et on ajoute le poids au compteur : sur l'affiche dans la salle, et sur ce site.</p></li>
+        <li><span class="chaine-num" aria-hidden="true">4</span><p><strong>Vous pouvez prendre un billet de tombola</strong> à <span class="prix-billet">1 €</span> si vous voulez, mais ce n'est pas obligatoire pour donner.</p></li>
+        <li><span class="chaine-num" aria-hidden="true">5</span><p><strong>On trie tout avec l'association</strong>, puis nous lui remettons les vêtements le <span data-date="distribution">samedi 21 novembre</span>.</p></li>
+        <li><span class="chaine-num" aria-hidden="true">6</span><p><strong><span data-bind="association.nom">A.V.A. – Amiens</span> les redonne gratuitement</strong> aux personnes qu'elle accompagne.</p></li>
       </ol>
-      <p class="chaine-note">Un engagement n'est jamais automatique sur tous les coureurs : il concerne uniquement le coureur que vous avez choisi.</p>
+      <p class="chaine-note">Donner ne coûte rien et ne demande aucune inscription. Un seul sac, un seul manteau : tout est utile.</p>
     </div>
   </section>
 
 
-  <!-- ═══════════════ LES DEUX PORTES ═══════════════ -->
-  <section class="section section-participer" id="participer" aria-labelledby="titre-participer">
+  <!-- ═══════════════ L'OBJECTIF ═══════════════ -->
+  <section class="section section-objectif" id="objectif" aria-labelledby="titre-objectif">
     <div class="conteneur">
-      <h2 class="titre-section" id="titre-participer">Par où commencer ?</h2>
-      <p class="intro">Deux façons d'entrer dans le projet. Et rien n'empêche de faire les deux.</p>
-      <ul class="todo todo-deux">
-        <li class="todo-item todo-vert">
-          <span class="todo-case" aria-hidden="true"></span>
-          <div class="todo-corps">
-            <h3 class="todo-titre"><span aria-hidden="true">🏃</span> Je veux être coureur</h3>
-            <p>Vous courez le jour de la course, à votre rythme, seul ou avec des amis. Chaque kilomètre que vous parcourez rapporte de l'argent au projet. Aucun niveau requis : marcher compte aussi.</p>
-            <div class="cta-bloc">
-              <a class="bouton bouton-vert" data-lien="inscriptionCoureur">🏃 Je m'inscris comme coureur</a>
-              <p class="destination" data-destination="inscriptionCoureur"></p>
+      <h2 class="titre-section" id="titre-objectif">L'objectif de la journée : <span id="titre-kg">300 kg</span></h2>
+      <p class="intro">Le carton se remplit au fil des dépôts. Nous mettons le chiffre à jour dans la journée, ici et sur l'affiche de la salle.</p>
+
+      <div class="objectif-grille">
+        <div class="objectif-resume">
+          <div class="compteur" id="compteur" role="progressbar" aria-labelledby="titre-objectif" aria-valuemin="0">
+            <p class="compteur-montant" id="jauge-kg">0 kg</p>
+            <p class="compteur-objectif">sur <span id="jauge-objectif">300 kg</span>, soit <strong id="jauge-pourcent">0 %</strong> de l'objectif</p>
+          </div>
+          <p class="jauge-bilan" id="jauge-bilan"></p>
+          <p class="estimation-vetements" id="estimation-vetements"></p>
+          <p class="maj" id="maj-compteurs" hidden>Dernière mise à jour : <span data-bind="compteurs.miseAJour"></span></p>
+          <div class="cta-bloc">
+            <button class="bouton bouton-jaune" type="button" id="bouton-affiche">🖨️ Imprimer l'affiche de la salle</button>
+            <p class="petit">Une affiche A4 avec une jauge à remplir au marqueur, pour la table d'accueil.</p>
+          </div>
+        </div>
+
+        <div class="carton-jauge">
+          <p class="annotation annotation-carton">on pèse, on note, ça monte !</p>
+          <div class="carton-zone" aria-hidden="true">
+            <div class="carton-rabats"><span></span><span></span></div>
+            <div class="carton-interieur">
+              <div class="carton-remplissage" id="carton-remplissage"></div>
+              <ul class="carton-graduations" id="carton-graduations"></ul>
             </div>
+            <p class="carton-etiquette">Vêtements pour <span data-bind="association.nom">A.V.A.</span></p>
           </div>
-        </li>
-        <li class="todo-item todo-rose">
-          <span class="todo-case" aria-hidden="true"></span>
-          <div class="todo-corps">
-            <h3 class="todo-titre"><span aria-hidden="true">🤝</span> Je m'engage pour un coureur</h3>
-            <p>Vous choisissez un ou plusieurs coureurs et, pour chacun, le montant que vous vous engagez à verser par kilomètre. Le simulateur vous montre en temps réel ce que cela peut représenter.</p>
-            <a class="bouton bouton-rose" href="#engager">🤝 Choisir un coureur</a>
-          </div>
-        </li>
-      </ul>
+        </div>
+      </div>
+
+      <div class="compteurs-jour">
+        <div class="tableau-scores" id="tableau-scores"></div>
+      </div>
     </div>
   </section>
 
 
-  <!-- ═══════════════ ÊTRE COUREUR ═══════════════ -->
-  <section class="section section-coureur" id="coureur" aria-labelledby="titre-coureur">
-    <div class="conteneur coureur-grille">
+  <!-- ═══════════════ INFOS PRATIQUES ═══════════════ -->
+  <section class="section section-infos" id="infos" aria-labelledby="titre-infos">
+    <div class="conteneur infos-grille">
       <div>
-        <h2 class="titre-section" id="titre-coureur">Devenir coureur</h2>
-        <p class="intro">La course est ouverte à toutes et à tous : étudiants, familles, débutants, marcheurs. L'important, ce sont les kilomètres cumulés par tout le monde.</p>
-        <ul class="infos-course" id="infos-course"></ul>
-        <h3 class="sous-titre">Ce qu'il faut prévoir</h3>
-        <ul class="liste-oui">
-          <li>Un compte <strong>Strava</strong> (gratuit) pour enregistrer votre parcours : c'est ce qui permet de vérifier les kilomètres.</li>
-          <li>Une tenue adaptée, de l'eau, et de quoi courir ou marcher en sécurité.</li>
-          <li>Prévenir vos proches : plus vous partagez votre dossard, plus les engagements montent.</li>
-        </ul>
+        <h2 class="titre-section" id="titre-infos">Venir déposer</h2>
+        <p class="intro">Une seule journée, de <span class="quand-ouverture">8h</span> à <span class="quand-fermeture">19h</span>, à l'IUT d'Amiens.</p>
+        <ul class="infos-course" id="infos-collecte"></ul>
+        <h3 class="sous-titre">Pour que ça aille vite</h3>
+        <ul class="liste-oui" id="liste-conseils"></ul>
         <div class="cta-bloc">
-          <a class="bouton bouton-vert" data-lien="inscriptionCoureur">🏃 Je m'inscris comme coureur</a>
-          <p class="destination" data-destination="inscriptionCoureur"></p>
+          <a class="bouton bouton-vert" href="#vetements">Voir ce qu'on accepte</a>
         </div>
-        <p class="petit">L'inscription passe par un formulaire externe : ce site ne conserve aucune information personnelle.</p>
       </div>
-      <aside class="encadre encadre-strava" aria-labelledby="titre-strava">
-        <h3 class="encadre-titre" id="titre-strava">La vérification des kilomètres</h3>
-        <p>Pendant la course, chaque coureur enregistre son activité sur Strava. À l'arrivée, nous relevons la distance de chaque activité, nous la publions sur ce site, puis nous marquons les kilomètres comme <strong>vérifiés</strong>.</p>
-        <p>Tant que les kilomètres ne sont pas vérifiés, les montants affichés restent « en attente ». Aucun engagement n'est demandé avant cette vérification.</p>
-        <p class="strava-lien" id="strava-lien" hidden></p>
+      <aside class="encadre" aria-labelledby="titre-partager">
+        <h3 class="encadre-titre" id="titre-partager">Le plus utile : en parler</h3>
+        <p>Un sac de vêtements, c'est bien. Dix sacs, c'est mieux. Parlez-en à votre promo, à vos profs, à vos colocs, et partagez ce site.</p>
+        <p id="bloc-reseaux"></p>
+        <p class="petit">Vous êtes enseignant ou personnel de l'IUT ? Un mot en début de cours change tout.</p>
       </aside>
     </div>
   </section>
 
 
-  <!-- ═══════════════ LES COUREURS ═══════════════ -->
-  <section class="section section-coureurs" id="coureurs" aria-labelledby="titre-coureurs">
+  <!-- ═══════════════ CE QU'ON ACCEPTE ═══════════════ -->
+  <section class="section section-collecte" id="vetements" aria-labelledby="titre-vetements">
     <div class="conteneur">
-      <h2 class="titre-section" id="titre-coureurs">Les coureurs</h2>
-      <p class="intro">Choisissez celles et ceux que vous voulez soutenir. Un engagement concerne un seul coureur : vous pouvez en soutenir plusieurs, avec un montant différent pour chacun.</p>
-      <div class="recherche">
-        <label class="recherche-label" for="recherche-coureur">Rechercher un coureur</label>
-        <input class="recherche-champ" type="search" id="recherche-coureur" placeholder="Prénom ou numéro de dossard" autocomplete="off">
-        <p class="recherche-resultat" id="recherche-resultat" aria-live="polite"></p>
-      </div>
-      <ol class="coureurs" id="liste-coureurs"></ol>
-      <div class="vide" id="coureurs-vide" hidden></div>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ MES ENGAGEMENTS ═══════════════ -->
-  <section class="section section-engager" id="engager" aria-labelledby="titre-engager">
-    <div class="conteneur">
-      <h2 class="titre-section" id="titre-engager">Mes engagements</h2>
-      <p class="intro">Votre récapitulatif reste sur votre appareil, rien n'est envoyé automatiquement. Pour valider, remplissez le document d'engagement ou le formulaire.</p>
-      <div id="panier"></div>
-      <div class="engager-bas">
-        <div class="encadre">
-          <h3 class="encadre-titre">Un engagement raisonnable</h3>
-          <p>Un engagement est une promesse : le montant vous sera demandé après la course. Choisissez une somme que vous pourrez verser sans difficulté, et pensez au <strong>plafond</strong> : il limite le total à verser, même si le coureur dépasse son objectif.</p>
-        </div>
-        <div class="encadre">
-          <h3 class="encadre-titre">Le document d'engagement</h3>
-          <p>Il récapitule vos coordonnées, vos engagements et votre signature. Remplissez-le ici, puis imprimez-le ou enregistrez-le en PDF pour nous le transmettre.</p>
-          <div class="cta-bloc">
-            <button class="bouton bouton-jaune" type="button" data-ouvre="modale-document">📄 Remplir mon document</button>
-            <p class="petit">Vos informations restent sur votre appareil, dans votre navigateur.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ LA COURSE EN DIRECT ═══════════════ -->
-  <section class="section section-direct" id="direct" aria-labelledby="titre-direct">
-    <div class="conteneur">
-      <h2 class="titre-section" id="titre-direct">La course en direct</h2>
-      <p class="intro">Tous les coureurs partent le même jour, à la même heure. Le live est commenté par l'équipe, et les kilomètres avancent sous vos yeux.</p>
-      <ul class="infos-course" id="infos-direct"></ul>
-      <div class="direct-grille">
-        <div class="live">
-          <h3 class="sous-titre">Le live</h3>
-          <div class="live-ecran" id="live-ecran"></div>
-        </div>
-        <div class="classement">
-          <h3 class="sous-titre">Les kilomètres</h3>
-          <div id="classement-km"></div>
-          <p class="petit">Les distances sont relevées par l'équipe, puis vérifiées sur Strava à l'arrivée.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ LE TABLEAU DES SCORES (compteurs) ═══════════════ -->
-  <section class="section section-scores" id="compteurs" aria-labelledby="titre-scores">
-    <div class="conteneur">
-      <h2 class="titre-section" id="titre-scores">Le tableau des scores</h2>
-      <p class="intro">Le projet en chiffres. Nous mettons ces compteurs à jour au fil des inscriptions, de la course et des dons récupérés.</p>
-      <div class="tableau-scores" id="tableau-scores"></div>
-      <p class="maj" id="maj-compteurs" hidden>Dernière mise à jour : <span data-bind="compteurs.miseAJour"></span></p>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ LA CAGNOTTE ═══════════════ -->
-  <section class="section section-cagnotte" id="cagnotte" aria-labelledby="titre-cagnotte">
-    <div class="conteneur">
-      <h2 class="titre-section" id="titre-cagnotte">L'objectif : <span id="titre-objectif">1 000 €</span></h2>
-      <p class="intro">La cagnotte réunit les engagements versés, les dons libres et la tombola. Tout ce qui est récolté finance les projets de <span data-bind="association.nom">A.V.A. – Amiens</span>.</p>
-      <div class="compteur" id="compteur" role="progressbar" aria-labelledby="titre-cagnotte" aria-valuemin="0">
-        <p class="compteur-montant" id="jauge-montant">0 €</p>
-        <p class="compteur-objectif">sur <span id="jauge-objectif">1 000 €</span>, soit <strong id="jauge-pourcent">0 %</strong> de l'objectif</p>
-      </div>
-
-      <div class="piste-h">
-        <p class="annotation annotation-piste">le coureur avance à chaque euro !</p>
-        <div class="piste-zone" aria-hidden="true">
-          <div class="piste-coureur" id="piste-coureur">
-            <span class="piste-bulle" id="piste-bulle">0 €</span>
-            <svg viewBox="0 0 100 100" focusable="false"><use href="#coureur"></use></svg>
-          </div>
-          <div class="piste-arrivee"></div>
-        </div>
-        <p class="piste-bornes" aria-hidden="true"><span>Départ · 0 €</span><span>🏁 <span id="piste-objectif">1 000 €</span></span></p>
-      </div>
-
-      <p class="jauge-bilan" id="jauge-bilan"></p>
-
-      <div class="cagnotte-bas">
-        <div class="cta-bloc">
-          <a class="bouton bouton-rose bouton-geant" data-lien="cagnotte">💰 Donner à la cagnotte</a>
-          <p class="destination" data-destination="cagnotte"></p>
-          <p class="petit">Pas besoin d'être engagé sur un coureur pour donner : la cagnotte est ouverte à tout le monde.</p>
-        </div>
-        <div class="projets">
-          <h3 class="sous-titre">Ce que l'argent finance</h3>
-          <ul class="projets-liste" id="projets-liste"></ul>
-          <p class="paliers-note">Exemples de projets, à confirmer avec l'association.</p>
-        </div>
-      </div>
-
-      <div class="widget-cagnotte" id="widget-cagnotte" hidden>
-        <h3 class="sous-titre">La cagnotte en direct</h3>
-        <p class="petit">Montant réel affiché par HelloAsso, mis à jour automatiquement.</p>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ LES DONS EN NATURE ET LA DISTRIBUTION ═══════════════ -->
-  <section class="section section-collecte" id="collecte" aria-labelledby="titre-collecte">
-    <div class="conteneur">
-      <h2 class="titre-section" id="titre-collecte">Les dons en nature et la distribution</h2>
-      <p class="intro">En parallèle de la course, nous allons nous-mêmes à la rencontre des commerces, des supermarchés et des entreprises pour récupérer des denrées et des vêtements. Il n'y a donc pas de point de dépôt : c'est l'équipe qui se déplace.</p>
-      <blockquote class="citation">
-        <p>« Le <span data-date="distribution">samedi 21 novembre</span>, tout ce que nous avons récupéré est distribué avec l'association, aux personnes qui en ont besoin. »</p>
-      </blockquote>
+      <h2 class="titre-section" id="titre-vetements">Ce qu'on accepte</h2>
+      <p class="intro">Le principe est simple : ce que vous donneriez à un ami. Les vêtements sont redonnés directement, donc ils doivent être portables tout de suite.</p>
       <div class="cartons">
-        <article class="carton" aria-labelledby="titre-carton-alim">
-          <h3 class="carton-titre" id="titre-carton-alim"><span aria-hidden="true">🥫</span> Denrées alimentaires</h3>
-          <p class="carton-compteur"><strong id="compteur-kg">0</strong> kg déjà récupérés</p>
-          <ul class="liste-oui" id="liste-alimentaire"></ul>
+        <article class="carton" aria-labelledby="titre-carton-oui">
+          <h3 class="carton-titre" id="titre-carton-oui"><span aria-hidden="true">👕</span> Oui, avec plaisir</h3>
+          <ul class="liste-oui" id="liste-accepte"></ul>
         </article>
-        <article class="carton" aria-labelledby="titre-carton-vet">
-          <h3 class="carton-titre" id="titre-carton-vet"><span aria-hidden="true">👕</span> Vêtements</h3>
-          <p class="carton-compteur"><strong id="compteur-vetements">0</strong> vêtements déjà récupérés</p>
-          <ul class="liste-oui" id="liste-vetements"></ul>
+        <article class="carton carton-clair" aria-labelledby="titre-carton-non">
+          <h3 class="carton-titre" id="titre-carton-non"><span aria-hidden="true">🚫</span> Non, désolés</h3>
+          <ul class="liste-non" id="liste-eviter"></ul>
+          <p class="petit">Listes indicatives, ajustées avec l'association.</p>
         </article>
-      </div>
-      <div class="collecte-bas">
-        <div class="collecte-bloc">
-          <h3 class="collecte-titre">Vous êtes un commerce ou une entreprise ?</h3>
-          <p>Un carton de conserves, un lot de vêtements, des invendus encore consommables : tout est utile. Dites-nous simplement quand passer, nous venons chercher sur place.</p>
-          <div class="cta-bloc">
-            <a class="bouton bouton-carton" data-lien="email">Nous proposer un don</a>
-            <p class="destination" data-destination="email"></p>
-          </div>
-        </div>
-        <div class="collecte-bloc">
-          <h3 class="collecte-titre">La distribution</h3>
-          <p>Rendez-vous le <strong><span data-date="distribution">samedi 21 novembre</span></strong> avec <span data-bind="association.nom">A.V.A. – Amiens</span> pour remettre les denrées et les vêtements aux personnes accompagnées.</p>
-          <p id="lieu-distribution"></p>
-        </div>
       </div>
     </div>
   </section>
@@ -375,24 +244,22 @@
   <!-- ═══════════════ LA TOMBOLA ═══════════════ -->
   <section class="section section-tombola" id="tombola" aria-labelledby="titre-tombola">
     <div class="conteneur">
-      <h2 class="titre-section" id="titre-tombola">La tombola, 100 % en ligne</h2>
-      <p class="intro">Un moyen de plus de soutenir le projet, ouvert à toutes et à tous, même sans courir et sans s'engager.</p>
+      <h2 class="titre-section" id="titre-tombola">La tombola</h2>
+      <p class="intro">Le petit plus de la journée : un billet à <span class="prix-billet">1 €</span> pour soutenir les projets de l'association. Donner des vêtements reste entièrement gratuit.</p>
       <div class="tombola-grille">
         <div class="ticket">
           <div class="ticket-corps">
             <p class="ticket-prix" id="ticket-prix"></p>
             <p class="ticket-tirage" id="ticket-tirage"></p>
-            <div class="cta-bloc">
-              <a class="bouton bouton-blanc" data-lien="tombola">🎟️ Participer à la tombola</a>
-              <p class="destination destination-claire" data-destination="tombola"></p>
-            </div>
+            <p class="ticket-papier" id="ticket-papier"></p>
+            <div class="cta-bloc" id="tombola-action"></div>
           </div>
           <div class="ticket-souche" aria-hidden="true"><span>N°</span><span>?</span></div>
         </div>
-        <p class="pas-papier">
-          <span class="barre">Billets papier</span>
-          <span class="annotation">tout se passe en ligne, sur HelloAsso !</span>
-        </p>
+        <div class="papier-note">
+          <h3 class="sous-titre">Comment on garde les comptes</h3>
+          <p id="note-especes"></p>
+        </div>
       </div>
       <h3 class="sous-titre" id="titre-lots">Exemples de lots recherchés</h3>
       <p class="avertissement" id="avertissement-lots">Ces lots ne sont pas encore confirmés : nous contactons des commerces et des entreprises. La liste sera mise à jour au fur et à mesure.</p>
@@ -400,7 +267,7 @@
       <div class="resultat" id="tombola-resultat" hidden></div>
       <div class="appel">
         <h3 class="appel-titre">Vous êtes un commerce ou une entreprise ?</h3>
-        <p>Offrir un lot, c'est soutenir le projet sans que la cagnotte serve à l'acheter. Écrivez-nous, on vous explique tout.</p>
+        <p>Offrir un lot, c'est soutenir le projet sans rien coûter à l'association. Écrivez-nous, on vous explique tout en deux minutes.</p>
         <div class="cta-bloc">
           <a class="bouton bouton-contour" data-lien="email">Proposer un lot</a>
           <p class="destination" data-destination="email"></p>
@@ -410,40 +277,41 @@
   </section>
 
 
-  <!-- ═══════════════ TRANSPARENCE ═══════════════ -->
+  <!-- ═══════════════ OÙ VA TOUT ÇA ═══════════════ -->
   <section class="section section-transparence" id="transparence" aria-labelledby="titre-transparence">
     <div class="conteneur">
-      <h2 class="titre-section" id="titre-transparence">Où va votre participation ?</h2>
-      <p class="intro">Notre objectif : que le maximum de ce qui est collecté serve au projet, puis à l'association.</p>
+      <h2 class="titre-section" id="titre-transparence">Où va tout ça ?</h2>
+      <p class="intro">Deux chemins, et aucun ne passe par nos poches.</p>
       <div class="flux">
         <div class="voie">
-          <h3 class="voie-titre"><span aria-hidden="true">💰</span> L'argent</h3>
+          <h3 class="voie-titre"><span aria-hidden="true">👕</span> Les vêtements</h3>
           <ol class="schema">
-            <li class="bulle">Vous</li>
-            <li class="bulle">Engagements au kilomètre, cagnotte, tombola</li>
+            <li class="bulle">Vous, à l'IUT</li>
+            <li class="bulle">Pesés, triés et rangés par l'équipe</li>
             <li class="bulle bulle-asso" data-bind="association.nom">A.V.A. – Amiens</li>
-            <li class="bulle bulle-fin">Ses projets : sorties, voyages, activités</li>
+            <li class="bulle bulle-fin">Donnés gratuitement aux personnes accompagnées</li>
           </ol>
         </div>
         <div class="voie">
-          <h3 class="voie-titre"><span aria-hidden="true">🥫👕</span> Les denrées et les vêtements</h3>
+          <h3 class="voie-titre"><span aria-hidden="true">🎟️</span> L'argent de la tombola</h3>
           <ol class="schema">
-            <li class="bulle">Commerces et entreprises</li>
-            <li class="bulle">Récupérés et triés par l'équipe</li>
+            <li class="bulle">Vous</li>
+            <li class="bulle">Billets papier et billets en ligne</li>
             <li class="bulle bulle-asso" data-bind="association.nom">A.V.A. – Amiens</li>
-            <li class="bulle bulle-fin">Distribution du <span data-date="distribution">21 novembre</span></li>
+            <li class="bulle bulle-fin">Ses projets : sorties, voyages, ateliers</li>
           </ol>
         </div>
       </div>
+      <h3 class="sous-titre">Ce que l'argent finance</h3>
+      <ul class="projets-liste" id="projets-liste"></ul>
+      <p class="paliers-note">Exemples de projets, à confirmer avec l'association.</p>
       <h3 class="sous-titre">Nos engagements</h3>
       <ul class="engagements">
-        <li><strong>Nous ne gagnons rien.</strong> L'équipe ne garde aucun euro : nous organisons ce projet pour l'association.</li>
-        <li><strong>Rien n'est demandé avant la vérification.</strong> Les montants restent « en attente » tant que les kilomètres ne sont pas vérifiés sur Strava.</li>
-        <li><strong>Les lots sont offerts.</strong> Nous les cherchons gratuitement auprès de partenaires, pour que la cagnotte ne serve pas à les acheter.</li>
-        <li><strong>Les compteurs sont publics.</strong> Cagnotte, kilomètres, denrées et vêtements sont mis à jour sur ce site au fil du projet.</li>
-        <li><strong>L'argent ne passe pas par nous.</strong> Les paiements vont directement sur le compte HelloAsso de l'association.</li>
-        <li><strong>Encaissement.</strong> <span id="encaissement"></span></li>
-        <li><strong>La contribution HelloAsso est facultative.</strong> HelloAsso ne prend aucune commission aux associations et se finance par une contribution volontaire proposée au moment du paiement. Elle ne va pas au projet : vous pouvez la modifier ou la mettre à 0 €.</li>
+        <li><strong>Nous ne gagnons rien.</strong> L'équipe ne garde aucun euro et aucun vêtement : tout part à l'association.</li>
+        <li><strong>Le poids est pesé devant vous.</strong> Le compteur de l'affiche et celui du site affichent le même chiffre.</li>
+        <li><strong>Les lots sont offerts.</strong> Nous les cherchons gratuitement auprès de partenaires : l'argent de la tombola n'y passe pas.</li>
+        <li><strong>L'argent en ligne.</strong> <span id="encaissement"></span></li>
+        <li><strong>L'argent en espèces.</strong> <span id="especes"></span></li>
       </ul>
     </div>
   </section>
@@ -464,7 +332,7 @@
         </article>
         <div class="equipe-bloc">
           <h3 class="sous-titre">L'équipe GEAnérosité</h3>
-          <p>4 étudiants en BUT GEA (Gestion des entreprises et des administrations) à l'IUT d'Amiens, qui ont monté ce projet pour l'association.</p>
+          <p>4 étudiants en BUT GEA (Gestion des entreprises et des administrations) à l'IUT d'Amiens. C'est nous que vous verrez à la table d'accueil toute la journée.</p>
           <ul class="equipe" id="equipe"></ul>
         </div>
       </div>
@@ -478,40 +346,32 @@
       <h2 class="titre-section" id="titre-faq">Vos questions</h2>
       <div class="faq">
         <details>
-          <summary>Je ne suis pas sportif, je peux quand même courir ?</summary>
-          <div class="faq-reponse"><p>Oui. La course se fait à votre rythme, et la marche compte aussi. Ce sont les kilomètres de tout le monde qui font le total, pas les performances.</p></div>
+          <summary>Il faut donner beaucoup pour que ça compte ?</summary>
+          <div class="faq-reponse"><p>Non. Un pull, un jean, une paire de chaussures : tout est pesé et tout compte. L'objectif de la journée se remplit avec de petits dépôts, pas avec trois gros sacs.</p></div>
         </details>
         <details>
-          <summary>Comment les kilomètres sont-ils vérifiés ?</summary>
-          <div class="faq-reponse"><p>Chaque coureur enregistre son parcours sur Strava pendant le créneau de la course. Nous relevons ensuite la distance de chaque activité et nous la publions sur ce site. Tant que ce n'est pas fait, les montants restent affichés « en attente ».</p></div>
+          <summary>Je ne suis pas de l'IUT, je peux venir ?</summary>
+          <div class="faq-reponse"><p>La collecte est organisée pour les étudiants, les enseignants et les personnels de l'IUT. Si vous êtes de passage et que vous avez un sac, on ne vous refusera pas : venez nous voir à la table d'accueil.</p></div>
         </details>
         <details>
-          <summary>Combien vais-je devoir verser exactement ?</summary>
-          <div class="faq-reponse"><p>Votre montant par kilomètre multiplié par les kilomètres vérifiés de votre coureur. Par exemple, 1 € par km et 15 km parcourus font 15 €. Si vous avez mis un plafond, vous ne verserez jamais plus que ce plafond.</p></div>
+          <summary>Faut-il laver les vêtements avant ?</summary>
+          <div class="faq-reponse"><p>Oui, merci : ils sont redonnés directement à des personnes, sans passer par une blanchisserie. Des vêtements propres et secs, pliés ou en vrac dans un sac, c'est parfait.</p></div>
         </details>
         <details>
-          <summary>Et si mon coureur court beaucoup plus que prévu ?</summary>
-          <div class="faq-reponse"><p>C'est une bonne nouvelle pour le projet, et c'est là que le plafond est utile : il fixe à l'avance le maximum que vous verserez. Le simulateur vous prévient dès qu'un engagement devient important.</p></div>
+          <summary>Et si mes vêtements sont abîmés ?</summary>
+          <div class="faq-reponse"><p>Nous ne pouvons pas les redonner : un vêtement troué ou taché finit à la poubelle, et c'est nous qui devrions le jeter. Pour ces textiles, utilisez plutôt une borne de collecte classique en ville.</p></div>
         </details>
         <details>
-          <summary>Quand et comment je verse mon engagement ?</summary>
-          <div class="faq-reponse"><p>Après la course et la vérification des kilomètres. Nous vous indiquons le montant exact, et vous le versez sur la cagnotte HelloAsso du projet. Rien n'est prélevé automatiquement.</p></div>
+          <summary>Le billet de tombola est obligatoire ?</summary>
+          <div class="faq-reponse"><p>Pas du tout. Donner des vêtements est gratuit. La tombola est un coup de pouce en plus, à <span class="prix-billet">1 €</span> le billet, pour financer les projets de l'association.</p></div>
         </details>
         <details>
-          <summary>Où va l'argent ?</summary>
-          <div class="faq-reponse"><p>Il est reversé à <span data-bind="association.nom">A.V.A. – Amiens</span> pour financer ses projets : sorties, voyages et activités pour les enfants et les familles qu'elle accompagne. Les paiements arrivent directement sur son compte HelloAsso : l'argent ne passe jamais par nous. Le schéma complet est dans la partie <a href="#transparence">Où va votre participation ?</a></p></div>
+          <summary>Comment je sais combien a été collecté ?</summary>
+          <div class="faq-reponse"><p>Le poids est mis à jour dans la journée sur l'affiche de la salle et sur ce site, dans la partie <a href="#objectif">L'objectif</a>. Le total final y reste affiché après la collecte.</p></div>
         </details>
         <details>
-          <summary>Mes informations sont-elles conservées sur le site ?</summary>
-          <div class="faq-reponse"><p>Non. Vos engagements et vos coordonnées restent dans votre navigateur, sur votre appareil, et vous pouvez les effacer à tout moment. Les inscriptions et les engagements officiels passent par des formulaires externes.</p></div>
-        </details>
-        <details>
-          <summary>Je peux aider sans courir et sans argent ?</summary>
-          <div class="faq-reponse"><p>Oui : courez, partagez le site et le live autour de vous, venez encourager les coureurs le 11 novembre, ou mettez-nous en relation avec un commerce ou une entreprise qui accepterait de donner des denrées ou des vêtements.</p></div>
-        </details>
-        <details>
-          <summary>Comment donner des denrées ou des vêtements ?</summary>
-          <div class="faq-reponse"><p>Il n'y a pas de point de dépôt : nous passons nous-mêmes dans les commerces, les supermarchés et les entreprises. Si vous représentez un commerce, écrivez-nous et nous venons chercher sur place. Tout est distribué le <span data-date="distribution">samedi 21 novembre</span> avec l'association.</p></div>
+          <summary>Où vont exactement les vêtements ?</summary>
+          <div class="faq-reponse"><p>À <span data-bind="association.nom">A.V.A. – Amiens</span>, remis le <span data-date="distribution">samedi 21 novembre</span>. L'association les donne gratuitement aux personnes qu'elle accompagne. Le détail est dans la partie <a href="#transparence">Où va tout ça ?</a></p></div>
         </details>
         <details>
           <summary>Comment vous contacter ?</summary>
@@ -537,100 +397,41 @@
     </div>
     <ul class="pied-liens">
       <li><a data-lien="instagram">Instagram</a></li>
-      <li><a data-lien="live">Le live</a></li>
-      <li><a data-lien="strava">Strava</a></li>
+      <li><a data-lien="twitch">Twitch</a></li>
       <li><a data-lien="email">Nous écrire</a></li>
     </ul>
     <p class="pied-legal">
-      <button class="lien-bouton" type="button" data-ouvre="modale-reglement">Projet de règlement</button>
+      <button class="lien-bouton" type="button" data-ouvre="modale-reglement">Règlement de la tombola</button>
       <button class="lien-bouton" type="button" data-ouvre="modale-mentions">Mentions légales</button>
     </p>
-    <p class="pied-marques">Strava et Twitch sont des marques de leurs propriétaires. Ce projet étudiant n'est ni affilié ni soutenu par elles.</p>
+    <p class="pied-marques">HelloAsso et Twitch sont des marques de leurs propriétaires. Ce projet étudiant n'est ni affilié ni soutenu par elles.</p>
   </div>
 </footer>
 
 
-<!-- ═══════════════ FENÊTRE : MON ENGAGEMENT ═══════════════ -->
-<dialog class="modale" id="modale-engagement" aria-labelledby="titre-modale-engagement">
-  <div class="modale-boite">
-    <div class="modale-entete">
-      <h2 id="titre-modale-engagement">Mon engagement</h2>
-      <button class="modale-fermer" type="button" aria-label="Fermer">×</button>
-    </div>
-    <div class="modale-contenu">
-      <p class="engagement-coureur" id="engagement-coureur"></p>
-      <fieldset class="champ">
-        <legend>Je m'engage à verser, par kilomètre</legend>
-        <div class="montants" id="montants-suggeres"></div>
-        <label class="champ-label" for="par-km">Autre montant, en € par kilomètre</label>
-        <input class="champ-saisie" type="number" id="par-km" min="0.1" step="0.1" inputmode="decimal">
-      </fieldset>
-      <div class="champ">
-        <label class="champ-label" for="plafond">Plafond, en € (conseillé)</label>
-        <input class="champ-saisie" type="number" id="plafond" min="1" step="1" inputmode="numeric">
-        <p class="aide">Le plafond limite le total à verser, même si le coureur parcourt plus de kilomètres que prévu. Laissez vide pour ne pas en mettre.</p>
-      </div>
-      <p class="estimation" id="estimation" aria-live="polite"></p>
-      <p class="alerte" id="alerte-engagement" hidden></p>
-      <div class="modale-actions">
-        <button class="bouton bouton-rose" type="button" id="valider-engagement">Ajouter à mes engagements</button>
-        <button class="lien-bouton" type="button" id="annuler-engagement">Annuler</button>
-      </div>
-    </div>
-  </div>
-</dialog>
-
-
-<!-- ═══════════════ FENÊTRE : DOCUMENT D'ENGAGEMENT ═══════════════ -->
-<dialog class="modale" id="modale-document" aria-labelledby="titre-modale-document">
-  <div class="modale-boite">
-    <div class="modale-entete">
-      <h2 id="titre-modale-document">Mon document d'engagement</h2>
-      <button class="modale-fermer" type="button" aria-label="Fermer">×</button>
-    </div>
-    <div class="modale-contenu">
-      <p>Complétez vos coordonnées : elles servent uniquement à vous recontacter après la course, au moment du versement. Elles restent sur votre appareil.</p>
-      <div class="champs-doc">
-        <div class="champ"><label class="champ-label" for="doc-prenom">Prénom</label><input class="champ-saisie" type="text" id="doc-prenom" autocomplete="given-name"></div>
-        <div class="champ"><label class="champ-label" for="doc-nom">Nom</label><input class="champ-saisie" type="text" id="doc-nom" autocomplete="family-name"></div>
-        <div class="champ"><label class="champ-label" for="doc-email">E-mail</label><input class="champ-saisie" type="email" id="doc-email" autocomplete="email"></div>
-        <div class="champ"><label class="champ-label" for="doc-tel">Téléphone (facultatif)</label><input class="champ-saisie" type="tel" id="doc-tel" autocomplete="tel"></div>
-      </div>
-      <div class="apercu-doc" id="apercu-doc"></div>
-      <div class="modale-actions">
-        <button class="bouton bouton-jaune" type="button" id="imprimer-document">🖨️ Imprimer ou enregistrer en PDF</button>
-        <button class="bouton bouton-contour" type="button" id="copier-document">Copier le récapitulatif</button>
-      </div>
-      <div class="cta-bloc" id="doc-envoi"></div>
-      <p class="petit" id="doc-message" aria-live="polite"></p>
-    </div>
-  </div>
-</dialog>
-
-
-<!-- ═══════════════ FENÊTRE : PROJET DE RÈGLEMENT ═══════════════ -->
+<!-- ═══════════════ FENÊTRE : RÈGLEMENT DE LA TOMBOLA ═══════════════ -->
 <dialog class="modale" id="modale-reglement" aria-labelledby="titre-modale-reglement">
   <div class="modale-boite">
     <div class="modale-entete">
-      <h2 id="titre-modale-reglement">Projet de règlement : course, engagements et tombola</h2>
+      <h2 id="titre-modale-reglement">Projet de règlement : la tombola</h2>
       <button class="modale-fermer" type="button" aria-label="Fermer le règlement">×</button>
     </div>
     <div class="modale-contenu">
-      <p class="a-confirmer-bloc">Projet à valider avec l'association avant l'ouverture des inscriptions et des engagements.</p>
+      <p class="a-confirmer-bloc">Projet à valider avec l'association avant la mise en vente des billets.</p>
       <h3>1. Organisation</h3>
-      <p>La course solidaire, les engagements au kilomètre et la tombola sont organisés par 4 étudiants en BUT GEA de l'IUT d'Amiens, dans le cadre du projet GEAnérosité, au profit de <span data-bind="association.nom">A.V.A. – Amiens</span>.</p>
-      <h3>2. La course</h3>
-      <p>La course est gratuite et ouverte à toute personne inscrite via le formulaire prévu. Chacun court ou marche à son rythme, sous sa propre responsabilité, et doit respecter le code de la route et les consignes de sécurité. Les mineurs participent accompagnés d'un adulte responsable.</p>
-      <h3>3. Les kilomètres</h3>
-      <p>Seuls les kilomètres enregistrés sur Strava pendant le créneau officiel de la course sont retenus. La distance retenue est celle affichée par l'activité, arrondie au dixième de kilomètre. En cas de problème technique, l'équipe peut retenir une distance constatée d'un commun accord avec le coureur.</p>
-      <h3>4. Les engagements</h3>
-      <p>Un engagement est une promesse de don : il porte sur un coureur précis, pour un montant librement choisi par kilomètre, avec un plafond facultatif. Le montant dû est calculé après vérification des kilomètres, puis versé par la personne engagée sur la cagnotte HelloAsso du projet. Aucun prélèvement automatique n'est effectué. Une personne peut s'engager pour plusieurs coureurs ; chaque engagement reste distinct.</p>
-      <h3>5. La tombola</h3>
-      <p>La tombola se déroule uniquement en ligne. Les lots sont offerts par des partenaires et la liste est tenue à jour sur ce site. La date du tirage y sera annoncée. Les lots ne peuvent pas être échangés contre de l'argent.</p>
+      <p>La tombola est organisée par 4 étudiants en BUT GEA de l'IUT d'Amiens, dans le cadre du projet GEAnérosité, au profit de <span data-bind="association.nom">A.V.A. – Amiens</span>.</p>
+      <h3>2. Participation</h3>
+      <p>La tombola est ouverte à toute personne physique. Le billet coûte <span class="prix-billet">1 €</span>. Les billets papier sont vendus le jour de la collecte, à la table d'accueil ; des billets peuvent aussi être proposés en ligne. Donner des vêtements ne demande aucun achat de billet.</p>
+      <h3>3. Le tirage</h3>
+      <p>Le tirage au sort a lieu <span id="reglement-tirage">à la date annoncée sur ce site</span>. Les numéros ou les prénoms gagnants sont publiés sur ce site et les gagnants sont contactés avec les coordonnées laissées lors de l'achat.</p>
+      <h3>4. Les lots</h3>
+      <p>Les lots sont offerts par des partenaires et la liste est tenue à jour sur ce site. Ils ne peuvent être ni échangés contre de l'argent, ni remboursés. Un lot non réclamé dans les 30 jours reste acquis à l'association.</p>
+      <h3>5. Les sommes récoltées</h3>
+      <p>La totalité des sommes récoltées est remise à l'association pour financer ses projets. L'équipe organisatrice ne perçoit rien.</p>
       <h3>6. Données personnelles</h3>
-      <p>Les coordonnées recueillies servent uniquement à organiser la course, à contacter les personnes engagées après vérification des kilomètres et à remettre les lots. Elles ne sont ni vendues, ni transmises à des tiers.</p>
+      <p>Les coordonnées recueillies servent uniquement à contacter les gagnants. Elles ne sont ni vendues, ni transmises à des tiers.</p>
       <h3>7. Acceptation</h3>
-      <p>Participer implique l'acceptation de ce règlement. Les organisateurs peuvent modifier, reporter ou annuler l'opération en cas de besoin ; les participants en seraient informés sur ce site.</p>
+      <p>Participer implique l'acceptation de ce règlement. Les organisateurs peuvent modifier, reporter ou annuler l'opération en cas de besoin ; l'information serait donnée sur ce site.</p>
     </div>
   </div>
 </dialog>
@@ -651,18 +452,16 @@
       <h3>Hébergement</h3>
       <p data-bind="mentionsLegales.hebergeur">…</p>
       <h3>Données personnelles et cookies</h3>
-      <p>Ce site ne dépose aucun cookie et n'envoie aucune donnée. Les engagements que vous simulez et les coordonnées que vous saisissez pour le document d'engagement sont enregistrés uniquement dans la mémoire locale de votre navigateur, sur votre appareil, et vous pouvez les effacer à tout moment depuis la partie « Mes engagements ». Les inscriptions, engagements officiels et paiements passent par des services externes (formulaires, HelloAsso), qui appliquent leur propre politique de confidentialité. Le lecteur du live ne se charge que si vous appuyez dessus.</p>
-      <h3>Marques</h3>
-      <p>Strava, Twitch et HelloAsso sont des marques de leurs propriétaires respectifs. Ce projet étudiant n'est ni affilié ni soutenu par elles.</p>
+      <p>Ce site ne dépose aucun cookie et ne collecte aucune donnée : il n'y a ni formulaire, ni compte, ni mesure d'audience. Les éventuels paiements en ligne passent par HelloAsso, qui applique sa propre politique de confidentialité.</p>
       <h3>Crédits</h3>
-      <p>Polices Big Shoulders, Caveat et Atkinson Hyperlegible, sous licence SIL Open Font License. Dessins : l'équipe GEAnérosité.</p>
+      <p>Polices Big Shoulders, Caveat et Atkinson Hyperlegible, sous licence SIL Open Font License. Logotype d'A.V.A. utilisé avec l'accord de l'association. Dessins : l'équipe GEAnérosité.</p>
     </div>
   </div>
 </dialog>
 
 
-<!-- Document imprimable (visible uniquement à l'impression) -->
-<section class="document-imprimable" id="document-imprimable" hidden></section>
+<!-- Affiche imprimable pour la salle (visible uniquement à l'impression) -->
+<section class="affiche-imprimable" id="affiche-imprimable" hidden></section>
 
 <!-- Bandeaux d'aide (visibles seulement pour vous) -->
 <div class="bandeau bandeau-brouillon" id="bandeau-brouillon" hidden>
@@ -673,7 +472,7 @@
   <p><strong>Le fichier js/config.js contient une erreur.</strong> C'est presque toujours une virgule ou un guillemet oublié à l'endroit que tu viens de modifier. Sur ordinateur, la touche F12 (onglet Console) indique le numéro de la ligne.</p>
 </div>
 
-<noscript><p class="noscript">Activez JavaScript pour voir les coureurs, les compteurs et le simulateur d'engagement.</p></noscript>
+<noscript><p class="noscript">Activez JavaScript pour voir le compteur de kilos, les informations pratiques et la tombola.</p></noscript>
 
 </body>
 </html>

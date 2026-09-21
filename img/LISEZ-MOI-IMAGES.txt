@@ -13,7 +13,7 @@ LE LOGO DE L'IUT (facultatif)
 Même principe : dépose img/logo-iut.png puis, dans js/config.js :
       logoIUT: "img/logo-iut.png",
 
-DES PHOTOS DE L'ÉQUIPE (facultatif, désactivé pour l'instant)
+DES PHOTOS DE L EQUIPE (facultatif, non utilisées)
 Le site affiche seulement les noms. Si un jour vous voulez des photos :
 dépose une image carrée par personne (ex : img/julien.jpg) puis, dans « equipe » :
       { nom: "Julien Pires", role: "", photo: "img/julien.jpg" },
