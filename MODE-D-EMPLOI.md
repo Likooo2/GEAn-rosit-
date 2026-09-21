@@ -8,7 +8,7 @@ Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change
 
 > Bandeau rouge après une modification ? C'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier.
 
-Ce qui est déjà renseigné : la date (mercredi 11 novembre 2026, à partir de 14h), le lieu (piste d'athlétisme de l'UPJV), l'objectif de 1 000 €, les 4 noms de l'équipe, la chaîne Twitch, le sigle d'A.V.A. (Accompagnement Vers l'Autonomie), l'encaissement direct sur le compte HelloAsso de l'association, la tombola à 1 € avec tirage le 21 novembre, les dons en nature récupérés par l'équipe et la distribution du 21 novembre.
+Ce qui est déjà renseigné : la date (mercredi 11 novembre 2026, à partir de 14h), le lieu (piste d'athlétisme de l'UPJV), l'objectif de 1 000 €, les 4 noms de l'équipe, la chaîne Twitch, le sigle d'A.V.A. (Accompagnement Vers l'Autonomie), l'encaissement direct sur le compte HelloAsso de l'association, la tombola à 1 € avec tirage le 21 novembre, les dons en nature récupérés par l'équipe, la distribution du 21 novembre, le logotype d'A.V.A. (extrait de votre visuel, dans `img/logo-ava.png`), sa présentation et ses deux numéros de téléphone.
 
 ---
 
@@ -74,12 +74,12 @@ Les engagements simulés restent **sur l'appareil du visiteur** : le site ne les
 
 - [ ] **Les 4 liens HelloAsso ou formulaires** : `cagnotte`, `tombola`, `inscriptionCoureur`, `engagement`. Tant qu'un lien est vide, le bouton reste grisé avec « bientôt disponible » : aucun faux lien sur le site.
 - [ ] **L'Instagram** (`instagram`) et l'**adresse e-mail** de contact (`email`). L'e-mail sert aussi au bouton « Nous proposer un don » destiné aux commerces.
-- [ ] **Le logo d'A.V.A.** : dépose le fichier dans `img/`, puis écris son chemin dans `association.logo` (tout est expliqué dans `img/LISEZ-MOI-IMAGES.txt`).
 - [ ] **Le responsable de publication** (`mentionsLegales.responsable`) : obligatoire, un prénom et un nom.
 - [ ] **Le lieu de la distribution** du 21 novembre (`collecte.lieuDistribution`).
 - [ ] **Les projets financés** (`projetsFinances`) : à faire valider par A.V.A. avant de les annoncer.
 - [ ] **Les lots** : quand un lot est obtenu, passe son `statut` de `"recherche"` à `"confirme"` et ajoute le partenaire.
-- [ ] Facultatif : la présentation d'A.V.A. relue par l'association, `course.depart` (retrait des dossards), `course.info`, les rôles de l'équipe, le club `strava`.
+- [ ] **La présentation d'A.V.A. et ses numéros de téléphone** : à faire relire par l'association (`association.presentation`, `association.telephone` ; laisse `""` pour masquer les numéros).
+- [ ] Facultatif : `course.depart` (retrait des dossards), `course.info`, les rôles de l'équipe, le club `strava`.
 
 Le mode brouillon est désactivé (`modeBrouillon: false`). Passe-le à `true` pendant que tu travailles : tout ce qui manque est alors entouré de pointillés bleus.
 

@@ -1097,6 +1097,13 @@
     secoursImages(logo, ".asso-logo", secours);
     if (texte(a.nomComplet)) { $("#asso-sigle").textContent = a.nomComplet; $("#asso-sigle").hidden = false; }
     $("#asso-presentation").innerHTML = (a.presentation || []).map((p) => `<p>${esc(p)}</p>`).join("");
+    const tel = texte(a.telephone);
+    if (tel) {
+      const liens = tel.split(/[\/·,]+/).map((t) => t.trim()).filter(Boolean)
+        .map((t) => `<a href="tel:${esc(t.replace(/[^0-9+]/g, ""))}">${esc(t)}</a>`).join(" · ");
+      $("#asso-contact").innerHTML = `Contacter l'association : ${liens}`;
+      $("#asso-contact").hidden = false;
+    }
     const site = /^https:\/\/\S+\.\S+$/.test(texte(a.site)) ? texte(a.site) : "";
     if (site) { $("#asso-site").href = site; $("#asso-site-ligne").hidden = false; }
 

@@ -188,13 +188,14 @@ const CONFIG = {
   association: {
     nom: "A.V.A. – Amiens",
     nomComplet: "Accompagnement Vers l'Autonomie",   // signification du sigle A.V.A.
-    // 👉 Dépose le logo dans le dossier img/ puis écris son chemin ici,
-    // par exemple : logo: "img/logo-ava.png"
-    logo: "",
+    logo: "img/logo-ava.png",   // logotype extrait du visuel de l'association
+    // Numéros repris du visuel d'A.V.A. Laisse "" pour ne pas les afficher.
+    telephone: "07 49 05 15 41 / 07 69 30 06 57",
     site: "",         // site ou page de l'asso, avec https:// (facultatif)
     presentation: [
-      "A.V.A. – Amiens, pour Accompagnement Vers l'Autonomie, est l'association que nous soutenons. Elle accompagne notamment des enfants issus de situations très précaires.",
-      "L'argent récolté finance ses projets : sorties, voyages et activités. Les denrées et les vêtements que nous récupérons auprès des commerces et des entreprises sont distribués le 21 novembre, avec l'association.",
+      "A.V.A. – Amiens, pour Accompagnement Vers l'Autonomie, est un espace de vie sociale. L'association accueille les habitants et les accompagne dans leur quotidien : cours de français, accompagnement scolaire, aide administrative, point relais CAF et conseiller numérique France Services.",
+      "Elle propose aussi des ateliers toute l'année : cuisine, couture, tricot et crochet, coiffure et bien-être, activités créatives, sport et marche, et des temps consacrés à la parentalité.",
+      "L'argent que nous récoltons finance ses projets : sorties, voyages et activités. Les denrées et les vêtements que nous récupérons auprès des commerces et des entreprises sont distribués le 21 novembre, avec l'association.",
     ],
   },
 

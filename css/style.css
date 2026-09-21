@@ -613,6 +613,8 @@ body.menu-ouvert { overflow: hidden; }
 .asso-logo-texte { padding: .3rem; text-align: center; font: 900 1rem/1 var(--police-titre); }
 .asso-nom { margin-bottom: .35rem; font: 900 clamp(1.8rem, 7vw, 2.4rem)/1 var(--police-titre); text-transform: uppercase; }
 .asso-sigle { margin-bottom: .75rem; font-style: italic; color: var(--encre-2); }
+.asso-contact { margin: 0 0 .5rem; font-weight: 700; }
+.asso-logo { width: 7rem; height: 6rem; }
 .asso-presentation p { line-height: 1.6; }
 .equipe { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1rem; margin-top: 1.25rem; }
 .polaroid { position: relative; padding: .55rem .55rem .9rem; background: var(--blanc); border: 2.5px solid var(--encre); box-shadow: 4px 4px 0 var(--encre); transform: rotate(var(--rot, 0deg)); }
