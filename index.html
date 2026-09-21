@@ -3,17 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GEAnérosité — Collecte de vêtements à l'IUT d'Amiens, mercredi 11 novembre</title>
-  <meta name="description" content="Mercredi 11 novembre, de 8h à 19h, quatre étudiants en BUT GEA organisent une collecte de vêtements à l'IUT d'Amiens. Tout est remis gratuitement à l'association A.V.A. Tombola à 1 € sur place.">
-  <meta name="theme-color" content="#14306b">
+  <title>GEAnérosité — Collecte de vêtements, mercredi 11 novembre, IUT d'Amiens</title>
+  <meta name="description" content="Mercredi 11 novembre, de 8h à 19h, quatre étudiants en BUT GEA organisent une collecte de vêtements à l'IUT d'Amiens. Tout est donné à l'association A.V.A. Tombola à 1 € sur place.">
+  <meta name="theme-color" content="#0a1a3f">
 
-  <!-- Aperçu du lien sur WhatsApp, Instagram, Facebook.
-       Si l'adresse du site change, remplace les 2 adresses ci-dessous. -->
+  <!-- Aperçu du lien partagé. Si l'adresse du site change, remplace les 2 adresses. -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="GEAnérosité">
   <meta property="og:title" content="GEAnérosité — Collecte de vêtements, mercredi 11 novembre">
-  <meta property="og:description" content="Une journée à l'IUT d'Amiens, de 8h à 19h. Vous apportez les vêtements que vous ne mettez plus, tout est donné à l'association A.V.A.">
+  <meta property="og:description" content="Une journée à l'IUT d'Amiens, de 8h à 19h. Vous apportez ce que vous ne mettez plus, tout est donné à l'association A.V.A.">
   <meta property="og:url" content="https://likooo2.github.io/GEAn-rosit-/">
   <meta property="og:image" content="https://likooo2.github.io/GEAn-rosit-/img/partage.jpg">
   <meta property="og:image:width" content="1200">
@@ -32,27 +31,39 @@
 </head>
 <body>
 
-<a class="evitement" href="#contenu">Aller au contenu</a>
+<!-- Dessins réutilisés -->
+<svg class="sprites" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-tshirt" viewBox="0 0 100 92"><path d="M31 6 L43 2 Q50 11 57 2 L69 6 L94 21 L84 39 L74 33 L74 88 L26 88 L26 33 L16 39 L6 21 Z"/></symbol>
+    <symbol id="i-pull" viewBox="0 0 100 92"><path d="M30 8 L50 3 L70 8 L96 26 L86 44 L76 38 L76 86 L24 86 L24 38 L14 44 L4 26 Z"/></symbol>
+    <symbol id="i-carton" viewBox="0 0 100 80"><path d="M4 16 L96 16 L88 76 L12 76 Z"/><path d="M2 6 L50 6 L50 18 L2 18 Z"/><path d="M50 6 L98 6 L98 18 L50 18 Z"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 100 60"><path d="M6 6 H94 V22 a8 8 0 0 0 0 16 V54 H6 V38 a8 8 0 0 0 0-16 Z"/></symbol>
+    <symbol id="i-calc" viewBox="0 0 80 100"><rect x="6" y="4" width="68" height="92" rx="8"/><rect x="16" y="16" width="48" height="18" rx="3" fill="#ffffff"/><g fill="#ffffff"><circle cx="22" cy="48" r="5"/><circle cx="40" cy="48" r="5"/><circle cx="58" cy="48" r="5"/><circle cx="22" cy="66" r="5"/><circle cx="40" cy="66" r="5"/><circle cx="58" cy="66" r="5"/><circle cx="22" cy="84" r="5"/><circle cx="40" cy="84" r="5"/><circle cx="58" cy="84" r="5"/></g></symbol>
+    <symbol id="i-fleche" viewBox="0 0 24 24"><path d="M4 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
 
-<header class="entete">
+<a class="evitement" href="#contenu">Aller au contenu</a>
+<div class="progression" aria-hidden="true"><span id="progression-barre"></span></div>
+
+<header class="entete" id="entete">
   <div class="conteneur entete-barre">
     <a class="marque" href="#accueil">
-      <span class="marque-icone" aria-hidden="true">
-        <svg viewBox="0 0 100 92" focusable="false"><path d="M31 6 L43 2 Q50 11 57 2 L69 6 L94 21 L84 39 L74 33 L74 88 L26 88 L26 33 L16 39 L6 21 Z"/></svg>
-      </span>
+      <span class="marque-icone" aria-hidden="true"><svg viewBox="0 0 100 92" focusable="false"><use href="#i-tshirt"></use></svg></span>
       <span class="marque-nom"><span class="marque-gea">GEA</span>nérosité</span>
     </a>
     <nav class="nav" id="nav" aria-label="Menu principal">
       <ul>
-        <li><a href="#pourquoi">Pourquoi venir</a></li>
+        <li><a href="#intro">Le projet</a></li>
         <li><a href="#objectif">L'objectif</a></li>
-        <li><a href="#deroule">Comment ça se passe</a></li>
+        <li><a href="#evenement">L'événement</a></li>
+        <li><a href="#pourquoi">Pourquoi venir</a></li>
         <li><a href="#tombola">Tombola</a></li>
-        <li><a href="#qui">Qui sommes-nous</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
-    <a class="bouton bouton-jaune bouton-petit entete-cta" href="#deroule">Participer</a>
+    <p class="entete-kg" id="entete-kg" hidden><strong id="entete-kg-valeur">0 kg</strong><span>/ <span id="entete-kg-objectif">300 kg</span></span></p>
+    <a class="bouton bouton-jaune bouton-petit entete-cta" href="#participer">Participer</a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu">
       <span></span><span></span><span></span>
     </button>
@@ -61,34 +72,45 @@
 
 <main id="contenu">
 
-  <!-- ─────────── ACCUEIL ─────────── -->
+  <!-- ═══════════ HERO ═══════════ -->
   <section class="hero" id="accueil" aria-labelledby="titre-hero">
+    <div class="hero-decor" aria-hidden="true">
+      <svg class="flottant flottant-1" viewBox="0 0 100 92" data-parallaxe="26"><use href="#i-tshirt"></use></svg>
+      <svg class="flottant flottant-2" viewBox="0 0 100 60" data-parallaxe="-18"><use href="#i-ticket"></use></svg>
+      <svg class="flottant flottant-3" viewBox="0 0 100 80" data-parallaxe="14"><use href="#i-carton"></use></svg>
+      <svg class="flottant flottant-4" viewBox="0 0 80 100" data-parallaxe="-24"><use href="#i-calc"></use></svg>
+      <svg class="flottant flottant-5" viewBox="0 0 100 92" data-parallaxe="20"><use href="#i-pull"></use></svg>
+      <span class="halo halo-1"></span>
+      <span class="halo halo-2"></span>
+    </div>
+
     <div class="conteneur hero-grille">
-      <div class="hero-texte" data-anim>
-        <p class="fil-infos">
-          <span class="fil-date" id="fil-date">Mercredi 11 novembre</span>
-          <span id="fil-horaires">8h – 19h</span>
-          <span id="fil-lieu">IUT d'Amiens</span>
-        </p>
-        <h1 id="titre-hero">Videz votre placard, on s'occupe du reste</h1>
-        <p class="hero-intro">Une journée, une table à l'IUT, et tous les vêtements que vous ne mettez plus. On pèse, on trie, et tout part chez <strong data-bind="association.nom">A.V.A. – Amiens</strong>, qui les <span class="surligne">redonne gratuitement</span> aux personnes qu'elle accompagne.</p>
+      <div class="hero-texte">
+        <p class="hero-etiquette">Projet étudiant · BUT GEA · IUT d'Amiens</p>
+        <h1 id="titre-hero" class="hero-titre">
+          <span class="mot" style="--i:0">Videz</span>
+          <span class="mot mot-jaune" style="--i:1">votre placard,</span>
+          <span class="mot mot-manuscrit" style="--i:2">on s'occupe du reste.</span>
+        </h1>
+        <p class="hero-date" id="hero-date"></p>
+        <p class="hero-intro">Une journée, une table, et tous les vêtements que vous ne mettez plus. On pèse, on trie, et tout part chez <strong data-bind="association.nom">A.V.A. – Amiens</strong>, qui les redonne gratuitement.</p>
         <div class="hero-actions">
-          <a class="bouton bouton-bleu" href="#deroule">Comment participer</a>
-          <a class="bouton bouton-contour" href="#tombola">Voir les lots</a>
+          <a class="bouton bouton-jaune bouton-grand" href="#participer">Je viens donner<svg class="bouton-fleche" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fleche"></use></svg></a>
+          <a class="bouton bouton-fantome bouton-grand" href="#tombola">Voir les 6 lots</a>
         </div>
         <p class="hero-note">Gratuit, sans inscription. Même un seul pull compte.</p>
       </div>
 
-      <aside class="carte-compte" aria-labelledby="car-titre" data-anim>
-        <p class="car-titre" id="car-titre">La collecte ouvre dans</p>
-        <ul class="car-blocs" id="car-blocs" role="timer" aria-live="off"></ul>
-        <p class="car-message" id="car-message"></p>
-        <div class="car-jauge">
-          <p class="car-ligne"><span>Déjà collecté</span><strong id="car-kg">0 kg</strong></p>
-          <div class="barre" aria-hidden="true"><span id="car-barre"></span></div>
-          <p class="car-objectif">Objectif du jour : <strong id="car-objectif">300 kg</strong></p>
+      <aside class="hero-compte" aria-labelledby="compte-titre">
+        <p class="compte-titre" id="compte-titre">Ouverture dans</p>
+        <ul class="compte-blocs" id="compte-blocs" role="timer" aria-live="off"></ul>
+        <p class="compte-message" id="compte-message"></p>
+        <div class="compte-jauge">
+          <p class="compte-ligne"><span>Déjà collecté</span><strong id="compte-kg">0 kg</strong></p>
+          <div class="barre"><span id="compte-barre"></span></div>
+          <p class="compte-objectif">Objectif du jour : <strong id="compte-objectif">300 kg</strong></p>
         </div>
-        <p class="car-agenda" id="car-agenda" hidden>
+        <p class="compte-agenda" id="compte-agenda" hidden>
           <a id="agenda-google" target="_blank" rel="noopener">Ajouter à mon agenda</a>
           <a id="agenda-ics" download="geanerosite-collecte.ics">Fichier .ics</a>
         </p>
@@ -96,48 +118,49 @@
     </div>
   </section>
 
+  <!-- ═══════════ BANDEAU DÉFILANT ═══════════ -->
+  <div class="ruban" aria-hidden="true">
+    <div class="ruban-piste" id="ruban-piste"></div>
+  </div>
 
-  <!-- ─────────── POURQUOI VENIR ─────────── -->
-  <section class="section section-pourquoi" id="pourquoi" aria-labelledby="titre-pourquoi">
-    <div class="conteneur">
-      <h2 id="titre-pourquoi">Pourquoi venir ?</h2>
-      <ol class="raisons" data-anim>
-        <li>
-          <p class="raison-num" aria-hidden="true">01</p>
-          <h3>Ça vous prend deux minutes</h3>
-          <p>Vous passez entre deux cours, on pèse votre sac devant vous, et vous repartez les mains vides. Pas de formulaire, pas d'inscription.</p>
-        </li>
-        <li>
-          <p class="raison-num" aria-hidden="true">02</p>
-          <h3>Vos vêtements servent tout de suite</h3>
-          <p>Ils ne partent pas dans une benne à l'autre bout de l'Europe : l'association les redonne directement à des familles d'Amiens.</p>
-        </li>
-        <li>
-          <p class="raison-num" aria-hidden="true">03</p>
-          <h3>Et vous pouvez repartir avec un lot</h3>
-          <p>La tombola est à <span class="prix-billet">1 €</span> le billet, sur place. Cinéma, bowling, laser game, escape game, resto : <a href="#tombola">voir les lots</a>.</p>
-        </li>
-      </ol>
+  <!-- ═══════════ 01 · LE PROJET ═══════════ -->
+  <section class="section section-intro" id="intro" aria-labelledby="titre-intro">
+    <div class="conteneur intro-grille">
+      <div>
+        <p class="chapitre"><span class="chapitre-num">01</span> Le projet</p>
+        <h2 id="titre-intro">GEAnérosité, c'est quoi&nbsp;?</h2>
+        <p class="texte-large">Nous sommes quatre étudiants en BUT GEA à l'IUT d'Amiens. Pour notre projet de formation, on a choisi de faire quelque chose d'utile plutôt qu'un dossier de plus&nbsp;: <span class="marqueur">une collecte de vêtements sur une journée entière</span>, dans notre propre IUT.</p>
+        <p>Tout ce qui est déposé est trié puis remis à <strong data-bind="association.nom">A.V.A. – Amiens</strong>, une association du quartier qui redonne les vêtements gratuitement aux familles qu'elle accompagne. On ajoute une tombola à <span class="prix-billet">1 €</span> pour financer ses sorties et ses ateliers.</p>
+        <p class="note-main">promis, c'est plus concret qu'un tableur</p>
+      </div>
+      <ul class="fiche-faits">
+        <li><span class="fait-label">Qui</span><span class="fait-valeur">4 étudiants en BUT GEA</span></li>
+        <li><span class="fait-label">Quoi</span><span class="fait-valeur">Une collecte de vêtements, une journée</span></li>
+        <li><span class="fait-label">Pour qui</span><span class="fait-valeur" data-bind="association.nom">A.V.A. – Amiens</span></li>
+        <li><span class="fait-label">Combien ça coûte</span><span class="fait-valeur">Rien. Un sac, c'est tout</span></li>
+      </ul>
     </div>
   </section>
 
-
-  <!-- ─────────── L'OBJECTIF ─────────── -->
+  <!-- ═══════════ 02 · L'OBJECTIF ═══════════ -->
   <section class="section section-objectif" id="objectif" aria-labelledby="titre-objectif">
     <div class="conteneur">
       <div class="objectif-entete">
-        <h2 id="titre-objectif">L'objectif de la journée</h2>
-        <p class="note-manuscrite">on met le chiffre à jour dans la journée</p>
+        <div>
+          <p class="chapitre"><span class="chapitre-num">02</span> L'objectif</p>
+          <h2 id="titre-objectif">Remplir le carton avant 19&nbsp;h</h2>
+        </div>
+        <p class="note-main note-carton">on met le chiffre à jour dans la journée</p>
       </div>
 
-      <div class="objectif-grille" data-anim>
+      <div class="objectif-grille">
         <div class="objectif-chiffres">
           <div class="compteur" id="compteur" role="progressbar" aria-labelledby="titre-objectif" aria-valuemin="0">
-            <p class="compteur-valeur" id="jauge-kg">0 kg</p>
-            <p class="compteur-detail">sur <strong id="jauge-objectif">300 kg</strong>, soit <span id="jauge-pourcent">0 %</span> de l'objectif</p>
+            <p class="compteur-valeur"><span id="jauge-kg" data-compteur>0</span><span class="compteur-unite">kg</span></p>
+            <p class="compteur-detail">sur <strong id="jauge-objectif">300 kg</strong> — <span id="jauge-pourcent">0 %</span> de l'objectif</p>
           </div>
-          <p class="objectif-bilan" id="jauge-bilan"></p>
-          <p class="objectif-estimation" id="estimation-vetements"></p>
+          <p class="objectif-bilan" id="objectif-bilan"></p>
+          <p class="objectif-estimation" id="objectif-estimation"></p>
           <p class="objectif-maj" id="objectif-maj" hidden>Mis à jour à <span data-bind="compteurs.miseAJour"></span></p>
         </div>
 
@@ -147,134 +170,139 @@
             <div class="carton-remplissage" id="carton-remplissage"></div>
             <ul class="carton-reperes" id="carton-reperes"></ul>
           </div>
-          <p class="carton-etiquette">Pour <span data-bind="association.nom">A.V.A.</span></p>
+          <p class="carton-etiquette">Destination&nbsp;: <span data-bind="association.nom">A.V.A.</span></p>
         </div>
       </div>
 
-      <ul class="chiffres-jour" id="chiffres-jour"></ul>
+      <ul class="stats" id="stats"></ul>
     </div>
   </section>
 
-
-  <!-- ─────────── COMMENT ÇA SE PASSE ─────────── -->
-  <section class="section section-deroule" id="deroule" aria-labelledby="titre-deroule">
+  <!-- ═══════════ 03 · L'ÉVÉNEMENT ═══════════ -->
+  <section class="section section-evenement" id="evenement" aria-labelledby="titre-evenement">
     <div class="conteneur">
-      <h2 id="titre-deroule">Comment ça se passe</h2>
-      <ol class="etapes" data-anim>
-        <li>
-          <h3>Vous triez chez vous</h3>
-          <p>Un sac, un carton, un cabas : tout ce que vous ne mettez plus et qui peut encore servir.</p>
+      <p class="chapitre chapitre-clair"><span class="chapitre-num">03</span> L'événement</p>
+      <h2 id="titre-evenement">Une seule journée, de 8&nbsp;h à 19&nbsp;h</h2>
+      <div class="evenement-grille">
+        <ul class="infos-event" id="infos-event"></ul>
+        <div class="frise" aria-hidden="true">
+          <div class="frise-barre"><span class="frise-curseur" id="frise-curseur"></span></div>
+          <ul class="frise-heures" id="frise-heures"></ul>
+          <p class="frise-note">Passez quand vous voulez&nbsp;: entre deux cours, à la pause de midi, ou en partant le soir.</p>
+        </div>
+      </div>
+      <ol class="etapes">
+        <li><h3>Vous triez chez vous</h3><p>Un sac, un carton, un cabas. Ce que vous ne mettez plus et qui peut encore servir.</p></li>
+        <li><h3>Vous passez nous voir</h3><p id="etape-lieu">À l'IUT d'Amiens, à la table GEAnérosité.</p></li>
+        <li><h3>On pèse devant vous</h3><p>Le poids monte sur le compteur de la salle et sur ce site. Votre sac fait avancer l'objectif.</p></li>
+        <li><h3>Tout part à l'association</h3><p>Vêtements triés d'un côté, argent de la tombola de l'autre.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══════════ 04 · POURQUOI VENIR ═══════════ -->
+  <section class="section section-pourquoi" id="pourquoi" aria-labelledby="titre-pourquoi">
+    <div class="conteneur">
+      <p class="chapitre"><span class="chapitre-num">04</span> Pourquoi venir</p>
+      <h2 id="titre-pourquoi">Trois bonnes raisons, deux minutes de votre temps</h2>
+      <ol class="raisons">
+        <li data-reveal style="--i:0">
+          <p class="raison-num" aria-hidden="true">01</p>
+          <h3>Ça ne vous coûte rien</h3>
+          <p>Pas d'inscription, pas de formulaire, pas un centime. Vous arrivez avec un sac, vous repartez sans.</p>
         </li>
-        <li>
-          <h3>Vous passez nous voir</h3>
-          <p><span class="quand-jour">Mercredi 11 novembre</span>, de <span class="quand-ouverture">8h</span> à <span class="quand-fermeture">19h</span>, <span id="etape-lieu">à l'IUT d'Amiens</span>.</p>
+        <li data-reveal style="--i:1">
+          <p class="raison-num" aria-hidden="true">02</p>
+          <h3>Vos vêtements servent ici</h3>
+          <p>Pas de benne, pas de revente à l'autre bout de l'Europe&nbsp;: l'association les redonne à des familles d'Amiens.</p>
         </li>
-        <li>
-          <h3>On pèse et on note</h3>
-          <p>Le poids monte sur le compteur de la salle et sur ce site. Vous voyez votre sac faire avancer l'objectif.</p>
-        </li>
-        <li>
-          <h3>On remet tout à l'association</h3>
-          <p>Vêtements triés d'un côté, argent de la tombola de l'autre : <span data-bind="association.nom">A.V.A. – Amiens</span> récupère les deux.</p>
+        <li data-reveal style="--i:2">
+          <p class="raison-num" aria-hidden="true">03</p>
+          <h3>Et vous pouvez gagner</h3>
+          <p>Un billet de tombola à <span class="prix-billet">1 €</span>, six lots à la clé. <a href="#tombola">Voir les lots</a>.</p>
         </li>
       </ol>
-      <div class="deroule-infos">
-        <ul class="infos-cles" id="infos-cles"></ul>
-        <p class="deroule-conseil">Le plus pratique : un sac fermé, des vêtements propres et secs. Pas besoin de plier, on trie sur place.</p>
-      </div>
-    </div>
-  </section>
 
-
-  <!-- ─────────── CE QU'ON PREND ─────────── -->
-  <section class="section section-tri" id="vetements" aria-labelledby="titre-tri">
-    <div class="conteneur">
-      <h2 id="titre-tri">Ce qu'on peut prendre, et ce qu'on ne peut pas</h2>
-      <p class="intro">Les vêtements sont redonnés tels quels, sans passer par une blanchisserie. Le bon réflexe : ce que vous prêteriez à un ami.</p>
-      <div class="tri-grille" data-anim>
-        <div class="tri-bloc">
-          <h3>On prend</h3>
+      <div class="tri-grille">
+        <div class="tri-bloc tri-oui" data-reveal>
+          <h3><span class="tri-pastille tri-pastille-oui" aria-hidden="true"></span>On prend</h3>
           <ul class="liste-oui" id="liste-accepte"></ul>
         </div>
-        <div class="tri-bloc tri-non">
-          <h3>On ne peut pas</h3>
+        <div class="tri-bloc tri-non" data-reveal style="--i:1">
+          <h3><span class="tri-pastille tri-pastille-non" aria-hidden="true"></span>On ne peut pas</h3>
           <ul class="liste-non" id="liste-refuse"></ul>
-          <p class="petit">Pour ces textiles, une borne de collecte en ville reste la bonne solution.</p>
+          <p class="petit-clair">Pour ces textiles, une borne de collecte en ville reste la bonne solution.</p>
         </div>
       </div>
     </div>
   </section>
 
-
-  <!-- ─────────── LA TOMBOLA ─────────── -->
+  <!-- ═══════════ 05 · LA TOMBOLA ═══════════ -->
   <section class="section section-tombola" id="tombola" aria-labelledby="titre-tombola">
     <div class="conteneur">
       <div class="tombola-entete">
-        <h2 id="titre-tombola">La tombola</h2>
-        <p class="tombola-prix"><strong class="prix-billet">1 €</strong> le billet</p>
-      </div>
-      <p class="intro">Six lots, un billet à <span class="prix-billet">1 €</span>, et tout ce qui est récolté part dans les projets de l'association. Donner des vêtements reste gratuit : la tombola, c'est juste en plus.</p>
-      <ul class="lots" id="lots" data-anim></ul>
-      <p class="lots-note" id="lots-note"></p>
-      <div class="tombola-pratique">
         <div>
+          <p class="chapitre"><span class="chapitre-num">05</span> La tombola</p>
+          <h2 id="titre-tombola">Six lots, un billet à <span class="prix-billet">1 €</span></h2>
+        </div>
+        <p class="tombola-info" id="tombola-info"></p>
+      </div>
+      <ul class="tickets" id="tickets"></ul>
+      <p class="tickets-note" id="tickets-note"></p>
+      <div class="tombola-bas">
+        <div class="tombola-carte">
           <h3>Comment prendre un billet</h3>
           <p id="tombola-papier"></p>
           <div id="tombola-action"></div>
         </div>
-        <div>
+        <div class="tombola-carte">
           <h3>Le tirage</h3>
           <p id="tombola-tirage"></p>
           <p><button class="lien-bouton" type="button" data-ouvre="modale-reglement">Lire le règlement</button></p>
         </div>
-      </div>
-      <div class="resultat" id="tombola-resultat" hidden></div>
-      <p class="appel-partenaires">Vous tenez un commerce à Amiens et vous voulez offrir un lot ? <a data-lien="email">Écrivez-nous</a>, on passe vous voir.</p>
-    </div>
-  </section>
-
-
-  <!-- ─────────── OÙ VA TOUT ÇA ─────────── -->
-  <section class="section section-suivi" id="suivi" aria-labelledby="titre-suivi">
-    <div class="conteneur">
-      <h2 id="titre-suivi">Où va tout ça ?</h2>
-      <div class="suivi-grille" data-anim>
-        <div class="suivi-chemin">
-          <h3>Les vêtements</h3>
-          <ol class="chemin">
-            <li>Vous, à l'IUT</li>
-            <li>Pesés et triés par l'équipe</li>
-            <li data-bind="association.nom">A.V.A. – Amiens</li>
-            <li>Donnés gratuitement</li>
-          </ol>
-        </div>
-        <div class="suivi-chemin">
-          <h3>L'argent de la tombola</h3>
-          <ol class="chemin">
-            <li>Vous</li>
-            <li>Billets papier ou en ligne</li>
-            <li data-bind="association.nom">A.V.A. – Amiens</li>
-            <li>Ses projets</li>
-          </ol>
+        <div class="tombola-carte tombola-carte-jaune">
+          <h3>Où va l'argent</h3>
           <ul class="projets" id="projets-liste"></ul>
           <p class="petit">Projets à confirmer avec l'association.</p>
         </div>
       </div>
-      <ul class="promesses">
-        <li><strong>On ne garde rien.</strong> Ni euro, ni vêtement : l'équipe ne fait que transporter.</li>
-        <li><strong>Le poids est pesé devant vous.</strong> Le chiffre de la salle et celui du site sont les mêmes.</li>
-        <li><strong>Les lots sont offerts</strong> par des commerces : l'argent de la tombola ne sert pas à les acheter.</li>
-        <li><strong>L'argent en ligne.</strong> <span id="encaissement"></span></li>
-        <li><strong>L'argent en espèces.</strong> <span id="especes"></span></li>
-      </ul>
+      <div class="resultat" id="tombola-resultat" hidden></div>
     </div>
   </section>
 
+  <!-- ═══════════ 06 · PARTICIPER ═══════════ -->
+  <section class="section section-participer" id="participer" aria-labelledby="titre-participer">
+    <div class="conteneur">
+      <p class="chapitre chapitre-clair"><span class="chapitre-num">06</span> Participer</p>
+      <h2 id="titre-participer">Trois façons d'aider, le 11 novembre</h2>
+      <div class="actions-grille">
+        <article class="action-carte action-carte-1" data-reveal>
+          <p class="action-num" aria-hidden="true">01</p>
+          <h3>Apporter un sac</h3>
+          <p>Le plus utile. Un sac de 5 kg, c'est déjà 2 % de l'objectif de la journée.</p>
+          <p class="action-quand" id="action-quand"></p>
+        </article>
+        <article class="action-carte action-carte-2" data-reveal style="--i:1">
+          <p class="action-num" aria-hidden="true">02</p>
+          <h3>Prendre un billet</h3>
+          <p><span class="prix-billet">1 €</span> à la table d'accueil, en espèces. Six lots à gagner, tirage le soir même.</p>
+          <a class="lien-fleche" href="#tombola">Voir les lots<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-fleche"></use></svg></a>
+        </article>
+        <article class="action-carte action-carte-3" data-reveal style="--i:2">
+          <p class="action-num" aria-hidden="true">03</p>
+          <h3>En parler autour de vous</h3>
+          <p>Un message dans le groupe de promo vaut dix affiches dans le couloir.</p>
+          <p class="action-partage"><button class="lien-bouton" type="button" id="copier-lien">Copier le lien du site</button><span class="copie-ok" id="copie-ok" role="status"></span></p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-  <!-- ─────────── QUI SOMMES-NOUS ─────────── -->
+  <!-- ═══════════ 07 · QUI EST DERRIÈRE ═══════════ -->
   <section class="section section-qui" id="qui" aria-labelledby="titre-qui">
     <div class="conteneur qui-grille">
       <article class="asso" aria-labelledby="titre-asso">
+        <p class="chapitre"><span class="chapitre-num">07</span> Qui est derrière</p>
         <div class="asso-logo" id="asso-logo"></div>
         <h2 class="asso-nom" id="titre-asso" data-bind="association.nom">A.V.A. – Amiens</h2>
         <p class="asso-sigle" id="asso-sigle" hidden></p>
@@ -284,61 +312,71 @@
       </article>
       <div class="equipe-bloc">
         <h2>L'équipe</h2>
-        <p>Quatre étudiants en BUT GEA à l'IUT d'Amiens. C'est nous que vous verrez derrière la table toute la journée, avec la balance et les sacs.</p>
+        <p>Quatre étudiants en BUT GEA. C'est nous que vous verrez derrière la table, avec la balance, les sacs et beaucoup de café.</p>
         <ul class="equipe" id="equipe"></ul>
-        <p class="petit" id="equipe-note">Projet réalisé dans le cadre de notre formation, avec l'accord de l'association.</p>
+        <ul class="promesses">
+          <li><strong>On ne garde rien.</strong> Ni euro, ni vêtement.</li>
+          <li><strong>Le poids est pesé devant vous.</strong> Même chiffre dans la salle et sur le site.</li>
+          <li><strong>Les lots sont offerts</strong> par des commerces d'Amiens.</li>
+          <li><strong>En ligne.</strong> <span id="encaissement"></span></li>
+          <li><strong>En espèces.</strong> <span id="especes"></span></li>
+        </ul>
       </div>
     </div>
   </section>
 
-
-  <!-- ─────────── FAQ ─────────── -->
+  <!-- ═══════════ FAQ ═══════════ -->
   <section class="section section-faq" id="faq" aria-labelledby="titre-faq">
     <div class="conteneur conteneur-etroit">
-      <h2 id="titre-faq">Questions fréquentes</h2>
-      <div class="faq" data-anim>
+      <h2 id="titre-faq">Les questions qu'on nous pose</h2>
+      <div class="faq">
         <details>
-          <summary>Il faut apporter beaucoup pour que ça compte ?</summary>
-          <div class="faq-reponse"><p>Non. Un pull, un jean, une paire de baskets : tout est pesé, tout compte. L'objectif se remplit surtout avec des petits dépôts.</p></div>
+          <summary>Il faut apporter beaucoup pour que ça compte&nbsp;?</summary>
+          <div class="faq-reponse"><p>Non. Un pull, un jean, une paire de baskets&nbsp;: tout est pesé, tout compte. L'objectif se remplit surtout avec des petits dépôts.</p></div>
         </details>
         <details>
-          <summary>Je ne suis pas de l'IUT, je peux passer ?</summary>
-          <div class="faq-reponse"><p>La collecte est pensée pour les étudiants, les enseignants et les personnels de l'IUT, mais si vous passez avec un sac, on ne va pas vous le refuser.</p></div>
+          <summary>Je ne suis pas de l'IUT, je peux passer&nbsp;?</summary>
+          <div class="faq-reponse"><p>La collecte est pensée pour les étudiants, les enseignants et les personnels, mais si vous passez avec un sac, on ne va pas vous le refuser.</p></div>
         </details>
         <details>
-          <summary>Faut-il laver les vêtements avant ?</summary>
-          <div class="faq-reponse"><p>Oui, merci : ils sont redonnés directement à des familles. Propres et secs, en vrac dans un sac, c'est parfait.</p></div>
+          <summary>Faut-il laver les vêtements avant&nbsp;?</summary>
+          <div class="faq-reponse"><p>Oui, merci&nbsp;: ils sont redonnés directement à des familles. Propres et secs, en vrac dans un sac, c'est parfait.</p></div>
         </details>
         <details>
-          <summary>Le billet de tombola est obligatoire ?</summary>
-          <div class="faq-reponse"><p>Non, donner des vêtements ne coûte rien. La tombola est indépendante : <span class="prix-billet">1 €</span> le billet si vous voulez tenter votre chance.</p></div>
+          <summary>Le billet de tombola est obligatoire&nbsp;?</summary>
+          <div class="faq-reponse"><p>Non. Donner des vêtements ne coûte rien, la tombola est totalement à part.</p></div>
         </details>
         <details>
-          <summary>Comment savoir combien a été collecté ?</summary>
-          <div class="faq-reponse"><p>Le poids est mis à jour dans la journée sur le compteur de la salle et sur ce site, dans <a href="#objectif">L'objectif de la journée</a>. Le total final y reste après la collecte.</p></div>
-        </details>
-        <details>
-          <summary>Comment vous contacter ?</summary>
-          <div class="faq-reponse"><p>Par e-mail, ou sur nos pages Instagram et Facebook : tout est dans <a href="#contact">Contact</a>.</p></div>
+          <summary>Comment suivre le total de la journée&nbsp;?</summary>
+          <div class="faq-reponse"><p>Sur le compteur de la salle et sur ce site, dans <a href="#objectif">L'objectif</a>. Le total final y reste affiché après la collecte.</p></div>
         </details>
       </div>
     </div>
   </section>
 
-
-  <!-- ─────────── CONTACT ─────────── -->
+  <!-- ═══════════ 08 · RÉSEAUX ET CONTACT ═══════════ -->
   <section class="section section-contact" id="contact" aria-labelledby="titre-contact">
-    <div class="conteneur contact-grille">
-      <div>
-        <h2 id="titre-contact">Une question, une idée, un lot à offrir ?</h2>
-        <p>Écrivez-nous ou passez nous voir le jour de la collecte. On répond vite, sauf pendant la journée : on sera occupés à peser des sacs.</p>
-        <p class="contact-partage">Le plus utile : parlez-en autour de vous. <button class="lien-bouton" type="button" id="copier-lien">Copier le lien du site</button><span class="copie-ok" id="copie-ok" role="status"></span></p>
-      </div>
-      <ul class="contact-liens">
-        <li><a class="contact-lien" data-lien="email" data-afficher>adresse bientôt disponible</a><span class="contact-etiquette">E-mail</span></li>
-        <li><a class="contact-lien" data-lien="instagram">Instagram</a><span class="contact-etiquette" data-destination-courte="instagram"></span></li>
-        <li><a class="contact-lien" data-lien="facebook">Facebook</a><span class="contact-etiquette" data-destination-courte="facebook"></span></li>
+    <div class="conteneur">
+      <p class="chapitre chapitre-clair"><span class="chapitre-num">08</span> Nous suivre, nous écrire</p>
+      <h2 id="titre-contact">On répond vite (sauf le 11, on pèsera des sacs)</h2>
+      <ul class="contact-tuiles">
+        <li class="tuile tuile-insta">
+          <span class="tuile-label">Instagram</span>
+          <a class="tuile-lien" data-lien="instagram">Suivre le projet</a>
+          <span class="tuile-etat" data-etat="instagram"></span>
+        </li>
+        <li class="tuile tuile-fb">
+          <span class="tuile-label">Facebook</span>
+          <a class="tuile-lien" data-lien="facebook">Suivre le projet</a>
+          <span class="tuile-etat" data-etat="facebook"></span>
+        </li>
+        <li class="tuile tuile-mail">
+          <span class="tuile-label">E-mail</span>
+          <a class="tuile-lien" data-lien="email" data-afficher>adresse bientôt disponible</a>
+          <span class="tuile-etat" data-etat="email"></span>
+        </li>
       </ul>
+      <p class="contact-note">Un commerce qui veut offrir un lot, une question d'un enseignant, une idée&nbsp;? Écrivez-nous, ou venez nous voir à la table le jour J.</p>
     </div>
   </section>
 
@@ -349,7 +387,7 @@
   <div class="conteneur pied-grille">
     <div>
       <p class="pied-marque"><span class="marque-gea">GEA</span>nérosité</p>
-      <p class="pied-texte">Collecte de vêtements du <span class="quand-jour">mercredi 11 novembre</span>, à l'IUT d'Amiens, au profit de <span data-bind="association.nom">A.V.A. – Amiens</span>. Un projet d'étudiants en BUT GEA.</p>
+      <p class="pied-texte">Collecte de vêtements du <span class="quand-jour">mercredi 11 novembre</span>, à l'IUT d'Amiens, au profit de <span data-bind="association.nom">A.V.A. – Amiens</span>. Projet d'étudiants en BUT GEA.</p>
     </div>
     <div class="pied-logos">
       <div class="pied-logo" id="logo-iut"></div>
@@ -358,6 +396,7 @@
     <p class="pied-legal">
       <button class="lien-bouton" type="button" data-ouvre="modale-reglement">Règlement de la tombola</button>
       <button class="lien-bouton" type="button" data-ouvre="modale-mentions">Mentions légales</button>
+      <a href="#accueil">Retour en haut</a>
     </p>
   </div>
 </footer>
@@ -370,13 +409,13 @@
       <button class="modale-fermer" type="button" aria-label="Fermer">×</button>
     </div>
     <div class="modale-contenu">
-      <p class="encart-attention">Projet de règlement, à valider avec l'association avant la vente des billets.</p>
+      <p class="encart">Projet de règlement, à valider avec l'association avant la vente des billets.</p>
       <h3>1. Organisation</h3>
       <p>La tombola est organisée par quatre étudiants en BUT GEA de l'IUT d'Amiens, dans le cadre du projet GEAnérosité, au profit de <span data-bind="association.nom">A.V.A. – Amiens</span>.</p>
       <h3>2. Participation</h3>
-      <p>La tombola est ouverte à toute personne physique. Le billet coûte <span class="prix-billet">1 €</span>. Les billets papier sont vendus à la table d'accueil le jour de la collecte ; des billets peuvent aussi être proposés en ligne. Donner des vêtements ne demande aucun achat de billet.</p>
+      <p>Ouverte à toute personne physique. Le billet coûte <span class="prix-billet">1 €</span>, vendu à la table d'accueil le jour de la collecte. Donner des vêtements ne demande aucun achat de billet.</p>
       <h3>3. Tirage au sort</h3>
-      <p><span id="reglement-tirage">Le tirage a lieu à la date annoncée sur ce site.</span> Les gagnants sont contactés avec les coordonnées laissées à l'achat, et les résultats sont publiés sur ce site.</p>
+      <p><span id="reglement-tirage">Le tirage a lieu à la date annoncée sur ce site.</span> Les gagnants sont contactés avec les coordonnées laissées à l'achat, et les résultats publiés sur ce site.</p>
       <h3>4. Les lots</h3>
       <p>Les lots sont offerts par des commerces partenaires. Ils ne peuvent être ni échangés contre de l'argent, ni remboursés. Un lot non réclamé dans les trente jours reste acquis à l'association.</p>
       <h3>5. Les sommes récoltées</h3>
@@ -384,7 +423,7 @@
       <h3>6. Données personnelles</h3>
       <p>Les coordonnées recueillies servent uniquement à contacter les gagnants. Elles ne sont ni vendues, ni transmises.</p>
       <h3>7. Acceptation</h3>
-      <p>Participer implique l'acceptation de ce règlement. En cas d'imprévu, l'opération peut être modifiée, reportée ou annulée ; l'information serait publiée sur ce site.</p>
+      <p>Participer implique l'acceptation de ce règlement. En cas d'imprévu, l'opération peut être modifiée, reportée ou annulée&nbsp;; l'information serait publiée ici.</p>
     </div>
   </div>
 </dialog>
@@ -398,15 +437,15 @@
     </div>
     <div class="modale-contenu">
       <h3>Éditeur</h3>
-      <p>Site réalisé par quatre étudiants du BUT GEA de l'IUT d'Amiens (Université de Picardie Jules Verne), dans le cadre d'un projet de formation, au profit de <span data-bind="association.nom">A.V.A. – Amiens</span>. Contact : <a data-lien="email" data-afficher>adresse bientôt disponible</a>.</p>
+      <p>Site réalisé par quatre étudiants du BUT GEA de l'IUT d'Amiens (Université de Picardie Jules Verne), dans le cadre d'un projet de formation, au profit de <span data-bind="association.nom">A.V.A. – Amiens</span>. Contact&nbsp;: <a data-lien="email" data-afficher>adresse bientôt disponible</a>.</p>
       <h3>Responsable de la publication</h3>
       <p id="mentions-responsable"></p>
       <h3>Hébergement</h3>
       <p data-bind="mentionsLegales.hebergeur">…</p>
       <h3>Données personnelles et cookies</h3>
-      <p>Ce site ne dépose aucun cookie, n'utilise aucune mesure d'audience et ne collecte aucune donnée : il n'y a ni formulaire, ni compte. Les éventuels paiements en ligne passent par HelloAsso, qui applique sa propre politique de confidentialité.</p>
+      <p>Ce site ne dépose aucun cookie, n'utilise aucune mesure d'audience et ne collecte aucune donnée&nbsp;: il n'y a ni formulaire, ni compte. Les éventuels paiements en ligne passeraient par HelloAsso, qui applique sa propre politique de confidentialité.</p>
       <h3>Crédits</h3>
-      <p>Polices Big Shoulders, Caveat et Atkinson Hyperlegible, sous licence SIL Open Font License. Logotype d'A.V.A. utilisé avec l'accord de l'association.</p>
+      <p>Polices Big Shoulders, Caveat et Atkinson Hyperlegible, sous licence SIL Open Font License. Logotype d'A.V.A. utilisé avec l'accord de l'association. Dessins et code&nbsp;: l'équipe GEAnérosité.</p>
     </div>
   </div>
 </dialog>
@@ -416,10 +455,10 @@
   <button class="bandeau-fermer" type="button" aria-label="Masquer">×</button>
 </div>
 <div class="bandeau bandeau-erreur" id="erreur-config" role="alert" hidden>
-  <p><strong>js/config.js contient une erreur.</strong> En général une virgule ou un guillemet oublié à l'endroit modifié. Sur ordinateur, F12 puis l'onglet Console donne le numéro de ligne.</p>
+  <p><strong>js/config.js contient une erreur.</strong> En général une virgule ou un guillemet oublié. Sur ordinateur, F12 puis l'onglet Console donne le numéro de ligne.</p>
 </div>
 
-<noscript><p class="noscript">Activez JavaScript pour voir le compteur de kilos, le compte à rebours et les lots.</p></noscript>
+<noscript><p class="noscript">Activez JavaScript pour voir le compte à rebours, le compteur de kilos et les lots.</p></noscript>
 
 </body>
 </html>
