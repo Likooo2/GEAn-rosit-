@@ -228,18 +228,31 @@
 
   /* ───────────────────── Les coureurs ───────────────────── */
 
-  const coureurs = (Array.isArray(C.coureurs) ? C.coureurs : [])
-    .map((c, i) => ({
-      prenom: texte(c.prenom) || "Coureur " + (i + 1),
-      dossard: nombre(c.dossard) !== null ? String(Math.round(Number(c.dossard))) : String(i + 1),
-      objectifKm: Math.max(0, nombre(c.objectifKm) || 0),
-      km: Math.max(0, nombre(c.km) || 0),
-      kmVerifies: !!c.kmVerifies,
-      strava: /^https:\/\/\S+\.\S+$/.test(texte(c.strava)) ? texte(c.strava) : "",
-      promesseParKm: Math.max(0, nombre(c.promesseParKm) || 0),
-    }));
-  const parDossard = new Map(coureurs.map((c) => [c.dossard, c]));
-  const kmTotal = coureurs.reduce((t, c) => t + c.km, 0);
+  const nombreSouple = (v) => nombre(String(v ?? "").replace(",", ".").replace(/[^0-9.\-]/g, "")) || 0;
+  function normaliserCoureurs(brut) {
+    return (Array.isArray(brut) ? brut : []).map((c, i) => {
+      const nom = texte(c.prenom || c.nom);
+      const dos = texte(c.dossard);
+      if (!nom && !dos) return null;
+      return {
+        prenom: nom || "Coureur " + (i + 1),
+        dossard: dos ? String(Math.round(nombreSouple(dos)) || dos) : String(i + 1),
+        objectifKm: Math.max(0, nombreSouple(c.objectifKm)),
+        km: Math.max(0, nombreSouple(c.km)),
+        kmVerifies: c.kmVerifies === true || ["oui", "true", "vrai", "x", "1", "ok"].includes(texte(c.kmVerifies).toLowerCase()),
+        strava: /^https:\/\/\S+\.\S+$/.test(texte(c.strava)) ? texte(c.strava) : "",
+        promesseParKm: Math.max(0, nombreSouple(c.promesseParKm)),
+      };
+    }).filter(Boolean);
+  }
+  let coureurs = normaliserCoureurs(C.coureurs);
+  let parDossard = new Map();
+  let kmTotal = 0;
+  function majIndexCoureurs() {
+    parDossard = new Map(coureurs.map((c) => [c.dossard, c]));
+    kmTotal = coureurs.reduce((t, c) => t + c.km, 0);
+  }
+  majIndexCoureurs();
   const kmReference = Math.max(1, nombre(E.kmReference) || 15);
   const maxParKm = Math.max(1, nombre(E.maxParKm) || 20);
   const seuilAlerte = Math.max(1, nombre(E.seuilAlerte) || 50);
@@ -442,6 +455,7 @@
       { emoji: "💰", label: "Cagnotte", valeur: montant, unite: "€", uniteLongue: "euros", principal: true },
       { emoji: "🏃", label: "Coureurs inscrits", valeur: inscrits, unite: "", uniteLongue: inscrits > 1 ? "coureurs inscrits" : "coureur inscrit" },
       { emoji: "🛣️", label: "Kilomètres parcourus", valeur: distance, unite: "km", uniteLongue: "kilomètres" },
+      { emoji: "🥫", label: "Denrées collectées", valeur: nombre(K.denreesKg) || 0, unite: "kg", uniteLongue: "kilos de denrées" },
       { emoji: "👕", label: "Vêtements collectés", valeur: nombre(K.vetements) || 0, unite: "", uniteLongue: "vêtements" },
       { emoji: "🎟️", label: "Participants à la tombola", valeur: nombre(K.participantsTombola) || 0, unite: "", uniteLongue: (nombre(K.participantsTombola) || 0) > 1 ? "participants" : "participant" },
     ];
@@ -461,83 +475,39 @@
 
   /* ───────────────────── La cagnotte : la piste vers l'arrivée ───────────────────── */
 
-  const paliers = (Array.isArray(C.paliers) ? C.paliers : [])
-    .filter((p) => p && nombre(p.montant) !== null)
-    .map((p) => Object.assign({}, p, { montant: Number(p.montant) }))
-    .sort((a, b) => a.montant - b.montant);
+  const mouvementReduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function rendreCagnotte() {
     $("#jauge-montant").textContent = euros(montant);
     $("#jauge-objectif").textContent = euros(objectif);
+    $("#titre-objectif").textContent = euros(objectif);
+    $("#piste-objectif").textContent = euros(objectif);
     $("#jauge-pourcent").textContent = pourcentTexte;
+    $("#piste-bulle").textContent = euros(montant);
+
     const compteur = $("#compteur");
     compteur.setAttribute("aria-valuemax", String(Math.max(objectif, montant)));
     compteur.setAttribute("aria-valuenow", String(montant));
     compteur.setAttribute("aria-valuetext", `${euros(montant)} récoltés sur ${euros(objectif)}, soit ${pourcentTexte} de l'objectif`);
 
-    const n = paliers.length;
+    // Le coureur se place sur la piste, en fonction de l'argent récolté
+    const avancee = Math.max(0, Math.min(1, montant / objectif));
+    const coureurEl = $("#piste-coureur");
+    const placer = () => coureurEl.style.setProperty("--p", avancee.toFixed(4));
+    if (mouvementReduit) placer();
+    else quandVisible($(".piste-zone"), () => requestAnimationFrame(placer), 0.3);
+
     const bilan = $("#jauge-bilan");
-    if (!n) { bilan.hidden = true; return; }
-
-    let niveau;
-    if (montant <= 0) niveau = -0.5;
-    else if (montant < paliers[0].montant) niveau = -0.5 + 0.5 * (montant / paliers[0].montant);
-    else {
-      niveau = n - 0.5;
-      for (let i = 0; i < n - 1; i++) {
-        if (montant < paliers[i + 1].montant) { niveau = i + (montant - paliers[i].montant) / (paliers[i + 1].montant - paliers[i].montant); break; }
-      }
-    }
-    const iProchain = paliers.findIndex((p) => montant < p.montant);
-    const nbDebloques = paliers.filter((p) => montant >= p.montant).length;
-    const tout = montant >= paliers[n - 1].montant;
-    const ligneCoureur = tout ? -1 : Math.max(0, Math.min(n - 1, Math.floor(niveau + 0.5)));
-
-    $("#paliers").innerHTML = paliers.map((p, i) => {
-      const atteint = montant >= p.montant;
-      const prochain = i === iProchain;
-      const fill = Math.max(0, Math.min(1, niveau - (i - 0.5)));
-      const tier = i < n * 0.42 ? 1 : i < n * 0.72 ? 2 : 3;
-      const etat = atteint ? "est-debloque" : prochain ? "est-prochain" : "est-verrouille";
-      const tampon = atteint ? "Atteint" : prochain ? "Prochain palier" : "À atteindre";
-      const coureurJauge = i === ligneCoureur ? '<svg class="coureur-jauge" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#coureur"></use></svg>' : "";
-      let progression = "";
-      if (prochain) {
-        const precedent = i > 0 ? paliers[i - 1].montant : 0;
-        const k = Math.max(0, Math.min(1, (montant - precedent) / (p.montant - precedent)));
-        progression = `<div class="palier-progression">
-            <div class="mini-barre" aria-hidden="true"><span style="--p:${k.toFixed(3)}"></span></div>
-            <p class="palier-reste">Plus que ${euros(p.montant - montant)} pour l'atteindre</p>
-          </div>`;
-      }
-      return `<li class="palier tier-${tier} ${etat}" style="--fill:${fill.toFixed(3)};--ordre:${i}">
-          <div class="couloir" aria-hidden="true"><span class="couloir-trace"></span><span class="couloir-ligne"></span>${coureurJauge}</div>
-          <div class="palier-carte">
-            <div class="palier-haut">
-              <span class="palier-montant">${euros(p.montant)}</span>
-              <span class="tampon">${tampon}</span>
-            </div>
-            <p class="palier-texte">${p.emoji ? `<span class="palier-emoji" aria-hidden="true">${esc(p.emoji)}</span>` : ""}${esc(p.texte)}</p>
-            ${progression}
-          </div>
-        </li>`;
-    }).reverse().join("");
-
-    if (tout) {
-      const arrivee = $("#arrivee");
-      arrivee.classList.add("marque");
-      arrivee.innerHTML = '<span class="arrivee-texte">Objectif atteint !</span>';
+    if (montant >= objectif) {
+      bilan.innerHTML = "<strong>Ligne d'arrivée franchie !</strong> Merci : tout ce qui arrive maintenant finance encore plus de projets pour l'association.";
+    } else if (montant <= 0) {
+      bilan.innerHTML = `<strong>Le coureur est encore sur la ligne de départ.</strong> Les premiers euros le font avancer vers la ligne d'arrivée, à ${euros(objectif)}.`;
+    } else {
+      bilan.innerHTML = `<strong>Plus que ${euros(objectif - montant)}</strong> pour franchir la ligne d'arrivée.`;
     }
 
-    const liste = $("#paliers");
-    const coureurEl = liste.querySelector(".coureur-jauge");
-    const cible = (coureurEl && coureurEl.closest(".palier")) || liste.firstElementChild || liste;
-    quandVisible(cible, () => liste.classList.add("revele"), 0.4);
-
-    if (iProchain === -1) bilan.innerHTML = "<strong>Tous les paliers sont atteints !</strong> Merci : tout le surplus part à l'association.";
-    else if (nbDebloques === 0) bilan.innerHTML = `<strong>Premier palier à ${euros(paliers[0].montant)}.</strong> Il reste ${euros(paliers[0].montant - montant)} pour l'atteindre.`;
-    else bilan.innerHTML = `<strong>${nbDebloques} palier${nbDebloques > 1 ? "s" : ""} atteint${nbDebloques > 1 ? "s" : ""} sur ${n}.</strong> Prochain à ${euros(paliers[iProchain].montant)} : plus que ${euros(paliers[iProchain].montant - montant)}.`;
-    bilan.hidden = false;
+    $("#projets-liste").innerHTML = (Array.isArray(C.projetsFinances) ? C.projetsFinances : [])
+      .map((pr) => `<li><span class="projet-emoji" aria-hidden="true">${esc(pr.emoji || "▶")}</span><span>${esc(pr.texte)}</span></li>`).join("");
 
     // Cagnotte en direct : widget HelloAsso (facultatif)
     const widget = texte(L.widgetCagnotte);
@@ -550,6 +520,75 @@
       bloc.appendChild(iframe);
       bloc.hidden = false;
     }
+  }
+
+
+  /* ───────────────────── Mise à jour automatique depuis une feuille de calcul ───────────────────── */
+
+  const COLONNES = {
+    prenom: ["prenom", "prenom du coureur", "nom", "nom du coureur", "coureur", "pseudo"],
+    dossard: ["dossard", "numero", "num", "no", "n"],
+    objectifKm: ["objectif", "objectifkm", "objectif km", "objectif (km)", "km objectif"],
+    km: ["km", "kilometres", "km parcourus", "km realises", "distance", "distance (km)"],
+    kmVerifies: ["verifie", "verifies", "kmverifies", "km verifies", "verification", "valide"],
+    strava: ["strava", "lien strava", "activite strava", "profil strava"],
+    promesseParKm: ["promesse", "promesses", "promesseparkm", "promesse par km", "euros par km", "engagements"],
+  };
+  const sansAccent = (v) => String(v ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
+  function parserCSV(contenu) {
+    const premiere = contenu.split(/\r?\n/)[0] || "";
+    const sep = (premiere.match(/;/g) || []).length > (premiere.match(/,/g) || []).length ? ";" : ",";
+    const lignes = [];
+    let champ = "", ligne = [], guillemets = false;
+    for (let i = 0; i < contenu.length; i++) {
+      const c = contenu[i];
+      if (guillemets) {
+        if (c === '"') { if (contenu[i + 1] === '"') { champ += '"'; i++; } else guillemets = false; }
+        else champ += c;
+      } else if (c === '"') guillemets = true;
+      else if (c === sep) { ligne.push(champ); champ = ""; }
+      else if (c === "\n") { ligne.push(champ); lignes.push(ligne); ligne = []; champ = ""; }
+      else if (c !== "\r") champ += c;
+    }
+    if (champ !== "" || ligne.length) { ligne.push(champ); lignes.push(ligne); }
+    return lignes;
+  }
+
+  function chargerFeuilleCoureurs() {
+    const url = texte(L.feuilleCoureurs);
+    if (!/^https:\/\/\S+$/.test(url)) return;
+    fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(), { cache: "no-store" })
+      .then((r) => (r.ok ? r.text() : Promise.reject(new Error("réponse " + r.status))))
+      .then((csv) => {
+        const lignes = parserCSV(csv).filter((l) => l.some((c) => texte(c)));
+        if (lignes.length < 2) return;
+        const entetes = lignes[0].map(sansAccent);
+        const indice = {};
+        Object.keys(COLONNES).forEach((cle) => { indice[cle] = entetes.findIndex((e) => COLONNES[cle].includes(e)); });
+        if (indice.prenom < 0) {
+          console.warn("GEAnérosité : la feuille de calcul n'a pas de colonne « prenom ». Colonnes trouvées :", entetes);
+          return;
+        }
+        const brut = lignes.slice(1).map((l) => {
+          const val = (cle) => (indice[cle] >= 0 ? l[indice[cle]] : "");
+          return {
+            prenom: val("prenom"), dossard: val("dossard"), objectifKm: val("objectifKm"),
+            km: val("km"), kmVerifies: val("kmVerifies"), strava: val("strava"), promesseParKm: val("promesseParKm"),
+          };
+        });
+        const liste = normaliserCoureurs(brut);
+        if (!liste.length) return;
+        coureurs = liste;
+        majIndexCoureurs();
+        lancer("compteurs", rendreCompteurs);
+        lancer("liste des coureurs", rendreCoureurs);
+        lancer("classement des kilomètres", rendreClassement);
+        lancer("mes engagements", rendrePanier);
+        if (etatCourant) lancer("tableau d'affichage", () => rendreEtat(etatCourant));
+        console.info(`GEAnérosité : ${liste.length} coureur(s) chargé(s) depuis la feuille de calcul.`);
+      })
+      .catch((err) => console.warn("GEAnérosité : feuille de calcul illisible, la liste de js/config.js est utilisée.", err));
   }
 
 
@@ -903,9 +942,8 @@
     try { hote = live ? new URL(live).hostname.replace(/^www\./, "") : ""; } catch (err) { hote = ""; }
     return [
       { emoji: "📅", valeur: debut ? majuscule(formaterDate(debut, "jourCourt")) + (dateConfirmee ? "" : " " + aConfirmer("date provisoire")) : aConfirmer("date à confirmer") },
-      { emoji: "🕙", valeur: debut ? `${heure(debut)}${fin ? " – " + heure(fin) : ""}` : aConfirmer("horaire à confirmer") },
+      { emoji: "🕙", valeur: texte(co.horaires) ? esc(co.horaires) : (debut ? `À partir de ${heure(debut)}` : aConfirmer("horaire à confirmer")) },
       { emoji: "📍", valeur: texte(co.lieu) ? esc(co.lieu) : aConfirmer("lieu à confirmer") },
-      { emoji: "🏁", valeur: texte(co.format) ? esc(co.format) : aConfirmer("format à confirmer") },
       { emoji: "📺", valeur: live ? `Live sur ${esc(hote)}` : aConfirmer("lien du live à venir") },
     ];
   }
@@ -914,6 +952,11 @@
     $("#infos-course").innerHTML = html2;
     $("#infos-direct").innerHTML = html2;
     const co = C.course || {};
+    if (texte(co.info)) {
+      const chip = `<li><span aria-hidden="true">🏟️</span> ${esc(co.info)}</li>`;
+      $("#infos-course").insertAdjacentHTML("beforeend", chip);
+      $("#infos-direct").insertAdjacentHTML("beforeend", chip);
+    }
     if (texte(co.depart)) {
       $("#infos-course").insertAdjacentHTML("beforeend", `<li><span aria-hidden="true">🚦</span> ${esc(co.depart)}</li>`);
     }
@@ -1025,7 +1068,9 @@
 
   function rendreCollecte() {
     const col = C.collecte || {};
+    $("#compteur-kg").textContent = entier(nombre(K.denreesKg) || 0);
     $("#compteur-vetements").textContent = entier(nombre(K.vetements) || 0);
+    $("#liste-alimentaire").innerHTML = (col.alimentaire || []).map((x) => `<li>${esc(x)}</li>`).join("");
     $("#liste-vetements").innerHTML = (col.vetements || []).map((x) => `<li>${esc(x)}</li>`).join("");
     $("#liste-eviter").innerHTML = (col.aEviter || []).map((x) => `<li>${esc(x)}</li>`).join("");
     const points = Array.isArray(col.points) ? col.points.filter((p) => texte(p.ou)) : [];
@@ -1054,14 +1099,14 @@
     const rotations = [-2, 1.5, -1.2, 2];
     const silhouette = '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="38" r="18" fill="#16161b" opacity=".25"/><path d="M14 96 C 18 66, 34 58, 50 58 C 66 58, 82 66, 86 96 Z" fill="#16161b" opacity=".25"/></svg>';
     $("#equipe").innerHTML = (C.equipe || []).map((m, i) => {
-      const prenom = texte(m.prenom);
+      const prenom = texte(m.nom || m.prenom);
       const photo = texte(m.photo)
         ? `<img src="${esc(m.photo)}" alt="Photo de ${esc(prenom || "l'équipe")}" loading="lazy" decoding="async">`
         : silhouette;
       return `<li class="polaroid" style="--rot:${rotations[i % rotations.length]}deg">
           <div class="polaroid-photo">${photo}</div>
           <p class="polaroid-nom">${prenom ? esc(prenom) : aConfirmer("prénom à ajouter")}</p>
-          <p class="polaroid-role">${texte(m.role) ? esc(m.role) : aConfirmer("rôle à ajouter")}</p>
+          ${texte(m.role) ? `<p class="polaroid-role">${esc(m.role)}</p>` : ""}
         </li>`;
     }).join("");
     secoursImages($("#equipe"), ".polaroid-photo", silhouette);
@@ -1215,5 +1260,6 @@
   lancer("agenda", initAgenda);
   lancer("compte à rebours", () => { tic(); setInterval(tic, 1000); });
   lancer("interactions", initInteractions);
+  lancer("feuille de calcul des coureurs", chargerFeuilleCoureurs);
   lancer("typographie", () => typographie(document.body));
 })();

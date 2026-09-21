@@ -21,9 +21,10 @@
 const CONFIG = {
 
   /* 🚧 MODE BROUILLON
-     true  = ce qu'il reste à compléter est entouré de pointillés bleus.
-     false = site propre, prêt à être partagé. */
-  modeBrouillon: true,
+     true  = ce qu'il reste à compléter est entouré de pointillés bleus
+             (pratique pour travailler, mais visible par tout le monde).
+     false = site propre. */
+  modeBrouillon: false,
 
 
   /* ══════════════════════════════════════════════════════════════════
@@ -32,14 +33,15 @@ const CONFIG = {
 
   compteurs: {
     cagnotte: 0,              // € réellement présents sur la cagnotte HelloAsso
-    objectif: 1000,           // € : l'objectif affiché dans la jauge
-    vetements: 0,             // nombre de vêtements déjà collectés
+    objectif: 1000,           // € : l'objectif, c'est la ligne d'arrivée de la piste
+    denreesKg: 0,             // kg de denrées alimentaires collectées
+    vetements: 0,             // nombre de vêtements collectés
     participantsTombola: 0,   // personnes ayant pris un billet de tombola
-    // Ces deux compteurs se calculent tout seuls dès que la liste des coureurs
-    // ci-dessous est remplie. Sinon, écris les nombres à la main ici.
+    // Ces deux compteurs se calculent tout seuls dès qu'il y a des coureurs
+    // (liste ci-dessous ou feuille de calcul). Sinon, écris-les à la main.
     coureursInscrits: 0,
     kmParcourus: 0,
-    miseAJour: "",            // ex : "lundi 16 novembre à 18h" (vide = ligne masquée)
+    miseAJour: "",            // ex : "lundi 9 novembre à 18h" (vide = ligne masquée)
   },
 
 
@@ -50,7 +52,7 @@ const CONFIG = {
      ══════════════════════════════════════════════════════════════════ */
 
   liens: {
-    inscriptionCoureur: "",  // 🏃 formulaire d'inscription des coureurs (HelloAsso, Google Forms…)
+    inscriptionCoureur: "",  // 🏃 formulaire d'inscription des coureurs (Google Forms, HelloAsso…)
     engagement: "",          // 🤝 formulaire d'engagement au kilomètre
     cagnotte: "",            // 💰 HelloAsso : la cagnotte
     tombola: "",             // 🎟️ HelloAsso : la tombola
@@ -58,6 +60,14 @@ const CONFIG = {
     strava: "",              // 🟠 club Strava du projet (facultatif)
     instagram: "",
     email: "",               // adresse de contact (sans « mailto: »)
+
+    // 📊 MISE À JOUR AUTOMATIQUE DES COUREURS (facultatif mais très pratique)
+    // Adresse CSV d'un Google Sheet publié sur le web (Fichier → Partager →
+    // Publier sur le web → format « .csv »). Le site lit la feuille à chaque
+    // chargement : plus besoin de recopier les coureurs ni les kilomètres ici.
+    // Colonnes reconnues : prenom, dossard, objectif, km, verifie, strava, promesse
+    feuilleCoureurs: "",
+
     // Facultatif : adresse du widget HelloAsso de la cagnotte (iframe).
     // Il affiche le montant réel en direct, sans mise à jour manuelle.
     // Dans HelloAsso : diffusion → intégrer à mon site → copie l'adresse après src="
@@ -69,11 +79,12 @@ const CONFIG = {
      PARTIE 3 — LA COURSE
      ══════════════════════════════════════════════════════════════════ */
 
-  // 🗓️ DATES (heure de Paris). Format : "2026-11-21T10:00". Vide = « date à confirmer ».
   dates: {
-    debutCourse: "",        // départ de la course (clôture aussi les engagements)
-    finCourse: "",          // fin de la course (vide = 3 h après le départ)
-    dateConfirmee: false,   // true quand la date est définitive
+    debutCourse: "2026-11-11T14:00",   // départ (clôture aussi les engagements)
+    // Heure à laquelle le site bascule en « après la course ».
+    // La course s'arrête au dernier coureur : mets une heure large.
+    finCourse: "2026-11-11T19:00",
+    dateConfirmee: true,               // false = le site précise « date provisoire »
   },
 
   // 🧪 POUR TESTER : "" (automatique), "avant", "direct" ou "apres"
@@ -81,14 +92,17 @@ const CONFIG = {
   forcerEtat: "",
 
   course: {
-    lieu: "",        // ex : "Parc de la Hotoie, Amiens" (vide = à confirmer)
-    format: "",      // ex : "2 heures, boucle libre, à son rythme" (vide = à confirmer)
-    depart: "",      // ex : "Départ groupé à 10h, échauffement à 9h30" (vide = à confirmer)
+    lieu: "Piste d'athlétisme de l'UPJV, juste derrière l'IUT d'Amiens",
+    horaires: "À partir de 14h, jusqu'au dernier coureur",
+    depart: "",   // ex : "Retrait des dossards à 13h30" (vide = ligne masquée)
+    info: "",     // ex : "Piste de 400 m : 2 tours et demi = 1 km" (vide = ligne masquée)
   },
 
   /* 🏃 LES COUREURS
-     Ajoute une ligne par coureur inscrit. Le site s'occupe du reste :
-     recherche, sélection, calcul des engagements et classement des km.
+     Deux possibilités :
+       • soit tu remplis la liste ci-dessous à la main ;
+       • soit tu renseignes « feuilleCoureurs » plus haut, et le site lit
+         directement ta feuille de calcul (la liste ci-dessous est alors ignorée).
        prenom       : prénom (+ initiale si besoin), affiché publiquement
        dossard      : numéro unique, sert aussi de lien de partage (?coureur=7)
        objectifKm   : son objectif en km (sert à estimer les engagements)
@@ -111,13 +125,12 @@ const CONFIG = {
     kmReference: 15,                     // km utilisés pour estimer si le coureur n'a pas d'objectif
   },
 
-  // 🎯 LES PALIERS DE LA CAGNOTTE : ce que l'argent permet concrètement.
-  // ⚠️ Exemples à valider avec l'association avant de les annoncer.
-  paliers: [
-    { montant: 100,  emoji: "🧺", texte: "Le matériel de la collecte : sacs, cartons, étiquettes et transport des vêtements." },
-    { montant: 250,  emoji: "🧼", texte: "Le nettoyage et la remise en état d'une partie des vêtements collectés." },
-    { montant: 500,  emoji: "📦", texte: "L'essentiel de la collecte est financé : tri, stockage et distribution." },
-    { montant: 1000, emoji: "🌊", texte: "Le surplus part à A.V.A. : de quoi financer un voyage à la mer pour les enfants accompagnés, et d'autres projets." },
+  // 🎯 CE QUE L'ARGENT FINANCE : les projets de l'association.
+  // ⚠️ Exemples à valider avec A.V.A. avant de les annoncer.
+  projetsFinances: [
+    { emoji: "🚌", texte: "Des sorties pour les enfants et les familles accompagnées" },
+    { emoji: "🌊", texte: "Un voyage, par exemple à la mer" },
+    { emoji: "🎨", texte: "Du matériel pour les activités de l'association" },
   ],
 
 
@@ -147,9 +160,15 @@ const CONFIG = {
   },
 
   collecte: {
-    // Où et quand déposer les vêtements. Vide = « lieux et dates à confirmer ».
-    // Ex : { ou: "Hall de l'IUT d'Amiens", quand: "du 2 au 20 novembre, le midi" },
+    // Où et quand déposer. Vide = « lieux et dates à confirmer ».
+    // Ex : { ou: "Hall de l'IUT d'Amiens", quand: "du 2 au 10 novembre, le midi" },
     points: [],
+    alimentaire: [
+      "Conserves : légumes, poisson, plats cuisinés",
+      "Pâtes, riz, semoule, lentilles",
+      "Huile, sucre, farine",
+      "Café, thé, céréales, biscuits",
+    ],
     vetements: [
       "Vêtements propres et en bon état",
       "Manteaux, pulls, vêtements chauds",
@@ -157,8 +176,8 @@ const CONFIG = {
       "Chaussures en bon état",
     ],
     aEviter: [
+      "Produits frais, ouverts ou périmés",
       "Vêtements abîmés, tachés ou troués",
-      "Linge humide ou non lavé",
     ],
   },
 
@@ -174,7 +193,7 @@ const CONFIG = {
     site: "",         // site ou page de l'asso, avec https:// (facultatif)
     presentation: [
       "A.V.A. – Amiens est l'association que nous soutenons. Elle accompagne notamment des enfants issus de situations très précaires.",
-      "Les vêtements que nous collectons lui sont remis, pour être donnés gratuitement à des personnes dans le besoin.",
+      "L'argent récolté sert à financer ses projets : sorties, voyages et activités. Les denrées et les vêtements collectés lui sont remis pour être donnés gratuitement à des personnes dans le besoin.",
     ],
   },
 
@@ -184,12 +203,13 @@ const CONFIG = {
     encaissement: "",
   },
 
-  // 👥 L'ÉQUIPE (4 étudiants). photo : ex "img/equipe/prenom.jpg" (vide = silhouette)
+  // 👥 L'ÉQUIPE. photo : ex "img/equipe/julien.jpg" (vide = silhouette)
+  // role : facultatif (la ligne est masquée si c'est vide)
   equipe: [
-    { prenom: "", role: "", photo: "" },
-    { prenom: "", role: "", photo: "" },
-    { prenom: "", role: "", photo: "" },
-    { prenom: "", role: "", photo: "" },
+    { nom: "Volkan Akbulut",   role: "", photo: "" },
+    { nom: "Julien Pires",     role: "", photo: "" },
+    { nom: "Abdoulaye Deme",   role: "", photo: "" },
+    { nom: "Noha Bayonga",     role: "", photo: "" },
   ],
 
   logoIUT: "",   // ex : "img/logo-iut.png" (vide = nom écrit à la place)

@@ -400,117 +400,69 @@ body.menu-ouvert { overflow: hidden; }
 .score-principal .score-led { --chiffre: 2.4rem; }
 .score-unite { font: 800 1.35rem/1.2 var(--police-titre); color: var(--led); }
 .score-principal .score-unite { font-size: 2rem; }
-@media (min-width: 62rem) {
-  .tableau-scores { grid-template-columns: 1.5fr repeat(4, minmax(0, 1fr)); }
+@media (min-width: 48rem) {
+  .tableau-scores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .score-principal { grid-column: span 3; }
+}
+@media (min-width: 72rem) {
+  .tableau-scores { grid-template-columns: 1.4fr repeat(5, minmax(0, 1fr)); }
   .score-principal { grid-column: auto; }
+  .score-principal .score-led { --chiffre: 2.1rem; }
 }
 
 /* ═════════════════ LA CAGNOTTE : LA PISTE VERS L'ARRIVÉE ═════════════════ */
-.jauge-grille { display: grid; gap: 2.5rem; }
 .compteur { margin: .25rem 0 0; }
 .compteur-montant { margin: 0; font: 900 clamp(3.6rem, 17vw, 6rem)/.88 var(--police-titre); }
 .compteur-objectif { margin: .4rem 0 0; font-size: 1.1rem; }
 .compteur-objectif strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
 .jauge-bilan {
-  margin: 1.2rem 0 1.4rem; padding: .85rem 1rem;
+  margin: 1.2rem 0 1.75rem; padding: .85rem 1rem; max-width: 40rem;
   background: var(--blanc); border: 2.5px solid var(--encre); border-radius: var(--coins); box-shadow: 3px 3px 0 var(--encre);
 }
 .jauge-bilan strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
 
-.piste { position: relative; padding-top: 3.2rem; }
-.annotation-piste { position: absolute; top: .2rem; left: 4.4rem; margin: 0; transform: rotate(-3deg); }
-.arrivee {
-  position: relative; width: 3.6rem; height: 1.8rem;
-  border: 3px solid var(--encre); border-bottom: 0; border-radius: 4px 4px 0 0;
+/* La piste : le coureur avance vers la ligne d'arrivée */
+.piste-h { margin: 2.25rem 0 1.25rem; }
+.annotation-piste { margin: 0 0 .4rem; transform: rotate(-2deg); }
+.piste-zone {
+  position: relative; height: 7.5rem; overflow: hidden;
+  border: 3px solid var(--encre); border-radius: 12px; box-shadow: var(--ombre);
+  background-image: repeating-linear-gradient(90deg, var(--piste-1) 0 26px, var(--piste-2) 26px 52px);
+}
+.piste-zone::before { /* lignes de couloir */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(180deg, transparent 0 calc(2.5rem - 3px), rgba(255, 255, 255, .85) calc(2.5rem - 3px) 2.5rem);
+}
+.piste-arrivee {
+  position: absolute; top: 0; bottom: 0; right: 0; width: 1.5rem;
+  border-left: 3px solid var(--encre);
   background-color: #fff;
   background-image: repeating-conic-gradient(var(--encre) 0% 25%, #ffffff 0% 50%);
   background-size: 12px 12px;
 }
-.arrivee-texte {
-  position: absolute; left: 4.4rem; top: -.2rem; white-space: nowrap;
-  padding: .2rem .5rem; background: var(--fluo); border: 2.5px solid var(--encre); border-radius: 7px 9px 6px 10px;
-  font: 900 1.2rem/1 var(--police-titre); text-transform: uppercase; transform: rotate(-4deg);
+.piste-coureur {
+  position: absolute; bottom: .9rem; left: calc(var(--p, 0) * (100% - 5.6rem));
+  width: 3.2rem; height: 3.2rem; padding: .3rem; color: var(--encre);
+  background: var(--blanc); border: 3px solid var(--encre); border-radius: 50%;
 }
-.paliers { list-style: none; }
-.palier { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr); column-gap: .9rem; }
-.couloir {
-  position: relative;
-  background-image: repeating-linear-gradient(180deg, var(--piste-1) 0 22px, var(--piste-2) 22px 44px);
-  border-left: 3px solid var(--encre); border-right: 3px solid var(--encre);
-  box-shadow: inset 4px 0 0 rgba(255, 255, 255, .8), inset -4px 0 0 rgba(255, 255, 255, .8);
+.piste-bulle {
+  position: absolute; bottom: calc(100% + .4rem); left: 50%; transform: translateX(-50%);
+  padding: .18rem .5rem .14rem; white-space: nowrap;
+  background: var(--fluo); border: 2.5px solid var(--encre); border-radius: 7px 9px 6px 10px;
+  font: 900 1rem/1.15 var(--police-titre);
 }
-.palier:last-child .couloir { border-bottom: 3px solid var(--encre); }
-.couloir-ligne { position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; background: rgba(255, 255, 255, .85); }
-.est-debloque .couloir-ligne { background: var(--fluo); box-shadow: 0 0 8px rgba(255, 240, 74, .8); }
-.couloir-trace {
-  position: absolute; left: 50%; bottom: 0; width: 5px; margin-left: -2.5px;
-  height: calc(var(--fill) * 100%); transform-origin: bottom;
-  background-image: repeating-linear-gradient(180deg, var(--fluo) 0 9px, transparent 9px 15px);
-}
-.coureur-jauge {
-  position: absolute; left: 50%; bottom: calc(var(--fill) * 100%); z-index: 2;
-  width: 2.4rem; height: 2.4rem; transform: translate(-50%, 50%);
-  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, .3));
-}
-.depart-piste { margin: .6rem 0 0; font-size: .92rem; font-weight: 700; color: var(--encre-2); }
-
-.palier-carte {
-  margin-block: .45rem; padding: .8rem .95rem .9rem;
-  background: var(--blanc); border: 2.5px solid var(--encre); border-radius: var(--coins); box-shadow: 3px 3px 0 var(--encre);
-}
-.palier-haut { display: flex; justify-content: space-between; align-items: center; gap: .6rem; margin-bottom: .4rem; }
-.palier-montant { font: 900 1.65rem/1 var(--police-titre); }
-.palier-texte { margin: 0; line-height: 1.42; }
-.palier-emoji { margin-right: .2rem; }
-.tampon {
-  flex: none; padding: .3rem .45rem .24rem;
-  font: 800 .92rem/1 var(--police-titre); text-transform: uppercase; white-space: nowrap;
-  border: 2.5px solid currentColor; border-radius: 6px; transform: rotate(-7deg);
-}
-.est-debloque .tampon { color: var(--vert-vif); }
-.est-prochain .tampon { color: var(--rose); border-style: solid; transform: none; }
-.est-verrouille .tampon { color: var(--encre-2); border-width: 2px; border-style: dashed; transform: none; }
-.est-verrouille .palier-carte { border-style: dashed; }
-.est-prochain .palier-carte { box-shadow: 4px 4px 0 var(--rose); }
-.palier-progression { margin-top: .75rem; }
-.mini-barre { height: .55rem; border: 2px solid var(--encre); border-radius: 999px; overflow: hidden; background: var(--blanc); }
-.mini-barre span { display: block; height: 100%; width: calc(var(--p) * 100%); background: var(--rose); }
-.palier-reste { margin: .45rem 0 0; font-weight: 700; }
-
-/* Les paliers grandissent : plus on monte, plus l'événement devient gros */
-.tier-2 .palier-carte { background: var(--fluo); }
-.tier-2 .palier-montant { font-size: 1.9rem; }
-.tier-2 .palier-texte { font-size: 1.07rem; }
-.tier-3 .palier-carte { background: var(--encre); color: var(--papier); box-shadow: 4px 4px 0 var(--rose); }
-.tier-3 .palier-montant { font-size: 2.2rem; color: var(--fluo); }
-.tier-3 .palier-texte { font-size: 1.12rem; }
-.tier-3 .a-confirmer { color: var(--encre); }
-.tier-3.est-verrouille .tampon { color: #b9b9c6; }
-
-@media (min-width: 60rem) {
-  .jauge-grille { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 3.5rem; align-items: start; }
-  .jauge-resume { position: sticky; top: calc(var(--entete-h) + 1.5rem); }
-}
-
-/* L'animation : le ballon remonte le terrain (une seule fois, à l'arrivée sur la section) */
+.piste-bornes { display: flex; justify-content: space-between; gap: 1rem; margin: .6rem 0 0; font-size: .95rem; font-weight: 700; color: var(--encre-2); }
 @media (prefers-reduced-motion: no-preference) {
-  .js .paliers .couloir-trace { transform: scaleY(0); transition: transform .3s linear calc(var(--ordre) * .3s); }
-  .js .paliers.revele .couloir-trace { transform: scaleY(1); }
-  .js .paliers .coureur-jauge { opacity: 0; }
-  .js .paliers.revele .coureur-jauge { animation: ballon-arrive .45s cubic-bezier(.2, 1.5, .4, 1) both; animation-delay: calc(var(--ordre) * .3s); }
-  .js .paliers .est-debloque .tampon { opacity: 0; }
-  .js .paliers.revele .est-debloque .tampon { animation: tampon .45s cubic-bezier(.2, 1.5, .4, 1) both; animation-delay: calc(var(--ordre) * .3s + .15s); }
-  .js .paliers .est-debloque .couloir-ligne { background: rgba(255, 255, 255, .85); box-shadow: none; transition: background .2s, box-shadow .2s; transition-delay: calc(var(--ordre) * .3s + .1s); }
-  .js .paliers.revele .est-debloque .couloir-ligne { background: var(--fluo); box-shadow: 0 0 8px rgba(255, 240, 74, .8); }
+  .js .piste-coureur { transition: left 1.6s cubic-bezier(.32, .82, .28, 1); }
 }
-@keyframes ballon-arrive {
-  0% { opacity: 0; transform: translate(-50%, 180%) rotate(-140deg) scale(.7); }
-  100% { opacity: 1; transform: translate(-50%, 50%) rotate(0) scale(1); }
-}
-@keyframes tampon {
-  0% { opacity: 0; transform: scale(2.2) rotate(-16deg); }
-  60% { opacity: 1; }
-  100% { opacity: 1; transform: scale(1) rotate(-7deg); }
+
+.cagnotte-bas { display: grid; gap: 2rem; margin-top: 1rem; }
+.projets-liste { list-style: none; display: grid; gap: .7rem; }
+.projets-liste li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: .6rem; align-items: start; line-height: 1.45; }
+.projets-liste .projet-emoji { font-size: 1.5rem; line-height: 1.2; }
+.projets .sous-titre { margin-top: 0; }
+@media (min-width: 56rem) {
+  .cagnotte-bas { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 3rem; align-items: start; }
 }
 
 /* ═════════════════ COMMENT PARTICIPER (des post-it) ═════════════════ */

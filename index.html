@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GEAnérosité : une course solidaire où chaque kilomètre rapporte</title>
-  <meta name="description" content="4 étudiants en BUT GEA organisent une course solidaire en direct sur Twitch. Chacun peut courir, ou s'engager à donner une somme par kilomètre parcouru. Au profit de la collecte de vêtements et de l'association A.V.A. à Amiens.">
+  <meta name="description" content="4 étudiants en BUT GEA organisent une course solidaire le mercredi 11 novembre, en direct sur Twitch. Chacun peut courir, ou s'engager à donner une somme par kilomètre parcouru, au profit des projets de l'association A.V.A. à Amiens. Collecte alimentaire et vestimentaire en parallèle.">
   <meta name="theme-color" content="#fcfdff">
 
   <!-- ════════════════════════════════════════════════════════════════
@@ -16,7 +16,7 @@
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="GEAnérosité">
   <meta property="og:title" content="GEAnérosité : chaque kilomètre rapporte">
-  <meta property="og:description" content="Une course solidaire en direct. Vous courez, ou vous vous engagez à donner une somme par kilomètre parcouru. Pour la collecte de vêtements et A.V.A. à Amiens.">
+  <meta property="og:description" content="Une course solidaire en direct, le mercredi 11 novembre. Vous courez, ou vous vous engagez à donner une somme par kilomètre parcouru. Pour les projets d'A.V.A. à Amiens.">
   <meta property="og:url" content="https://likooo2.github.io/GEAn-rosit-/">
   <meta property="og:image" content="https://likooo2.github.io/GEAn-rosit-/img/partage.jpg">
   <meta property="og:image:width" content="1200">
@@ -103,8 +103,8 @@
         </div>
         <p class="hero-phrase"><strong>Tout le monde peut courir.</strong> Et tout le monde peut s'engager à verser une somme par kilomètre parcouru par le coureur de son choix.</p>
         <ul class="hero-concret">
-          <li><span class="hero-concret-emoji" aria-hidden="true">👕</span><span><strong>L'argent finance d'abord la collecte de vêtements</strong>, donnés gratuitement à des personnes dans le besoin.</span></li>
-          <li><span class="hero-concret-emoji" aria-hidden="true">🌊</span><span><strong>Le reste va à <span data-bind="association.nom">A.V.A. – Amiens</span></strong>, notamment pour un voyage à la mer avec les enfants qu'elle accompagne.</span></li>
+          <li><span class="hero-concret-emoji" aria-hidden="true">🌊</span><span><strong>L'argent récolté finance les projets de <span data-bind="association.nom">A.V.A. – Amiens</span></strong> : des sorties, des voyages et des activités pour les enfants et les familles accompagnées.</span></li>
+          <li><span class="hero-concret-emoji" aria-hidden="true">🥫👕</span><span><strong>En parallèle, on collecte des denrées et des vêtements</strong>, remis à l'association pour être donnés gratuitement.</span></li>
         </ul>
         <div class="hero-cta">
           <a class="bouton bouton-vert bouton-geant" href="#coureur">🏃 Je veux être coureur</a>
@@ -150,7 +150,7 @@
         <li><span class="chaine-num" aria-hidden="true">4</span><p><strong>Vos kilomètres sont vérifiés avec Strava</strong>, l'application qui enregistre les parcours.</p></li>
         <li><span class="chaine-num" aria-hidden="true">5</span><p><strong>Chaque engagement est calculé</strong> : montant par kilomètre × kilomètres vérifiés.</p></li>
         <li><span class="chaine-num" aria-hidden="true">6</span><p><strong>Les personnes engagées versent leur montant</strong> sur la cagnotte HelloAsso.</p></li>
-        <li><span class="chaine-num" aria-hidden="true">7</span><p><strong>L'argent finance la collecte de vêtements</strong>, puis le reste va à <span data-bind="association.nom">A.V.A. – Amiens</span>.</p></li>
+        <li><span class="chaine-num" aria-hidden="true">7</span><p><strong>L'argent finance les projets de <span data-bind="association.nom">A.V.A. – Amiens</span></strong> : sorties, voyages, activités.</p></li>
       </ol>
       <p class="chaine-note">Un engagement n'est jamais automatique sur tous les coureurs : il concerne uniquement le coureur que vous avez choisi.</p>
     </div>
@@ -290,30 +290,41 @@
 
   <!-- ═══════════════ LA CAGNOTTE ═══════════════ -->
   <section class="section section-cagnotte" id="cagnotte" aria-labelledby="titre-cagnotte">
-    <div class="conteneur jauge-grille">
-      <div class="jauge-resume">
-        <h2 class="titre-section" id="titre-cagnotte">Ce que l'argent finance</h2>
-        <p class="intro">La cagnotte réunit les engagements versés, les dons libres et la tombola. Chaque palier correspond à quelque chose de concret.</p>
-        <div class="compteur" id="compteur" role="progressbar" aria-labelledby="titre-cagnotte" aria-valuemin="0">
-          <p class="compteur-montant" id="jauge-montant">0 €</p>
-          <p class="compteur-objectif">sur <span id="jauge-objectif">1 000 €</span>, soit <strong id="jauge-pourcent">0 %</strong> de l'objectif</p>
-        </div>
-        <p class="jauge-bilan" id="jauge-bilan"></p>
-        <div class="cta-bloc">
-          <a class="bouton bouton-rose" data-lien="cagnotte">💰 Donner à la cagnotte</a>
-          <p class="destination" data-destination="cagnotte"></p>
-        </div>
-        <p class="petit">Pas besoin d'être engagé sur un coureur pour donner : la cagnotte est ouverte à tout le monde.</p>
-      </div>
-      <div class="piste">
-        <p class="annotation annotation-piste">le coureur avance à chaque euro !</p>
-        <div class="arrivee" id="arrivee" aria-hidden="true"></div>
-        <ol class="paliers" id="paliers" aria-label="Les paliers de la cagnotte, du plus grand au plus petit"></ol>
-        <p class="depart-piste" aria-hidden="true">Départ : 0 €</p>
-      </div>
-    </div>
     <div class="conteneur">
-      <p class="paliers-note">Exemples d'utilisation, à confirmer avec l'association.</p>
+      <h2 class="titre-section" id="titre-cagnotte">L'objectif : <span id="titre-objectif">1 000 €</span></h2>
+      <p class="intro">La cagnotte réunit les engagements versés, les dons libres et la tombola. Tout ce qui est récolté finance les projets de <span data-bind="association.nom">A.V.A. – Amiens</span>.</p>
+      <div class="compteur" id="compteur" role="progressbar" aria-labelledby="titre-cagnotte" aria-valuemin="0">
+        <p class="compteur-montant" id="jauge-montant">0 €</p>
+        <p class="compteur-objectif">sur <span id="jauge-objectif">1 000 €</span>, soit <strong id="jauge-pourcent">0 %</strong> de l'objectif</p>
+      </div>
+
+      <div class="piste-h">
+        <p class="annotation annotation-piste">le coureur avance à chaque euro !</p>
+        <div class="piste-zone" aria-hidden="true">
+          <div class="piste-coureur" id="piste-coureur">
+            <span class="piste-bulle" id="piste-bulle">0 €</span>
+            <svg viewBox="0 0 100 100" focusable="false"><use href="#coureur"></use></svg>
+          </div>
+          <div class="piste-arrivee"></div>
+        </div>
+        <p class="piste-bornes" aria-hidden="true"><span>Départ · 0 €</span><span>🏁 <span id="piste-objectif">1 000 €</span></span></p>
+      </div>
+
+      <p class="jauge-bilan" id="jauge-bilan"></p>
+
+      <div class="cagnotte-bas">
+        <div class="cta-bloc">
+          <a class="bouton bouton-rose bouton-geant" data-lien="cagnotte">💰 Donner à la cagnotte</a>
+          <p class="destination" data-destination="cagnotte"></p>
+          <p class="petit">Pas besoin d'être engagé sur un coureur pour donner : la cagnotte est ouverte à tout le monde.</p>
+        </div>
+        <div class="projets">
+          <h3 class="sous-titre">Ce que l'argent finance</h3>
+          <ul class="projets-liste" id="projets-liste"></ul>
+          <p class="paliers-note">Exemples de projets, à confirmer avec l'association.</p>
+        </div>
+      </div>
+
       <div class="widget-cagnotte" id="widget-cagnotte" hidden>
         <h3 class="sous-titre">La cagnotte en direct</h3>
         <p class="petit">Montant réel affiché par HelloAsso, mis à jour automatiquement.</p>
@@ -322,34 +333,35 @@
   </section>
 
 
-  <!-- ═══════════════ LA COLLECTE DE VÊTEMENTS ═══════════════ -->
+  <!-- ═══════════════ LA COLLECTE ═══════════════ -->
   <section class="section section-collecte" id="collecte" aria-labelledby="titre-collecte">
     <div class="conteneur">
-      <h2 class="titre-section" id="titre-collecte">La collecte de vêtements</h2>
-      <p class="intro">C'est le cœur du projet : des vêtements collectés, triés, puis remis à <span data-bind="association.nom">A.V.A. – Amiens</span> pour être donnés gratuitement à des personnes dans le besoin.</p>
+      <h2 class="titre-section" id="titre-collecte">La collecte alimentaire et vestimentaire</h2>
+      <p class="intro">En parallèle de la course, nous collectons des denrées et des vêtements. Tout est remis à <span data-bind="association.nom">A.V.A. – Amiens</span> pour être donné gratuitement à des personnes dans le besoin.</p>
       <blockquote class="citation">
-        <p>« Vous pouvez aussi aider sans donner d'argent : un vêtement en bon état contribue directement à notre action solidaire. »</p>
+        <p>« Vous pouvez aussi aider sans donner d'argent : un produit alimentaire ou un vêtement en bon état contribue directement à notre action solidaire. »</p>
       </blockquote>
       <div class="cartons">
+        <article class="carton" aria-labelledby="titre-carton-alim">
+          <h3 class="carton-titre" id="titre-carton-alim"><span aria-hidden="true">🥫</span> Produits alimentaires</h3>
+          <p class="carton-compteur"><strong id="compteur-kg">0</strong> kg déjà collectés</p>
+          <ul class="liste-oui" id="liste-alimentaire"></ul>
+        </article>
         <article class="carton" aria-labelledby="titre-carton-vet">
-          <h3 class="carton-titre" id="titre-carton-vet"><span aria-hidden="true">👕</span> Ce qu'on collecte</h3>
+          <h3 class="carton-titre" id="titre-carton-vet"><span aria-hidden="true">👕</span> Vêtements</h3>
           <p class="carton-compteur"><strong id="compteur-vetements">0</strong> vêtements déjà collectés</p>
           <ul class="liste-oui" id="liste-vetements"></ul>
-        </article>
-        <article class="carton carton-clair" aria-labelledby="titre-carton-non">
-          <h3 class="carton-titre" id="titre-carton-non"><span aria-hidden="true">🚫</span> À éviter</h3>
-          <ul class="liste-non" id="liste-eviter"></ul>
-          <p class="petit">Liste indicative, ajustée selon les besoins de l'association.</p>
         </article>
       </div>
       <div class="collecte-bas">
         <div class="collecte-bloc">
-          <h3 class="collecte-titre">Où déposer vos vêtements ?</h3>
+          <h3 class="collecte-titre">Où déposer vos dons ?</h3>
           <div id="points-collecte"></div>
         </div>
         <div class="collecte-bloc">
-          <h3 class="collecte-titre">Pourquoi ça coûte de l'argent ?</h3>
-          <p>Collecter, c'est aussi trier, laver, stocker et transporter. C'est exactement ce que la cagnotte finance en premier, avant que le reste ne parte à l'association.</p>
+          <h3 class="collecte-titre">À éviter</h3>
+          <ul class="liste-non" id="liste-eviter"></ul>
+          <p class="petit">Listes indicatives, ajustées selon les besoins de l'association.</p>
         </div>
       </div>
     </div>
@@ -405,15 +417,15 @@
           <ol class="schema">
             <li class="bulle">Vous</li>
             <li class="bulle">Engagements au kilomètre, cagnotte, tombola</li>
-            <li class="bulle bulle-asso">La collecte de vêtements financée</li>
-            <li class="bulle bulle-fin">Le reste pour <span data-bind="association.nom">A.V.A. – Amiens</span> et ses projets</li>
+            <li class="bulle bulle-asso" data-bind="association.nom">A.V.A. – Amiens</li>
+            <li class="bulle bulle-fin">Ses projets : sorties, voyages, activités</li>
           </ol>
         </div>
         <div class="voie">
-          <h3 class="voie-titre"><span aria-hidden="true">👕</span> Les vêtements</h3>
+          <h3 class="voie-titre"><span aria-hidden="true">🥫👕</span> Les denrées et les vêtements</h3>
           <ol class="schema">
             <li class="bulle">Vous</li>
-            <li class="bulle">Collecte, tri et remise en état</li>
+            <li class="bulle">Collecte et tri par l'équipe</li>
             <li class="bulle bulle-asso" data-bind="association.nom">A.V.A. – Amiens</li>
             <li class="bulle bulle-fin">Des personnes dans le besoin</li>
           </ol>
@@ -424,7 +436,7 @@
         <li><strong>Nous ne gagnons rien.</strong> L'équipe ne garde aucun euro : nous organisons ce projet pour l'association.</li>
         <li><strong>Rien n'est demandé avant la vérification.</strong> Les montants restent « en attente » tant que les kilomètres ne sont pas vérifiés sur Strava.</li>
         <li><strong>Les lots sont offerts.</strong> Nous les cherchons gratuitement auprès de partenaires, pour que la cagnotte ne serve pas à les acheter.</li>
-        <li><strong>Les compteurs sont publics.</strong> Cagnotte, kilomètres et vêtements sont mis à jour sur ce site au fil du projet.</li>
+        <li><strong>Les compteurs sont publics.</strong> Cagnotte, kilomètres, denrées et vêtements sont mis à jour sur ce site au fil du projet.</li>
         <li><strong>Encaissement.</strong> <span id="encaissement"></span></li>
         <li><strong>La contribution HelloAsso est facultative.</strong> HelloAsso ne prend aucune commission aux associations et se finance par une contribution volontaire proposée au moment du paiement. Elle ne va pas au projet : vous pouvez la modifier ou la mettre à 0 €.</li>
       </ul>
@@ -481,7 +493,7 @@
         </details>
         <details>
           <summary>Où va l'argent ?</summary>
-          <div class="faq-reponse"><p>Il finance d'abord la collecte de vêtements : tri, remise en état, stockage, transport. Le reste est reversé à <span data-bind="association.nom">A.V.A. – Amiens</span>, notamment pour ses projets avec les enfants qu'elle accompagne. Le schéma complet est dans la partie <a href="#transparence">Où va votre participation ?</a></p></div>
+          <div class="faq-reponse"><p>Il est reversé à <span data-bind="association.nom">A.V.A. – Amiens</span> pour financer ses projets : sorties, voyages et activités pour les enfants et les familles qu'elle accompagne. Les denrées et les vêtements collectés lui sont remis directement. Le schéma complet est dans la partie <a href="#transparence">Où va votre participation ?</a></p></div>
         </details>
         <details>
           <summary>Mes informations sont-elles conservées sur le site ?</summary>
@@ -489,7 +501,7 @@
         </details>
         <details>
           <summary>Je peux aider sans courir et sans argent ?</summary>
-          <div class="faq-reponse"><p>Oui : déposez des vêtements pendant la <a href="#collecte">collecte</a>, partagez le site et le live autour de vous, ou venez encourager les coureurs le jour J.</p></div>
+          <div class="faq-reponse"><p>Oui : déposez des denrées ou des vêtements pendant la <a href="#collecte">collecte</a>, partagez le site et le live autour de vous, ou venez encourager les coureurs le 11 novembre.</p></div>
         </details>
         <details>
           <summary>Comment vous contacter ?</summary>

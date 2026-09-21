@@ -1,6 +1,6 @@
 # Mode d'emploi : site GEAnérosité (course solidaire)
 
-**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Compteurs, coureurs, liens, paliers, lots, collecte, équipe : tout est dedans, en français et commenté.
+**La règle d'or : tu ne modifies qu'un seul fichier, `js/config.js`.** Compteurs, coureurs, liens, projets financés, lots, collecte, équipe : tout est dedans, en français et commenté.
 
 Le site est en ligne : **https://likooo2.github.io/GEAn-rosit-/**
 Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change ce que tu veux, puis **Commit changes**. C'est publié une à deux minutes plus tard, et ça marche aussi depuis un téléphone :
@@ -8,89 +8,107 @@ Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change
 
 > Bandeau rouge après une modification ? C'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier.
 
----
-
-## 1. Ce que le site fait, et ce qu'il ne peut pas faire
-
-Ce site est un site **statique** : il affiche des informations, mais il ne peut ni recevoir d'inscriptions, ni encaisser d'argent, ni lire automatiquement HelloAsso. Le fonctionnement retenu :
-
-| Ce qu'il faut faire | Comment ça marche ici |
-|---|---|
-| Inscrire les coureurs | Un formulaire externe (HelloAsso ou Google Forms) : lien `liens.inscriptionCoureur`. Vous recopiez ensuite les coureurs dans `config.js`. |
-| Recueillir les engagements | Le site **simule et récapitule** l'engagement (montant par km, plafond, total), puis renvoie vers le formulaire officiel : lien `liens.engagement`. Le visiteur peut aussi imprimer son **document d'engagement** signé. |
-| Suivre les kilomètres | Vous saisissez les km de chaque coureur dans `config.js` ; le site recalcule tous les montants en attente. |
-| Afficher la cagnotte en direct | Deux options : le montant que vous saisissez (`compteurs.cagnotte`), et/ou le **widget HelloAsso** (`liens.widgetCagnotte`) qui affiche le montant réel automatiquement. |
-
-Les engagements simulés par un visiteur restent **sur son appareil** (mémoire du navigateur). Le site ne les reçoit pas : c'est le formulaire ou le document qui fait foi.
-
-### Ce qu'il faut demander dans vos formulaires
-
-- **Inscription coureur** : prénom (affiché publiquement), nom, e-mail, téléphone, objectif en km, lien du profil Strava, accord parental si mineur.
-- **Engagement** : nom, prénom, e-mail, téléphone, coureur soutenu (prénom + dossard), montant par kilomètre, plafond éventuel, case « je m'engage sur l'honneur », signature.
+Ce qui est déjà renseigné : la date (mercredi 11 novembre 2026, à partir de 14h), le lieu (piste d'athlétisme de l'UPJV), l'objectif de 1 000 €, les 4 prénoms de l'équipe, la collecte alimentaire et vestimentaire, et les 12 exemples de lots.
 
 ---
 
-## 2. Avant le lancement
+## 1. Les tableaux se mettent-ils à jour automatiquement ?
 
-- [ ] **Les liens** : `inscriptionCoureur`, `engagement`, `cagnotte`, `tombola`, `live`, `strava`, `instagram`, `email`. Tant qu'un lien est vide, le bouton reste grisé avec « bientôt disponible » : aucun faux lien sur le site.
-- [ ] **La date** : `dates.debutCourse`, par exemple `"2026-11-21T10:00"`, puis `dateConfirmee: true` quand elle est définitive.
-- [ ] **La course** : lieu, format, heure de départ (`course.lieu`, `course.format`, `course.depart`).
-- [ ] **Les paliers** : les 4 exemples d'utilisation de l'argent sont à valider avec A.V.A. avant de les annoncer.
-- [ ] **La tombola** : prix du billet, date du tirage, lots (passer `statut` de `"recherche"` à `"confirme"` quand un lot est obtenu).
-- [ ] **La collecte** : lieux et dates de dépôt dans `collecte.points`.
-- [ ] **L'association** : présentation, sigle, logo (avec son accord).
-- [ ] **L'équipe**, **l'encaissement** (`transparence.encaissement`) et le **responsable de publication**.
-- [ ] Passer `modeBrouillon` à `false`.
+**Oui, si tu passes par une feuille de calcul.** Deux façons de faire, au choix :
 
----
+### A. Automatique (recommandé) : un Google Sheet publié
 
-## 3. Ajouter les coureurs
+1. Crée un Google Sheet avec une ligne par coureur et ces colonnes (l'ordre n'a pas d'importance, les majuscules et les accents non plus) :
 
-Dans `config.js`, partie **LES COUREURS** :
+   | prenom | dossard | objectif | km | verifie | strava | promesse |
+   |---|---|---|---|---|---|---|
+   | Julien | 1 | 15 | 15.2 | oui | https://… | 3.5 |
+
+   - `km` : kilomètres réalisés · `verifie` : `oui` quand c'est vérifié sur Strava
+   - `promesse` : total des engagements reçus pour ce coureur, en € par km
+2. Dans Google Sheets : **Fichier → Partager → Publier sur le web**, choisis la feuille et le format **.csv**, puis copie l'adresse.
+3. Colle-la dans `config.js`, ligne `liens.feuilleCoureurs`.
+
+À partir de là, **il n'y a plus rien à recopier** : tu modifies la feuille, et le site affiche les nouveaux coureurs et les nouveaux kilomètres au chargement suivant. Astuce : si ton formulaire d'inscription est un Google Form, ses réponses arrivent déjà dans un Sheet — ajoute simplement les colonnes `km` et `verifie` à côté.
+
+Si la feuille est indisponible ou mal formée, le site utilise la liste de `config.js` : il n'y a jamais d'écran vide.
+
+### B. Manuelle : la liste dans `config.js`
 
 ```js
 coureurs: [
   { prenom: "Julien", dossard: 1, objectifKm: 15, km: 0, kmVerifies: false, strava: "", promesseParKm: 0 },
-  { prenom: "Sarah",  dossard: 2, objectifKm: 10, km: 0, kmVerifies: false, strava: "", promesseParKm: 0 },
 ],
 ```
 
-- `dossard` doit être unique : il sert aussi de **lien de partage**. Julien peut envoyer `…/GEAn-rosit-/?coureur=1` : la page s'ouvre directement sur son engagement.
-- `promesseParKm` : le total des engagements reçus pour ce coureur, en € par km. C'est très motivant à afficher, mais ça se met à jour à la main, d'après votre formulaire.
-- Tant que la liste est vide, le site affiche une invitation à s'inscrire : c'est normal.
+Le `dossard` doit être unique : il sert aussi de **lien de partage**. Julien peut envoyer `…/GEAn-rosit-/?coureur=1`, la page s'ouvre directement sur son engagement.
+
+### Ce qui reste manuel dans tous les cas
+
+- Le **montant de la cagnotte** (`compteurs.cagnotte`), sauf si tu ajoutes le widget HelloAsso (`liens.widgetCagnotte`) qui affiche le montant réel en direct, en plus de la jauge.
+- Les **denrées et vêtements collectés**, et les **participants à la tombola**.
+
+---
+
+## 2. Ce que le site ne peut pas faire
+
+Ce site est **statique** : il affiche, il calcule, mais il ne reçoit rien.
+
+| Ce qu'il faut faire | Comment ça marche ici |
+|---|---|
+| Inscrire les coureurs | Un formulaire externe (Google Forms ou HelloAsso) : lien `liens.inscriptionCoureur`. |
+| Recueillir les engagements | Le site **simule et récapitule** (montant par km, plafond, total), puis renvoie vers le formulaire officiel : `liens.engagement`. Le visiteur peut aussi imprimer son **document d'engagement** signé. |
+| Encaisser | HelloAsso uniquement : `liens.cagnotte` et `liens.tombola`. |
+
+Les engagements simulés restent **sur l'appareil du visiteur** : le site ne les reçoit pas. C'est le formulaire ou le document signé qui fait foi.
+
+### Ce qu'il faut demander dans les formulaires
+
+- **Inscription coureur** : prénom affiché, nom, e-mail, téléphone, objectif en km, lien Strava, accord parental si mineur.
+- **Engagement** : nom, prénom, e-mail, téléphone, coureur soutenu (prénom + dossard), montant par kilomètre, plafond éventuel, case « je m'engage sur l'honneur », signature.
+
+---
+
+## 3. Ce qu'il reste à compléter
+
+- [ ] **Les liens** : `inscriptionCoureur`, `engagement`, `cagnotte`, `tombola`, `live`, `strava`, `instagram`, `email`. Tant qu'un lien est vide, le bouton reste grisé avec « bientôt disponible » : aucun faux lien sur le site.
+- [ ] **Les projets financés** (`projetsFinances`) : à valider avec A.V.A. avant de les annoncer.
+- [ ] **La tombola** : prix du billet et date du tirage. Pour chaque lot obtenu, passe `statut` de `"recherche"` à `"confirme"` et ajoute le partenaire.
+- [ ] **La collecte** : lieux et dates de dépôt dans `collecte.points`.
+- [ ] **L'association** : présentation, sigle complet, logo (avec son accord).
+- [ ] **Les photos de l'équipe** et, si vous voulez, les rôles (la ligne est masquée quand le rôle est vide).
+- [ ] **L'encaissement** (`transparence.encaissement`) et le **responsable de publication** (`mentionsLegales.responsable`, obligatoire).
+- [ ] Facultatif : `course.depart` (retrait des dossards) et `course.info` (par exemple « piste de 400 m : 2 tours et demi = 1 km »).
+
+Le mode brouillon est désactivé (`modeBrouillon: false`). Passe-le à `true` pendant que tu travailles : tout ce qui manque est alors entouré de pointillés bleus.
 
 ---
 
 ## 4. Pendant et après la course
 
-```js
-{ prenom: "Julien", dossard: 1, objectifKm: 15, km: 15.2, kmVerifies: true, … },
-```
-
-1. Pendant la course, mettez `km` à jour de temps en temps : le classement et tous les montants suivent automatiquement.
-2. Après la course, relevez la distance de chaque activité Strava, corrigez `km`, puis passez `kmVerifies` à `true`.
-3. Le statut affiché passe alors de « en attente » à « à verser », et chaque personne engagée voit son montant définitif.
-4. Contactez les personnes engagées (avec les coordonnées de votre formulaire) et indiquez-leur le lien de la cagnotte.
-
-Pensez aussi à mettre à jour `compteurs.cagnotte`, `compteurs.vetements`, `compteurs.participantsTombola` et `compteurs.miseAJour`.
+1. Pendant la course, mets les `km` à jour de temps en temps (feuille de calcul ou `config.js`) : classement, compteurs et montants suivent automatiquement.
+2. Après la course, relève la distance de chaque activité Strava, corrige les `km`, puis passe `verifie` / `kmVerifies` à `oui` / `true`.
+3. Les montants passent alors de « en attente » à « à verser ». Contacte les personnes engagées avec les coordonnées de ton formulaire, et envoie-leur le lien de la cagnotte.
+4. Mets à jour `compteurs.cagnotte`, `denreesKg`, `vetements`, `participantsTombola` et `miseAJour`.
 
 ### Tester l'affichage sans attendre
 
-- `?etat=direct` : le site comme pendant la course
-- `?etat=apres` : le site comme après la course
-- `?maintenant=2026-11-21T10:30` : simule une date et une heure
+- `?etat=direct` : le site comme pendant la course · `?etat=apres` : comme après
+- `?maintenant=2026-11-11T15:30` : simule une date et une heure
 - `?coureur=1` : ouvre directement l'engagement pour le dossard 1
 
 ---
 
 ## 5. Quatre points à faire valider
 
-Nous ne sommes pas juristes : faites confirmer ces points par A.V.A. et, si besoin, par la mairie.
+Nous ne sommes pas juristes : fais confirmer ces points par A.V.A. et, si besoin, par l'UPJV et la mairie.
 
-1. **La sécurité de la course.** Parcours, assurance, autorisation si vous utilisez la voie publique, encadrement des mineurs, présence de secours. C'est le point le plus important.
-2. **La promesse de don.** Un engagement au kilomètre est une promesse : elle repose sur la confiance, et personne ne peut être contraint de payer. Le site le dit clairement, et le plafond aide à rester raisonnable.
+1. **La sécurité et l'accès à la piste.** Autorisation d'utiliser la piste de l'UPJV, assurance, encadrement des mineurs, présence de secours, point d'eau. C'est le point le plus important.
+2. **La promesse de don.** Un engagement au kilomètre repose sur la confiance : personne ne peut être contraint de payer. Le site le dit clairement, et le plafond aide à rester raisonnable.
 3. **La tombola.** Une tombola ouverte au public demande en général une **autorisation de la mairie**. Les lots doivent être des objets ou des bons, jamais de l'argent.
-4. **Le règlement.** Celui du site est présenté comme un **projet à valider**. Faites-le relire, puis retirez la mention « à valider » dans `index.html`.
+4. **Le règlement.** Celui du site est présenté comme un **projet à valider**. Fais-le relire, puis retire la mention « à valider » dans `index.html`.
+
+Pense aussi à l'accord des personnes photographiées et à l'accord d'A.V.A. pour son logo.
 
 ---
 
@@ -100,13 +118,7 @@ Nous ne sommes pas juristes : faites confirmer ces points par A.V.A. et, si beso
 |---|---|
 | Bandeau rouge « config.js contient une erreur » | Une virgule ou un guillemet manque à l'endroit modifié. Sur ordinateur, la touche **F12** (onglet *Console*) donne le numéro de la ligne. |
 | Un bouton reste grisé | Le lien correspondant est vide ou mal copié dans `liens` (il doit commencer par `https://`). |
-| Un coureur n'apparaît pas | Vérifie la virgule à la fin de sa ligne et que son `dossard` n'est pas déjà utilisé. |
-| Le lecteur du live ne s'affiche pas | Il ne fonctionne que sur le site en ligne, et seulement pour un lien Twitch. Sinon, le bouton ouvre le live dans un nouvel onglet. |
-| La cagnotte HelloAsso ne s'affiche pas | `liens.widgetCagnotte` doit être l'adresse fournie par HelloAsso dans « intégrer à mon site » (celle qui suit `src="`). |
+| La feuille de calcul n'est pas prise en compte | Vérifie qu'elle est **publiée au format .csv** et qu'une colonne s'appelle bien `prenom`. La console (F12) affiche les colonnes trouvées. |
+| Un coureur n'apparaît pas | Son `prenom` est vide, ou son `dossard` est déjà utilisé par un autre. |
+| Le lecteur du live ne s'affiche pas | Il ne fonctionne que sur le site en ligne, et seulement pour un lien Twitch. Sinon le bouton ouvre le live dans un nouvel onglet. |
 | Ta modification n'apparaît pas | Recharge la page. GitHub met une à deux minutes à publier. |
-
----
-
-## 7. Remettre le site en ligne ailleurs (si besoin)
-
-Le dossier complet fonctionne sur n'importe quel hébergeur de fichiers statiques. Sur **Netlify** : crée un compte, puis dans **Projects**, ouvre **Add new project**, choisis **Deploy manually** et dépose le dossier entier. Pense alors à remplacer les 2 adresses de partage en haut de `index.html`, ainsi que l'hébergeur dans `config.js`.
