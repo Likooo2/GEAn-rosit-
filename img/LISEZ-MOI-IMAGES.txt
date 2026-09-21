@@ -1,0 +1,29 @@
+OÙ METTRE LES IMAGES
+====================
+
+LE LOGO DE L'ASSOCIATION (c'est le principal)
+1. Dépose le fichier dans ce dossier, par exemple : img/logo-ava.png
+   (PNG sur fond transparent de préférence, ou SVG ; moins de 300 ko)
+2. Dans js/config.js, partie « association », écris le chemin :
+      logo: "img/logo-ava.png",
+Le logo apparaît alors dans la partie « Qui sommes-nous ? » et dans le pied de page.
+Tant que la ligne est vide, le site écrit simplement le nom de l'association.
+
+LE LOGO DE L'IUT (facultatif)
+Même principe : dépose img/logo-iut.png puis, dans js/config.js :
+      logoIUT: "img/logo-iut.png",
+
+DES PHOTOS DE L'ÉQUIPE (facultatif, désactivé pour l'instant)
+Le site affiche seulement les noms. Si un jour vous voulez des photos :
+dépose une image carrée par personne (ex : img/julien.jpg) puis, dans « equipe » :
+      { nom: "Julien Pires", role: "", photo: "img/julien.jpg" },
+
+ASTUCES
+- Demandez toujours l'accord d'A.V.A. avant d'utiliser son logo.
+- Noms de fichiers en minuscules, sans espace ni accent : « logo-ava.png ».
+- Pour réduire le poids d'une image gratuitement : https://squoosh.app
+- Si une image est introuvable, le site affiche le nom à la place : jamais de cadre cassé.
+
+NE PAS SUPPRIMER
+- favicon.svg et apple-touch-icon.png : l'icône du site dans l'onglet et sur l'écran d'accueil.
+- partage.jpg : l'image d'aperçu quand le lien est partagé (WhatsApp, Instagram, Messenger…).

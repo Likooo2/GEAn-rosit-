@@ -223,6 +223,11 @@
       const v = lire(el.dataset.bind);
       if (v !== undefined && v !== null && v !== "") el.textContent = v;
     });
+    const parDate = { debutCourse: debut, finCourse: fin, distribution: lireDate(dates.distribution) };
+    $$("[data-date]").forEach((el) => {
+      const d = parDate[el.dataset.date];
+      if (d) el.textContent = formaterDate(d, el.dataset.format || "jourCourt");
+    });
   }
 
 
@@ -1072,11 +1077,10 @@
     $("#compteur-vetements").textContent = entier(nombre(K.vetements) || 0);
     $("#liste-alimentaire").innerHTML = (col.alimentaire || []).map((x) => `<li>${esc(x)}</li>`).join("");
     $("#liste-vetements").innerHTML = (col.vetements || []).map((x) => `<li>${esc(x)}</li>`).join("");
-    $("#liste-eviter").innerHTML = (col.aEviter || []).map((x) => `<li>${esc(x)}</li>`).join("");
-    const points = Array.isArray(col.points) ? col.points.filter((p) => texte(p.ou)) : [];
-    $("#points-collecte").innerHTML = points.length
-      ? `<ul class="liste-lieux">${points.map((p) => `<li><strong>${esc(p.ou)}</strong><span>${texte(p.quand) ? esc(p.quand) : "dates à confirmer"}</span></li>`).join("")}</ul>`
-      : `<p>Les lieux et les dates de collecte sont ${aConfirmer("à confirmer")}. Ils seront annoncés ici et sur Instagram.</p>`;
+    const lieu = texte(col.lieuDistribution);
+    $("#lieu-distribution").innerHTML = lieu
+      ? `Lieu : ${esc(lieu)}.`
+      : `Le lieu exact est ${aConfirmer("à confirmer")} : il sera annoncé ici.`;
   }
 
   function rendreTransparence() {
@@ -1100,16 +1104,15 @@
     const silhouette = '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="38" r="18" fill="#16161b" opacity=".25"/><path d="M14 96 C 18 66, 34 58, 50 58 C 66 58, 82 66, 86 96 Z" fill="#16161b" opacity=".25"/></svg>';
     $("#equipe").innerHTML = (C.equipe || []).map((m, i) => {
       const prenom = texte(m.nom || m.prenom);
-      const photo = texte(m.photo)
-        ? `<img src="${esc(m.photo)}" alt="Photo de ${esc(prenom || "l'équipe")}" loading="lazy" decoding="async">`
-        : silhouette;
-      return `<li class="polaroid" style="--rot:${rotations[i % rotations.length]}deg">
-          <div class="polaroid-photo">${photo}</div>
+      const photo = texte(m.photo);
+      return `<li class="polaroid${photo ? "" : " polaroid-sans-photo"}" style="--rot:${rotations[i % rotations.length]}deg">
+          ${photo ? `<div class="polaroid-photo"><img src="${esc(photo)}" alt="Photo de ${esc(prenom || "l'équipe")}" loading="lazy" decoding="async"></div>` : ""}
           <p class="polaroid-nom">${prenom ? esc(prenom) : aConfirmer("prénom à ajouter")}</p>
           ${texte(m.role) ? `<p class="polaroid-role">${esc(m.role)}</p>` : ""}
         </li>`;
     }).join("");
     secoursImages($("#equipe"), ".polaroid-photo", silhouette);
+    if (!(C.equipe || []).some((m) => texte(m.photo))) $("#equipe").classList.add("equipe-noms");
 
     logoPied($("#logo-iut"), C.logoIUT, "Logo de l'IUT d'Amiens", "IUT d'Amiens");
     logoPied($("#logo-asso"), a.logo, "Logo de " + nom, nom);

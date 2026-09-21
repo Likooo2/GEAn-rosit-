@@ -619,6 +619,10 @@ body.menu-ouvert { overflow: hidden; }
 .polaroid-photo { display: grid; place-items: center; aspect-ratio: 1; overflow: hidden; background: var(--bleu-clair); }
 .polaroid-photo img { width: 100%; height: 100%; object-fit: cover; }
 .polaroid-nom { margin: .6rem 0 .1rem; font: 900 1.15rem/1 var(--police-titre); text-transform: uppercase; }
+.polaroid-sans-photo { padding: 1rem 1rem 1.1rem; }
+.polaroid-sans-photo .polaroid-nom { margin-top: 0; font-size: 1.25rem; }
+.equipe-noms { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1rem; }
+@media (min-width: 40rem) { .equipe-noms { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .polaroid-role { margin: 0; font-size: .9rem; color: var(--encre-2); }
 @media (min-width: 60rem) { .qui-grille { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 3.5rem; } }
 

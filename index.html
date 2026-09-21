@@ -70,7 +70,7 @@
         <li><a href="#coureurs">Les coureurs</a></li>
         <li><a href="#engager">M'engager</a></li>
         <li><a href="#cagnotte">Cagnotte</a></li>
-        <li><a href="#collecte">Collecte</a></li>
+        <li><a href="#collecte">Distribution</a></li>
         <li><a href="#tombola">Tombola</a></li>
         <li><a href="#transparence">Où va l'argent</a></li>
         <li><a href="#faq">FAQ</a></li>
@@ -104,7 +104,7 @@
         <p class="hero-phrase"><strong>Tout le monde peut courir.</strong> Et tout le monde peut s'engager à verser une somme par kilomètre parcouru par le coureur de son choix.</p>
         <ul class="hero-concret">
           <li><span class="hero-concret-emoji" aria-hidden="true">🌊</span><span><strong>L'argent récolté finance les projets de <span data-bind="association.nom">A.V.A. – Amiens</span></strong> : des sorties, des voyages et des activités pour les enfants et les familles accompagnées.</span></li>
-          <li><span class="hero-concret-emoji" aria-hidden="true">🥫👕</span><span><strong>En parallèle, on collecte des denrées et des vêtements</strong>, remis à l'association pour être donnés gratuitement.</span></li>
+          <li><span class="hero-concret-emoji" aria-hidden="true">🥫👕</span><span><strong>En parallèle, nous récupérons des denrées et des vêtements</strong> auprès des commerces et des entreprises, pour une distribution le <span data-date="distribution">samedi 21 novembre</span> avec l'association.</span></li>
         </ul>
         <div class="hero-cta">
           <a class="bouton bouton-vert bouton-geant" href="#coureur">🏃 Je veux être coureur</a>
@@ -281,7 +281,7 @@
   <section class="section section-scores" id="compteurs" aria-labelledby="titre-scores">
     <div class="conteneur">
       <h2 class="titre-section" id="titre-scores">Le tableau des scores</h2>
-      <p class="intro">Le projet en chiffres. Nous mettons ces compteurs à jour au fil des inscriptions, de la course et de la collecte.</p>
+      <p class="intro">Le projet en chiffres. Nous mettons ces compteurs à jour au fil des inscriptions, de la course et des dons récupérés.</p>
       <div class="tableau-scores" id="tableau-scores"></div>
       <p class="maj" id="maj-compteurs" hidden>Dernière mise à jour : <span data-bind="compteurs.miseAJour"></span></p>
     </div>
@@ -333,35 +333,39 @@
   </section>
 
 
-  <!-- ═══════════════ LA COLLECTE ═══════════════ -->
+  <!-- ═══════════════ LES DONS EN NATURE ET LA DISTRIBUTION ═══════════════ -->
   <section class="section section-collecte" id="collecte" aria-labelledby="titre-collecte">
     <div class="conteneur">
-      <h2 class="titre-section" id="titre-collecte">La collecte alimentaire et vestimentaire</h2>
-      <p class="intro">En parallèle de la course, nous collectons des denrées et des vêtements. Tout est remis à <span data-bind="association.nom">A.V.A. – Amiens</span> pour être donné gratuitement à des personnes dans le besoin.</p>
+      <h2 class="titre-section" id="titre-collecte">Les dons en nature et la distribution</h2>
+      <p class="intro">En parallèle de la course, nous allons nous-mêmes à la rencontre des commerces, des supermarchés et des entreprises pour récupérer des denrées et des vêtements. Il n'y a donc pas de point de dépôt : c'est l'équipe qui se déplace.</p>
       <blockquote class="citation">
-        <p>« Vous pouvez aussi aider sans donner d'argent : un produit alimentaire ou un vêtement en bon état contribue directement à notre action solidaire. »</p>
+        <p>« Le <span data-date="distribution">samedi 21 novembre</span>, tout ce que nous avons récupéré est distribué avec l'association, aux personnes qui en ont besoin. »</p>
       </blockquote>
       <div class="cartons">
         <article class="carton" aria-labelledby="titre-carton-alim">
-          <h3 class="carton-titre" id="titre-carton-alim"><span aria-hidden="true">🥫</span> Produits alimentaires</h3>
-          <p class="carton-compteur"><strong id="compteur-kg">0</strong> kg déjà collectés</p>
+          <h3 class="carton-titre" id="titre-carton-alim"><span aria-hidden="true">🥫</span> Denrées alimentaires</h3>
+          <p class="carton-compteur"><strong id="compteur-kg">0</strong> kg déjà récupérés</p>
           <ul class="liste-oui" id="liste-alimentaire"></ul>
         </article>
         <article class="carton" aria-labelledby="titre-carton-vet">
           <h3 class="carton-titre" id="titre-carton-vet"><span aria-hidden="true">👕</span> Vêtements</h3>
-          <p class="carton-compteur"><strong id="compteur-vetements">0</strong> vêtements déjà collectés</p>
+          <p class="carton-compteur"><strong id="compteur-vetements">0</strong> vêtements déjà récupérés</p>
           <ul class="liste-oui" id="liste-vetements"></ul>
         </article>
       </div>
       <div class="collecte-bas">
         <div class="collecte-bloc">
-          <h3 class="collecte-titre">Où déposer vos dons ?</h3>
-          <div id="points-collecte"></div>
+          <h3 class="collecte-titre">Vous êtes un commerce ou une entreprise ?</h3>
+          <p>Un carton de conserves, un lot de vêtements, des invendus encore consommables : tout est utile. Dites-nous simplement quand passer, nous venons chercher sur place.</p>
+          <div class="cta-bloc">
+            <a class="bouton bouton-carton" data-lien="email">Nous proposer un don</a>
+            <p class="destination" data-destination="email"></p>
+          </div>
         </div>
         <div class="collecte-bloc">
-          <h3 class="collecte-titre">À éviter</h3>
-          <ul class="liste-non" id="liste-eviter"></ul>
-          <p class="petit">Listes indicatives, ajustées selon les besoins de l'association.</p>
+          <h3 class="collecte-titre">La distribution</h3>
+          <p>Rendez-vous le <strong><span data-date="distribution">samedi 21 novembre</span></strong> avec <span data-bind="association.nom">A.V.A. – Amiens</span> pour remettre les denrées et les vêtements aux personnes accompagnées.</p>
+          <p id="lieu-distribution"></p>
         </div>
       </div>
     </div>
@@ -424,10 +428,10 @@
         <div class="voie">
           <h3 class="voie-titre"><span aria-hidden="true">🥫👕</span> Les denrées et les vêtements</h3>
           <ol class="schema">
-            <li class="bulle">Vous</li>
-            <li class="bulle">Collecte et tri par l'équipe</li>
+            <li class="bulle">Commerces et entreprises</li>
+            <li class="bulle">Récupérés et triés par l'équipe</li>
             <li class="bulle bulle-asso" data-bind="association.nom">A.V.A. – Amiens</li>
-            <li class="bulle bulle-fin">Des personnes dans le besoin</li>
+            <li class="bulle bulle-fin">Distribution du <span data-date="distribution">21 novembre</span></li>
           </ol>
         </div>
       </div>
@@ -437,6 +441,7 @@
         <li><strong>Rien n'est demandé avant la vérification.</strong> Les montants restent « en attente » tant que les kilomètres ne sont pas vérifiés sur Strava.</li>
         <li><strong>Les lots sont offerts.</strong> Nous les cherchons gratuitement auprès de partenaires, pour que la cagnotte ne serve pas à les acheter.</li>
         <li><strong>Les compteurs sont publics.</strong> Cagnotte, kilomètres, denrées et vêtements sont mis à jour sur ce site au fil du projet.</li>
+        <li><strong>L'argent ne passe pas par nous.</strong> Les paiements vont directement sur le compte HelloAsso de l'association.</li>
         <li><strong>Encaissement.</strong> <span id="encaissement"></span></li>
         <li><strong>La contribution HelloAsso est facultative.</strong> HelloAsso ne prend aucune commission aux associations et se finance par une contribution volontaire proposée au moment du paiement. Elle ne va pas au projet : vous pouvez la modifier ou la mettre à 0 €.</li>
       </ul>
@@ -493,7 +498,7 @@
         </details>
         <details>
           <summary>Où va l'argent ?</summary>
-          <div class="faq-reponse"><p>Il est reversé à <span data-bind="association.nom">A.V.A. – Amiens</span> pour financer ses projets : sorties, voyages et activités pour les enfants et les familles qu'elle accompagne. Les denrées et les vêtements collectés lui sont remis directement. Le schéma complet est dans la partie <a href="#transparence">Où va votre participation ?</a></p></div>
+          <div class="faq-reponse"><p>Il est reversé à <span data-bind="association.nom">A.V.A. – Amiens</span> pour financer ses projets : sorties, voyages et activités pour les enfants et les familles qu'elle accompagne. Les paiements arrivent directement sur son compte HelloAsso : l'argent ne passe jamais par nous. Le schéma complet est dans la partie <a href="#transparence">Où va votre participation ?</a></p></div>
         </details>
         <details>
           <summary>Mes informations sont-elles conservées sur le site ?</summary>
@@ -501,7 +506,11 @@
         </details>
         <details>
           <summary>Je peux aider sans courir et sans argent ?</summary>
-          <div class="faq-reponse"><p>Oui : déposez des denrées ou des vêtements pendant la <a href="#collecte">collecte</a>, partagez le site et le live autour de vous, ou venez encourager les coureurs le 11 novembre.</p></div>
+          <div class="faq-reponse"><p>Oui : courez, partagez le site et le live autour de vous, venez encourager les coureurs le 11 novembre, ou mettez-nous en relation avec un commerce ou une entreprise qui accepterait de donner des denrées ou des vêtements.</p></div>
+        </details>
+        <details>
+          <summary>Comment donner des denrées ou des vêtements ?</summary>
+          <div class="faq-reponse"><p>Il n'y a pas de point de dépôt : nous passons nous-mêmes dans les commerces, les supermarchés et les entreprises. Si vous représentez un commerce, écrivez-nous et nous venons chercher sur place. Tout est distribué le <span data-date="distribution">samedi 21 novembre</span> avec l'association.</p></div>
         </details>
         <details>
           <summary>Comment vous contacter ?</summary>

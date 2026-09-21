@@ -56,7 +56,7 @@ const CONFIG = {
     engagement: "",          // 🤝 formulaire d'engagement au kilomètre
     cagnotte: "",            // 💰 HelloAsso : la cagnotte
     tombola: "",             // 🎟️ HelloAsso : la tombola
-    live: "",                // 📺 lien du live (Twitch ou YouTube)
+    live: "https://www.twitch.tv/geanerosite",   // 📺 le live
     strava: "",              // 🟠 club Strava du projet (facultatif)
     instagram: "",
     email: "",               // adresse de contact (sans « mailto: »)
@@ -81,6 +81,7 @@ const CONFIG = {
 
   dates: {
     debutCourse: "2026-11-11T14:00",   // départ (clôture aussi les engagements)
+    distribution: "2026-11-21",        // jour de la distribution avec l'association
     // Heure à laquelle le site bascule en « après la course ».
     // La course s'arrête au dernier coureur : mets une heure large.
     finCourse: "2026-11-11T19:00",
@@ -139,8 +140,8 @@ const CONFIG = {
      ══════════════════════════════════════════════════════════════════ */
 
   tombola: {
-    prixBillet: null,     // prix d'un billet en € (null = à confirmer). Ex : 2
-    tirage: "",           // ex : "Pendant le live, à l'arrivée des coureurs"
+    prixBillet: 1,        // prix d'un billet en €
+    tirage: "Le samedi 21 novembre, le jour de la distribution",
     // statut : "recherche" (on cherche un partenaire) ou "confirme" (lot obtenu).
     lots: [
       { nom: "Carte cadeau Amazon",                              emoji: "🎁", statut: "recherche", partenaire: "" },
@@ -159,10 +160,12 @@ const CONFIG = {
     gagnants: [],         // APRÈS le tirage : numéros ou prénoms gagnants, dans l'ordre des lots
   },
 
+  /* 📦 LES DONS EN NATURE
+     Pas de dépôt public : l'équipe passe elle-même dans les commerces et les
+     entreprises. Ces listes disent simplement ce qui est utile.
+     Le tout est distribué le 21 novembre avec l'association. */
   collecte: {
-    // Où et quand déposer. Vide = « lieux et dates à confirmer ».
-    // Ex : { ou: "Hall de l'IUT d'Amiens", quand: "du 2 au 10 novembre, le midi" },
-    points: [],
+    lieuDistribution: "",   // ex : "Local d'A.V.A., rue…" (vide = à confirmer)
     alimentaire: [
       "Conserves : légumes, poisson, plats cuisinés",
       "Pâtes, riz, semoule, lentilles",
@@ -175,10 +178,6 @@ const CONFIG = {
       "Vêtements pour enfants",
       "Chaussures en bon état",
     ],
-    aEviter: [
-      "Produits frais, ouverts ou périmés",
-      "Vêtements abîmés, tachés ou troués",
-    ],
   },
 
 
@@ -188,23 +187,24 @@ const CONFIG = {
 
   association: {
     nom: "A.V.A. – Amiens",
-    nomComplet: "",   // signification du sigle A.V.A. (à compléter avec l'asso)
-    logo: "",         // ex : "img/logo-ava.png" (vide = nom écrit à la place)
+    nomComplet: "Accompagnement Vers l'Autonomie",   // signification du sigle A.V.A.
+    // 👉 Dépose le logo dans le dossier img/ puis écris son chemin ici,
+    // par exemple : logo: "img/logo-ava.png"
+    logo: "",
     site: "",         // site ou page de l'asso, avec https:// (facultatif)
     presentation: [
-      "A.V.A. – Amiens est l'association que nous soutenons. Elle accompagne notamment des enfants issus de situations très précaires.",
-      "L'argent récolté sert à financer ses projets : sorties, voyages et activités. Les denrées et les vêtements collectés lui sont remis pour être donnés gratuitement à des personnes dans le besoin.",
+      "A.V.A. – Amiens, pour Accompagnement Vers l'Autonomie, est l'association que nous soutenons. Elle accompagne notamment des enfants issus de situations très précaires.",
+      "L'argent récolté finance ses projets : sorties, voyages et activités. Les denrées et les vêtements que nous récupérons auprès des commerces et des entreprises sont distribués le 21 novembre, avec l'association.",
     ],
   },
 
   transparence: {
-    // Qui encaisse l'argent ? À préciser, ex : "Les paiements arrivent directement
-    // sur le compte HelloAsso d'A.V.A." (vide = « modalités précisées prochainement »)
-    encaissement: "",
+    // Qui encaisse l'argent ? (vide = « modalités précisées prochainement »)
+    encaissement: "Les paiements arrivent directement sur le compte HelloAsso de l'association : l'argent ne passe jamais par nous.",
   },
 
-  // 👥 L'ÉQUIPE. photo : ex "img/equipe/julien.jpg" (vide = silhouette)
-  // role : facultatif (la ligne est masquée si c'est vide)
+  // 👥 L'ÉQUIPE. role : facultatif (la ligne est masquée si c'est vide).
+  // photo : facultatif aussi ; laissé vide, le site affiche juste les noms.
   equipe: [
     { nom: "Volkan Akbulut",   role: "", photo: "" },
     { nom: "Julien Pires",     role: "", photo: "" },

@@ -8,7 +8,7 @@ Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change
 
 > Bandeau rouge après une modification ? C'est presque toujours une **virgule** ou un **guillemet** oublié à l'endroit que tu viens de modifier.
 
-Ce qui est déjà renseigné : la date (mercredi 11 novembre 2026, à partir de 14h), le lieu (piste d'athlétisme de l'UPJV), l'objectif de 1 000 €, les 4 prénoms de l'équipe, la collecte alimentaire et vestimentaire, et les 12 exemples de lots.
+Ce qui est déjà renseigné : la date (mercredi 11 novembre 2026, à partir de 14h), le lieu (piste d'athlétisme de l'UPJV), l'objectif de 1 000 €, les 4 noms de l'équipe, la chaîne Twitch, le sigle d'A.V.A. (Accompagnement Vers l'Autonomie), l'encaissement direct sur le compte HelloAsso de l'association, la tombola à 1 € avec tirage le 21 novembre, les dons en nature récupérés par l'équipe et la distribution du 21 novembre.
 
 ---
 
@@ -57,6 +57,7 @@ Ce site est **statique** : il affiche, il calcule, mais il ne reçoit rien.
 | Ce qu'il faut faire | Comment ça marche ici |
 |---|---|
 | Inscrire les coureurs | Un formulaire externe (Google Forms ou HelloAsso) : lien `liens.inscriptionCoureur`. |
+| Recevoir les dons en nature | Rien à gérer sur le site : vous passez vous-mêmes dans les commerces. Le bouton « Nous proposer un don » ouvre simplement votre messagerie. |
 | Recueillir les engagements | Le site **simule et récapitule** (montant par km, plafond, total), puis renvoie vers le formulaire officiel : `liens.engagement`. Le visiteur peut aussi imprimer son **document d'engagement** signé. |
 | Encaisser | HelloAsso uniquement : `liens.cagnotte` et `liens.tombola`. |
 
@@ -71,14 +72,14 @@ Les engagements simulés restent **sur l'appareil du visiteur** : le site ne les
 
 ## 3. Ce qu'il reste à compléter
 
-- [ ] **Les liens** : `inscriptionCoureur`, `engagement`, `cagnotte`, `tombola`, `live`, `strava`, `instagram`, `email`. Tant qu'un lien est vide, le bouton reste grisé avec « bientôt disponible » : aucun faux lien sur le site.
-- [ ] **Les projets financés** (`projetsFinances`) : à valider avec A.V.A. avant de les annoncer.
-- [ ] **La tombola** : prix du billet et date du tirage. Pour chaque lot obtenu, passe `statut` de `"recherche"` à `"confirme"` et ajoute le partenaire.
-- [ ] **La collecte** : lieux et dates de dépôt dans `collecte.points`.
-- [ ] **L'association** : présentation, sigle complet, logo (avec son accord).
-- [ ] **Les photos de l'équipe** et, si vous voulez, les rôles (la ligne est masquée quand le rôle est vide).
-- [ ] **L'encaissement** (`transparence.encaissement`) et le **responsable de publication** (`mentionsLegales.responsable`, obligatoire).
-- [ ] Facultatif : `course.depart` (retrait des dossards) et `course.info` (par exemple « piste de 400 m : 2 tours et demi = 1 km »).
+- [ ] **Les 4 liens HelloAsso ou formulaires** : `cagnotte`, `tombola`, `inscriptionCoureur`, `engagement`. Tant qu'un lien est vide, le bouton reste grisé avec « bientôt disponible » : aucun faux lien sur le site.
+- [ ] **L'Instagram** (`instagram`) et l'**adresse e-mail** de contact (`email`). L'e-mail sert aussi au bouton « Nous proposer un don » destiné aux commerces.
+- [ ] **Le logo d'A.V.A.** : dépose le fichier dans `img/`, puis écris son chemin dans `association.logo` (tout est expliqué dans `img/LISEZ-MOI-IMAGES.txt`).
+- [ ] **Le responsable de publication** (`mentionsLegales.responsable`) : obligatoire, un prénom et un nom.
+- [ ] **Le lieu de la distribution** du 21 novembre (`collecte.lieuDistribution`).
+- [ ] **Les projets financés** (`projetsFinances`) : à faire valider par A.V.A. avant de les annoncer.
+- [ ] **Les lots** : quand un lot est obtenu, passe son `statut` de `"recherche"` à `"confirme"` et ajoute le partenaire.
+- [ ] Facultatif : la présentation d'A.V.A. relue par l'association, `course.depart` (retrait des dossards), `course.info`, les rôles de l'équipe, le club `strava`.
 
 Le mode brouillon est désactivé (`modeBrouillon: false`). Passe-le à `true` pendant que tu travailles : tout ce qui manque est alors entouré de pointillés bleus.
 
@@ -89,7 +90,7 @@ Le mode brouillon est désactivé (`modeBrouillon: false`). Passe-le à `true` p
 1. Pendant la course, mets les `km` à jour de temps en temps (feuille de calcul ou `config.js`) : classement, compteurs et montants suivent automatiquement.
 2. Après la course, relève la distance de chaque activité Strava, corrige les `km`, puis passe `verifie` / `kmVerifies` à `oui` / `true`.
 3. Les montants passent alors de « en attente » à « à verser ». Contacte les personnes engagées avec les coordonnées de ton formulaire, et envoie-leur le lien de la cagnotte.
-4. Mets à jour `compteurs.cagnotte`, `denreesKg`, `vetements`, `participantsTombola` et `miseAJour`.
+4. Mets à jour `compteurs.cagnotte`, `denreesKg`, `vetements`, `participantsTombola` et `miseAJour`. Les denrées et les vêtements sont ceux que vous récupérez auprès des commerces, avant la distribution du 21 novembre.
 
 ### Tester l'affichage sans attendre
 
@@ -108,7 +109,7 @@ Nous ne sommes pas juristes : fais confirmer ces points par A.V.A. et, si besoin
 3. **La tombola.** Une tombola ouverte au public demande en général une **autorisation de la mairie**. Les lots doivent être des objets ou des bons, jamais de l'argent.
 4. **Le règlement.** Celui du site est présenté comme un **projet à valider**. Fais-le relire, puis retire la mention « à valider » dans `index.html`.
 
-Pense aussi à l'accord des personnes photographiées et à l'accord d'A.V.A. pour son logo.
+Pense aussi à l'accord d'A.V.A. pour son logo et sa présentation.
 
 ---
 
