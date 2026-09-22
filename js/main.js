@@ -596,7 +596,17 @@
       $("#asso-contact").hidden = false;
     }
     const site = /^https:\/\/\S+\.\S+$/.test(texte(a.site)) ? texte(a.site) : "";
-    if (site) { $("#asso-site").href = site; $("#asso-site-ligne").hidden = false; }
+    if (site) {
+      let hote = "";
+      try { hote = new URL(site).hostname.replace(/^www\./, ""); } catch (e) { hote = ""; }
+      const libelle = /facebook\.com$/.test(hote) ? "Voir la page Facebook de l'association"
+        : /instagram\.com$/.test(hote) ? "Voir l'Instagram de l'association"
+        : "Voir le site de l'association";
+      const lien = $("#asso-site");
+      lien.href = site;
+      lien.textContent = libelle;
+      $("#asso-site-ligne").hidden = false;
+    }
 
     const rotations = [-2, 1.5, -1.2, 2];
     const silhouette = '<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="38" r="18" fill="#16161b" opacity=".25"/><path d="M14 96 C 18 66, 34 58, 50 58 C 66 58, 82 66, 86 96 Z" fill="#16161b" opacity=".25"/></svg>';

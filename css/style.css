@@ -566,13 +566,13 @@ body.menu-ouvert { overflow: hidden; }
 /* ═════════════════ QUI SOMMES-NOUS ═════════════════ */
 .qui-grille { display: grid; gap: 2.5rem; }
 .asso { padding: 1.5rem 1.3rem; background: var(--blanc); border: var(--bord); border-radius: 5px; box-shadow: var(--ombre); }
-.asso-logo { display: grid; place-items: center; width: 5.5rem; height: 5.5rem; margin-bottom: 1rem; overflow: hidden; background: var(--papier); border: 2.5px solid var(--encre); border-radius: 10px; }
-.asso-logo img { width: 100%; height: 100%; object-fit: contain; padding: .35rem; }
+.asso-logo { display: grid; place-items: center; width: 7rem; height: 5.5rem; margin-bottom: 1rem; padding: .45rem; overflow: hidden; background: var(--papier); border: 2.5px solid var(--encre); border-radius: 10px; }
+.asso-logo img { max-width: 100%; max-height: 4.6rem; width: auto; height: auto; object-fit: contain; }
 .asso-logo-texte { padding: .3rem; text-align: center; font: 900 1rem/1 var(--police-titre); }
 .asso-nom { margin-bottom: .35rem; font: 900 clamp(1.8rem, 7vw, 2.4rem)/1 var(--police-titre); text-transform: uppercase; }
 .asso-sigle { margin-bottom: .75rem; font-style: italic; color: var(--encre-2); }
 .asso-contact { margin: 0 0 .5rem; font-weight: 700; }
-.asso-logo { width: 7rem; height: 6rem; }
+.asso-logo { width: 8rem; height: 6rem; }
 .asso-presentation p { line-height: 1.6; }
 .equipe { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 1rem; margin-top: 1.25rem; }
 .polaroid { position: relative; padding: .55rem .55rem .9rem; background: var(--blanc); border: 2.5px solid var(--encre); box-shadow: 4px 4px 0 var(--encre); transform: rotate(var(--rot, 0deg)); }
@@ -610,8 +610,8 @@ body.menu-ouvert { overflow: hidden; }
 .pied-nom { margin: 0; font: 900 clamp(1.8rem, 5.5vw, 2.3rem)/1 var(--police-titre); }
 .pied-texte { margin: 0; max-width: 38rem; color: rgba(241, 241, 245, .85); }
 .pied-logos { display: flex; flex-wrap: wrap; gap: 1rem; }
-.pied-logo { display: grid; place-items: center; width: 7.5rem; height: 4.5rem; overflow: hidden; background: var(--blanc); border-radius: 8px; }
-.pied-logo img { max-width: 100%; max-height: 100%; object-fit: contain; padding: .4rem; }
+.pied-logo { display: grid; place-items: center; width: 7.5rem; height: 5rem; padding: .5rem; overflow: hidden; background: var(--blanc); border-radius: 8px; }
+.pied-logo img { max-width: 100%; max-height: 4rem; width: auto; height: auto; object-fit: contain; }
 .pied-logo-texte { padding: .35rem; text-align: center; font: 900 .85rem/1.05 var(--police-titre); color: var(--encre); }
 .pied-liens { list-style: none; display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.5rem; }
 .pied-liens a { display: inline-flex; align-items: center; min-height: 2.8rem; padding: .45rem 1rem; border: 2px solid rgba(255, 255, 255, .6); border-radius: 999px; font-weight: 700; text-decoration: none; }

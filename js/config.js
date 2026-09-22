@@ -111,7 +111,7 @@ const CONFIG = {
      ══════════════════════════════════════════════════════════════════ */
 
   tombola: {
-    prixBillet: 1,        // prix d'un billet en €
+    prixBillet: 2,        // prix d'un billet en €
     billetsPapier: "Sur place, le jour de la collecte, à la table d'accueil",
     tirage: "À la fin de la journée, sur place",
     // statut : "recherche" (on cherche un partenaire) ou "confirme" (lot obtenu).
@@ -121,7 +121,6 @@ const CONFIG = {
       { nom: "Repas dans un restaurant d'Amiens", emoji: "🍽️", statut: "recherche", partenaire: "" },
       { nom: "Session de bowling",                emoji: "🎳", statut: "recherche", partenaire: "" },
       { nom: "Session de laser game",             emoji: "🎯", statut: "recherche", partenaire: "" },
-      { nom: "Escape game",                       emoji: "🔐", statut: "recherche", partenaire: "" },
     ],
     gagnants: [],         // APRÈS le tirage : numéros ou prénoms gagnants, dans l'ordre des lots
   },
@@ -143,9 +142,10 @@ const CONFIG = {
     nom: "A.V.A. – Amiens",
     nomComplet: "Accompagnement Vers l'Autonomie",
     logo: "img/logo-ava.png",   // logotype extrait du visuel de l'association
-    site: "",                   // site ou page de l'asso, avec https:// (facultatif)
-    // Numéros repris du visuel d'A.V.A. Laisse "" pour ne pas les afficher.
-    telephone: "07 49 05 15 41 / 07 69 30 06 57",
+    // page ou site de l'association (facultatif)
+    site: "https://www.facebook.com/share/1DtpLjAhYA/?mibextid=wwXIfr",
+    // Téléphone de l'association. Laisse "" pour ne rien afficher.
+    telephone: "",
     presentation: [
       "A.V.A. – Amiens, pour Accompagnement Vers l'Autonomie, est un espace de vie sociale. L'association accueille les habitants et les accompagne dans leur quotidien : cours de français, accompagnement scolaire, aide administrative, point relais CAF et conseiller numérique France Services.",
       "Elle propose aussi des ateliers toute l'année : cuisine, couture, tricot et crochet, coiffure et bien-être, activités créatives, sport et marche, et des temps consacrés à la parentalité.",
@@ -169,7 +169,7 @@ const CONFIG = {
     { nom: "Noha Bayonga",     role: "", photo: "" },
   ],
 
-  logoIUT: "",   // ex : "img/logo-iut.png" (vide = nom écrit à la place)
+  logoIUT: "img/logo-iut.png",   // vide = le nom est écrit à la place
 
   mentionsLegales: {
     responsable: "",   // prénom + nom d'une personne de l'équipe (obligatoire)
