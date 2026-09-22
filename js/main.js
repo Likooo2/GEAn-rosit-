@@ -778,7 +778,10 @@
             return;
           }
           if (/activ/i.test(msg)) {
-            merciQuiz(recap, "Vos réponses sont parties. <strong>Première réponse du site</strong> : un e-mail de confirmation vient d'arriver dans notre boîte, on clique dessus et tout est branché.");
+            // Le service attend encore la confirmation de notre adresse : côté
+            // visiteur, rien à signaler, ses réponses sont bien parties.
+            console.info("GEAnérosité : FormSubmit attend la confirmation de l'adresse (voir le mode d'emploi).");
+            merciQuiz(recap, "Vos réponses viennent d'arriver dans notre boîte. Ça nous aide vraiment.");
             return;
           }
           throw new Error(msg || "envoi refusé");
