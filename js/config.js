@@ -34,7 +34,6 @@ const CONFIG = {
   compteurs: {
     kg: 0,             // kg de vêtements déjà collectés  ← LE chiffre à mettre à jour
     objectifKg: 300,   // l'objectif de la journée, en kg (voir le repère plus bas)
-    donateurs: 0,      // nombre de personnes venues déposer des vêtements
     miseAJour: "",     // ex : "12h30" ou "lundi 9 novembre à 18h" (vide = ligne masquée)
   },
 
@@ -92,7 +91,6 @@ const CONFIG = {
       "Vêtements troués, tachés ou déchirés",
       "Linge humide ou non lavé",
       "Sous-vêtements usagés",
-      "Chaussures dépareillées ou abîmées",
     ],
     conseils: [
       "Rassemblez vos vêtements dans un sac fermé : c'est plus simple à peser et à transporter.",

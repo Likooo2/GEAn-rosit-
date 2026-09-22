@@ -16,12 +16,11 @@ Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change
 compteurs: {
   kg: 0,             // ← le poids collecté, en kg
   objectifKg: 300,
-  donateurs: 0,      // personnes venues déposer
   miseAJour: "",     // ex : "16h10"
 },
 ```
 
-Tu changes `kg`, et tout suit : le pourcentage, le carton qui se remplit, la jauge du tableau d'affichage, le message « encore X kg », l'estimation en nombre de vêtements et les compteurs.
+Tu changes `kg`, et tout suit : le grand chiffre, le pourcentage, le carton qui se remplit et la jauge du tableau d'affichage de l'accueil.
 
 Les décimales s'écrivent avec un point : `182.5` pour 182,5 kg.
 

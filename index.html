@@ -73,7 +73,6 @@
         <li><a href="#objectif">L'objectif</a></li>
         <li><a href="#infos">Infos pratiques</a></li>
         <li><a href="#vetements">Ce qu'on accepte</a></li>
-        <li><a href="#transparence">Où va tout ça</a></li>
         <li><a href="#faq">FAQ &amp; avis</a></li>
       </ul>
     </nav>
@@ -113,7 +112,7 @@
         </div>
         <p class="annotation annotation-cta">
           <svg class="fleche" aria-hidden="true" focusable="false"><use href="#fleche-courbe"></use></svg>
-          même un seul pull compte
+          on est là toute la journée
         </p>
       </div>
 
@@ -167,8 +166,6 @@
             <p class="compteur-montant" id="jauge-kg">0 kg</p>
             <p class="compteur-objectif">sur <span id="jauge-objectif">300 kg</span>, soit <strong id="jauge-pourcent">0 %</strong> de l'objectif</p>
           </div>
-          <p class="jauge-bilan" id="jauge-bilan"></p>
-          <p class="estimation-vetements" id="estimation-vetements"></p>
           <p class="maj" id="maj-compteurs" hidden>Dernière mise à jour : <span data-bind="compteurs.miseAJour"></span></p>
         </div>
 
@@ -185,9 +182,6 @@
         </div>
       </div>
 
-      <div class="compteurs-jour">
-        <div class="tableau-scores" id="tableau-scores"></div>
-      </div>
     </div>
   </section>
 
@@ -235,37 +229,10 @@
   </section>
 
 
-  <!-- ═══════════════ OÙ VA TOUT ÇA ═══════════════ -->
-  <section class="section section-transparence" id="transparence" aria-labelledby="titre-transparence">
-    <div class="conteneur">
-      <h2 class="titre-section" id="titre-transparence">Où va tout ça ?</h2>
-      <p class="intro">Un seul chemin, et il ne passe pas par nos poches : de votre placard aux familles accompagnées par l'association.</p>
-      <div class="flux">
-        <div class="voie">
-          <h3 class="voie-titre"><span aria-hidden="true">👕</span> Le parcours d'un sac</h3>
-          <ol class="schema">
-            <li class="bulle">Vous, à l'IUT, le <span class="quand-jour">mercredi 11 novembre</span></li>
-            <li class="bulle">Pesé, trié et rangé par l'équipe</li>
-            <li class="bulle bulle-asso" data-bind="association.nom">A.V.A. – Amiens</li>
-            <li class="bulle bulle-fin">Donné gratuitement aux familles accompagnées</li>
-          </ol>
-        </div>
-      </div>
-      <h3 class="sous-titre">Nos engagements</h3>
-      <ul class="engagements">
-        <li><strong>On ne garde rien.</strong> Ni vêtement, ni argent : l'équipe ne fait que peser, trier et transporter.</li>
-        <li><strong>Aucun euro ne circule.</strong> La collecte est entièrement gratuite : on ne vend rien, on ne récolte pas d'argent.</li>
-        <li><strong>Le poids est pesé devant vous.</strong> Le compteur de la salle et celui du site affichent le même chiffre.</li>
-        <li><strong>Rien n'est jeté en secret.</strong> Ce qu'on ne peut pas donner, on vous le dit sur place, et vous repartez avec.</li>
-      </ul>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════ QUI SOMMES-NOUS ═══════════════ -->
+  <!-- ═══════════════ L'ASSOCIATION ═══════════════ -->
   <section class="section section-qui" id="qui" aria-labelledby="titre-qui">
     <div class="conteneur">
-      <h2 class="titre-section" id="titre-qui">Qui sommes-nous ?</h2>
+      <h2 class="titre-section" id="titre-qui">L'association en quelques mots</h2>
       <div class="qui-grille">
         <article class="asso" aria-labelledby="titre-asso">
           <div class="asso-logo" id="asso-logo"></div>
@@ -313,7 +280,7 @@
         </details>
         <details>
           <summary>Où vont exactement les vêtements ?</summary>
-          <div class="faq-reponse"><p>À <span data-bind="association.nom">A.V.A. – Amiens</span>, à qui nous remettons tout juste après la collecte. L'association les donne gratuitement aux personnes qu'elle accompagne. Le détail est dans la partie <a href="#transparence">Où va tout ça ?</a></p></div>
+          <div class="faq-reponse"><p>À <span data-bind="association.nom">A.V.A. – Amiens</span>, à qui nous remettons tout juste après la collecte. L'association les donne gratuitement aux familles qu'elle accompagne, sans que rien ne passe par nous.</p></div>
         </details>
         <details>
           <summary>Comment vous contacter ?</summary>

@@ -448,39 +448,8 @@
     if (mouvementReduit) placer();
     else quandVisible($(".carton-interieur"), () => requestAnimationFrame(placer), 0.25);
 
-    const bilan = $("#jauge-bilan");
-    if (kg >= objectifKg) {
-      bilan.innerHTML = "<strong>Objectif atteint !</strong> Merci : chaque sac déposé en plus part aussi à l'association.";
-    } else if (kg <= 0) {
-      bilan.innerHTML = `<strong>Le carton est encore vide.</strong> Le premier sac peut être le vôtre : il reste ${poids(objectifKg)} à collecter.`;
-    } else {
-      bilan.innerHTML = `<strong>Plus que ${poids(objectifKg - kg)}</strong> pour atteindre l'objectif de la journée.`;
-    }
-
-    $("#estimation-vetements").innerHTML = kg > 0
-      ? `Soit environ <strong>${entier(kg / kgParVetement)} vêtements</strong> prêts à être redonnés.`
-      : `L'objectif représente environ <strong>${entier(objectifKg / kgParVetement)} vêtements</strong>, ou ${entier(objectifKg / 5)} sacs bien remplis.`;
-
     $("#maj-compteurs").hidden = !texte(K.miseAJour);
   }
-
-  function rendreCompteurs() {
-    const items = [
-      { emoji: "👕", label: "Vêtements collectés", valeur: kg, unite: "kg", uniteLongue: "kilos de vêtements", principal: true },
-      { emoji: "🙌", label: "Personnes venues déposer", valeur: nombre(K.donateurs) || 0, unite: "", uniteLongue: (nombre(K.donateurs) || 0) > 1 ? "personnes" : "personne" },
-    ];
-    $("#tableau-scores").innerHTML = items.map((it) => `
-      <div class="score${it.principal ? " score-principal" : ""}">
-        <p class="score-label"><span aria-hidden="true">${it.emoji}</span> ${esc(it.label)}</p>
-        <p class="score-valeur">
-          <span class="score-led" data-valeur="${it.valeur}" aria-hidden="true"></span>
-          ${it.unite ? `<span class="score-unite" aria-hidden="true">${esc(it.unite)}</span>` : ""}
-          <span class="sr-only">${esc(entier(it.valeur))} ${esc(it.uniteLongue)}</span>
-        </p>
-      </div>`).join("");
-    $$("#tableau-scores .score-led").forEach((el) => ledNombre(el, el.dataset.valeur));
-  }
-
 
   /* ───────────────────── Infos pratiques et vêtements ───────────────────── */
 
@@ -881,7 +850,6 @@
   lancer("liens", () => appliquerLiens(document));
   lancer("tableau d'affichage", rendreLedKilos);
   lancer("objectif et carton", rendreObjectif);
-  lancer("compteurs", rendreCompteurs);
   lancer("infos pratiques", rendreInfos);
   lancer("association et équipe", rendreQui);
   lancer("agenda", initAgenda);

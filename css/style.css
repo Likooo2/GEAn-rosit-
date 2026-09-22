@@ -379,49 +379,11 @@ body.menu-ouvert { overflow: hidden; }
 }
 .resultat-titre { margin-bottom: .35rem; font: 800 1.3rem/1 var(--police-titre); text-transform: uppercase; }
 
-/* ═════════════════ LE TABLEAU DES SCORES ═════════════════ */
-.tableau-scores {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px;
-  background: #2a2a33; border: 4px solid var(--encre); border-radius: 14px; overflow: hidden;
-  box-shadow: 8px 8px 0 rgba(22, 22, 27, .22);
-}
-.score {
-  display: flex; flex-direction: column; justify-content: space-between; gap: .7rem;
-  min-height: 7.5rem; padding: .85rem .8rem 1rem;
-  background-color: #000;
-  background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1.4px);
-  background-size: 6px 6px;
-}
-.score-principal { grid-column: 1 / -1; }
-.score-label { display: flex; align-items: center; gap: .4rem; margin: 0; font-size: .92rem; font-weight: 700; color: #f2f2f6; }
-.score-valeur { display: flex; align-items: flex-end; gap: .45rem; margin: 0; }
-.score-led { --chiffre: 1.45rem; display: flex; gap: .22rem; }
-.score-principal .score-led { --chiffre: 2.4rem; }
-.score-unite { font: 800 1.35rem/1.2 var(--police-titre); color: var(--led); }
-.score-principal .score-unite { font-size: 2rem; }
-@media (max-width: 47.99rem) {
-  .tableau-scores .score:last-child:nth-child(4) { grid-column: 1 / -1; }
-}
-@media (min-width: 48rem) {
-  .tableau-scores { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .score-principal { grid-column: span 3; }
-}
-@media (min-width: 72rem) {
-  .tableau-scores { grid-template-columns: 1.4fr repeat(5, minmax(0, 1fr)); }
-  .score-principal { grid-column: auto; }
-  .score-principal .score-led { --chiffre: 2.1rem; }
-}
-
 /* ═════════════════ LA CAGNOTTE : LA PISTE VERS L'ARRIVÉE ═════════════════ */
 .compteur { margin: .25rem 0 0; }
 .compteur-montant { margin: 0; font: 900 clamp(3.6rem, 17vw, 6rem)/.88 var(--police-titre); }
 .compteur-objectif { margin: .4rem 0 0; font-size: 1.1rem; }
 .compteur-objectif strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
-.jauge-bilan {
-  margin: 1.2rem 0 1.75rem; padding: .85rem 1rem; max-width: 40rem;
-  background: var(--blanc); border: 2.5px solid var(--encre); border-radius: var(--coins); box-shadow: 3px 3px 0 var(--encre);
-}
-.jauge-bilan strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
 
 /* ═════════════════ COMMENT PARTICIPER (des post-it) ═════════════════ */
 .todo { list-style: none; display: grid; gap: 1.75rem; }
@@ -496,35 +458,6 @@ body.menu-ouvert { overflow: hidden; }
   .cartons { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; }
   .collecte-bas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem; }
 }
-
-/* ═════════════════ TRANSPARENCE ═════════════════ */
-.flux { display: grid; gap: 2.5rem; margin-bottom: 1rem; }
-.voie-titre { display: flex; align-items: center; gap: .5rem; margin-bottom: 1.1rem; font: 800 1.5rem/1 var(--police-titre); text-transform: uppercase; }
-.schema { list-style: none; display: grid; justify-items: start; }
-.bulle {
-  position: relative; max-width: 22rem; margin-bottom: 3.2rem; padding: .75rem 1.1rem;
-  background: var(--blanc); border: var(--bord);
-  border-radius: 255px 14px 225px 14px / 14px 225px 14px 255px;
-  box-shadow: 3px 3px 0 var(--encre);
-  font: 800 1.3rem/1.15 var(--police-titre); text-transform: uppercase;
-}
-.bulle:last-child { margin-bottom: 0; }
-.bulle:not(:last-child)::after {
-  content: ""; position: absolute; left: 1.8rem; top: calc(100% + .3rem); width: 1.7rem; height: 2.5rem;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 64'><path d='M22 3 C 12 18 30 32 20 54' fill='none' stroke='%2316161b' stroke-width='5' stroke-linecap='round'/><path d='M9 43 L20 58 L31 44' fill='none' stroke='%2316161b' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat center / contain;
-}
-.schema li:nth-child(2) { margin-left: 1.4rem; }
-.schema li:nth-child(3) { margin-left: .5rem; }
-.schema li:nth-child(4) { margin-left: 1.8rem; }
-.bulle-asso { background: var(--fluo); }
-.bulle-fin { background: var(--rose); }
-.engagements { list-style: none; display: grid; gap: .9rem; max-width: 46rem; }
-.engagements li { position: relative; padding-left: 2.2rem; line-height: 1.5; }
-.engagements li::before {
-  content: ""; position: absolute; left: .35rem; top: .3em; width: .6rem; height: 1.05rem;
-  border: solid var(--vert-vif); border-width: 0 4px 4px 0; transform: rotate(40deg);
-}
-@media (min-width: 52rem) { .flux { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; } }
 
 /* ═════════════════ QUI SOMMES-NOUS ═════════════════ */
 .qui-grille { display: grid; gap: 2.5rem; }
@@ -672,9 +605,6 @@ body.modale-ouverte { overflow: hidden; }
 
 /* ═════════════════ L'OBJECTIF : LE CARTON QUI SE REMPLIT ═════════════════ */
 .objectif-grille { display: grid; gap: 2.5rem; align-items: start; }
-.estimation-vetements { max-width: 34rem; font-weight: 700; }
-.estimation-vetements strong { background: linear-gradient(transparent 55%, var(--fluo) 55%); }
-.compteurs-jour { margin-top: 2.5rem; }
 
 .carton-jauge { justify-self: center; width: 100%; max-width: 21rem; }
 .annotation-carton { margin: 0 0 .5rem; transform: rotate(-2deg); text-align: center; }
