@@ -65,7 +65,7 @@ Mieux vaut un objectif dépassé qu'une jauge bloquée à 40 % toute la journée
 
 ```js
 tombola: {
-  prixBillet: 1,
+  prixBillet: 2,
   billetsPapier: "Billets papier à la table d'accueil, toute la journée",
   tirage: "À la fin de la journée, sur place",
   lots: [ … ],
@@ -73,7 +73,9 @@ tombola: {
 },
 ```
 
-Les six lots sont affichés « en cours de recherche ». Quand un commerce accepte, passe son `statut` de `"recherche"` à `"confirme"` et écris son nom dans `partenaire` : le site affiche « Offert par … ».
+Les cinq lots sont affichés « en cours de recherche ». Quand un commerce accepte, passe son `statut` de `"recherche"` à `"confirme"` et écris son nom dans `partenaire` : le site affiche « Offert par … ».
+
+**Vendre aussi en ligne** (facultatif) : demande à A.V.A. de créer une billetterie sur son compte **HelloAsso** (gratuit, sans commission pour l'association), puis colle l'adresse dans `liens.tombola`. Un bouton « Prendre un billet en ligne » apparaît alors tout seul, et HelloAsso enregistre les coordonnées des acheteurs, ce qui simplifie le tirage. Sans ce lien, le site explique simplement que tout se passe sur place.
 
 Après le tirage, remplis `gagnants` dans l'ordre des lots, par exemple `["Camille B.", "Hugo"]`.
 
@@ -85,7 +87,7 @@ Après le tirage, remplis `gagnants` dans l'ordre des lots, par exemple `["Camil
 - [ ] La **salle** exacte : `collecte.salle`, par exemple `"Hall du bâtiment A"`.
 - [ ] Le **responsable de la publication** : `mentionsLegales.responsable` (obligatoire dans les mentions légales).
 - [ ] Les **lots confirmés**, au fil des réponses des commerces.
-- [ ] Facultatif : les **rôles** de chacun dans `equipe`, le **logo de l'IUT** (`logoIUT`), la relecture de la présentation d'A.V.A. par l'association.
+- [ ] Facultatif : la **billetterie en ligne** (`liens.tombola`), les **rôles** de chacun dans `equipe`, la relecture de la présentation d'A.V.A. par l'association.
 
 ---
 
