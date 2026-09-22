@@ -178,7 +178,7 @@ const CONFIG = {
   logoIUT: "img/logo-iut.png",   // vide = le nom est écrit à la place
 
   mentionsLegales: {
-    responsable: "",   // prénom + nom d'une personne de l'équipe (obligatoire)
+    responsable: "Julien Pires",   // prénom + nom d'une personne de l'équipe (obligatoire)
     hebergeur: "GitHub Pages, service de GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis",
   },
 };

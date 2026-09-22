@@ -799,3 +799,6 @@ textarea.quiz-champ { min-height: 6rem; resize: vertical; line-height: 1.7; }
 .quiz-question fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
 .quiz-merci details { margin-top: .5rem; }
 .quiz-merci summary { cursor: pointer; font-weight: 700; color: var(--stylo); }
+.modale-contenu ul { display: grid; gap: .5rem; margin: .6rem 0 1rem; padding-left: 1.1rem; list-style: disc; }
+.modale-contenu li { color: var(--encre-2); }
+.modale-contenu li strong { color: var(--encre); }
