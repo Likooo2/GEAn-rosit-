@@ -35,9 +35,7 @@ const CONFIG = {
     kg: 0,             // kg de vêtements déjà collectés  ← LE chiffre à mettre à jour
     objectifKg: 300,   // l'objectif de la journée, en kg (voir le repère plus bas)
     donateurs: 0,      // nombre de personnes venues déposer des vêtements
-    billets: 0,        // billets de tombola vendus
-    cagnotte: 0,       // € récoltés (tombola + dons en ligne)
-    miseAJour: "",     // ex : "12h30" ou "lundi 16 novembre à 18h" (vide = ligne masquée)
+    miseAJour: "",     // ex : "12h30" ou "lundi 9 novembre à 18h" (vide = ligne masquée)
   },
 
   /* 📏 REPÈRE POUR L'OBJECTIF
@@ -59,9 +57,7 @@ const CONFIG = {
   liens: {
     instagram: "",   // 📸 page Instagram du projet
     facebook: "",    // 👍 page Facebook du projet
-    email: "",       // ✉️ adresse de contact (sans « mailto: »)
-    tombola: "",     // 🎟️ facultatif : billets de tombola en ligne (HelloAsso)
-    cagnotte: "",    // 💰 facultatif : dons en ligne (HelloAsso)
+    email: "geanerosite@gmail.com",   // ✉️ adresse de contact (sans « mailto: »)
   },
 
 
@@ -107,31 +103,48 @@ const CONFIG = {
 
 
   /* ══════════════════════════════════════════════════════════════════
-     PARTIE 4 — LA TOMBOLA
+     PARTIE 4 — LE QUIZ D'AVIS (affiché à côté de la FAQ)
+     Les réponses partent par e-mail à l'adresse « destinataire ».
      ══════════════════════════════════════════════════════════════════ */
 
-  tombola: {
-    prixBillet: 2,        // prix d'un billet en €
-    billetsPapier: "Sur place, le jour de la collecte, à la table d'accueil",
-    tirage: "À la fin de la journée, sur place",
-    // statut : "recherche" (on cherche un partenaire) ou "confirme" (lot obtenu).
-    lots: [
-      { nom: "Carte cadeau Amazon",               emoji: "🎁", statut: "recherche", partenaire: "" },
-      { nom: "Places de cinéma",                  emoji: "🎬", statut: "recherche", partenaire: "" },
-      { nom: "Repas dans un restaurant d'Amiens", emoji: "🍽️", statut: "recherche", partenaire: "" },
-      { nom: "Session de bowling",                emoji: "🎳", statut: "recherche", partenaire: "" },
-      { nom: "Session de laser game",             emoji: "🎯", statut: "recherche", partenaire: "" },
-    ],
-    gagnants: [],         // APRÈS le tirage : numéros ou prénoms gagnants, dans l'ordre des lots
-  },
+  quiz: {
+    actif: true,                              // false = le quiz disparaît du site
+    destinataire: "geanerosite@gmail.com",    // où arrivent les réponses
 
-  // 🎯 CE QUE L'ARGENT DE LA TOMBOLA FINANCE : les projets de l'association.
-  // ⚠️ Exemples à valider avec A.V.A. avant de les annoncer.
-  projetsFinances: [
-    { emoji: "🚌", texte: "Des sorties pour les enfants et les familles accompagnées" },
-    { emoji: "🌊", texte: "Un voyage, par exemple à la mer" },
-    { emoji: "🎨", texte: "Du matériel pour les ateliers de l'association" },
-  ],
+    /* Deux façons d'envoyer :
+       "formsubmit" → envoi direct depuis le site, sans rien installer.
+                      ⚠️ À la PREMIÈRE réponse, FormSubmit envoie un e-mail
+                      d'activation à l'adresse ci-dessus : il faut cliquer une
+                      fois sur son lien, et ensuite tout arrive automatiquement.
+       "mail"       → ouvre la messagerie du visiteur avec les réponses déjà
+                      écrites ; il n'a plus qu'à appuyer sur Envoyer.
+       En cas de souci d'envoi, le site propose toujours la solution « mail ». */
+    service: "formsubmit",
+
+    /* Les questions. Trois types possibles :
+         "choix"   → une seule réponse parmi les options
+         "echelle" → une note de min à max
+         "texte"   → réponse libre     "email" → adresse (facultative)
+       Ajoute « facultatif: true » pour ne pas rendre la question obligatoire. */
+    questions: [
+      { id: "profil", type: "choix", texte: "Vous êtes…",
+        options: ["Étudiant à l'IUT", "Enseignant ou personnel", "Autre"] },
+      { id: "avant", type: "choix", texte: "Avant ce site, saviez-vous quoi faire des vêtements que vous ne mettez plus ?",
+        options: ["Oui, je sais où les donner", "Vaguement", "Non, ils restent dans le placard"] },
+      { id: "venir", type: "choix", texte: "Après avoir lu la page, pensez-vous passer déposer un sac le 11 novembre ?",
+        options: ["Oui, c'est noté", "Peut-être, si je passe par là", "Non"] },
+      { id: "important", type: "choix", texte: "Qu'est-ce qui compte le plus pour vous là-dedans ?",
+        options: ["Que les vêtements restent à Amiens", "Que ça ne prenne que deux minutes", "Que ce soit une association qui reçoive", "Que ce soit monté par des étudiants"] },
+      { id: "frein", type: "choix", texte: "Qu'est-ce qui risquerait de vous empêcher de venir ?",
+        options: ["Les horaires", "Je n'ai rien à donner", "Je vais oublier", "Rien, je viendrai"] },
+      { id: "utile", type: "echelle", texte: "Sur 5, ce projet vous paraît…",
+        min: 1, max: 5, legendeMin: "pas très utile", legendeMax: "vraiment utile" },
+      { id: "clair", type: "echelle", texte: "Et ce site, sur 5, il est…",
+        min: 1, max: 5, legendeMin: "confus", legendeMax: "très clair" },
+      { id: "remarque", type: "texte", texte: "Une idée, une remarque, un truc qui manque ?", facultatif: true },
+      { id: "contact", type: "email", texte: "Votre e-mail, si vous voulez qu'on vous réponde", facultatif: true },
+    ],
+  },
 
 
   /* ══════════════════════════════════════════════════════════════════
@@ -149,15 +162,8 @@ const CONFIG = {
     presentation: [
       "A.V.A. – Amiens, pour Accompagnement Vers l'Autonomie, est un espace de vie sociale. L'association accueille les habitants et les accompagne dans leur quotidien : cours de français, accompagnement scolaire, aide administrative, point relais CAF et conseiller numérique France Services.",
       "Elle propose aussi des ateliers toute l'année : cuisine, couture, tricot et crochet, coiffure et bien-être, activités créatives, sport et marche, et des temps consacrés à la parentalité.",
-      "Les vêtements collectés lui sont remis pour être donnés gratuitement. L'argent de la tombola finance ses projets : sorties, voyages et activités.",
+      "Les vêtements que nous collectons lui sont remis pour être donnés gratuitement aux familles qu'elle accompagne.",
     ],
-  },
-
-  transparence: {
-    // Qui encaisse l'argent ? (vide = « modalités précisées prochainement »)
-    encaissement: "Les paiements en ligne arrivent directement sur le compte HelloAsso de l'association : l'argent ne passe jamais par nous.",
-    // Et l'argent des billets papier vendus sur place ?
-    especes: "L'argent des billets papier est compté à deux, noté au fur et à mesure, puis remis à l'association avec les vêtements.",
   },
 
   // 👥 L'ÉQUIPE. role : facultatif (la ligne est masquée si c'est vide).

@@ -169,7 +169,7 @@
   /* ───────────────────── Les liens (jamais de faux lien) ───────────────────── */
 
   const NOMS_LIENS = {
-    tombola: "les billets en ligne", cagnotte: "les dons en ligne", instagram: "Instagram",
+    instagram: "Instagram", facebook: "Facebook",
     email: "l'adresse e-mail", facebook: "Facebook",
   };
   function urlValide(cle) {
@@ -235,14 +235,11 @@
     });
     $$(".quand-ouverture").forEach((el) => { el.textContent = ouvertureTexte(); });
     $$(".quand-fermeture").forEach((el) => { el.textContent = fermetureTexte(); });
-    const prix = nombre((C.tombola || {}).prixBillet);
-    $$(".prix-billet").forEach((el) => { el.textContent = prix !== null ? euros(prix) : "1 €"; });
     const quand = debut
       ? `${majuscule(formaterDate(debut, "jourCourt"))}, de ${ouvertureTexte()} à ${fermetureTexte()}`
       : `De ${ouvertureTexte()} à ${fermetureTexte()}`;
     $("#hero-quand").textContent = quand;
     $("#hero-objectif").textContent = poids(objectifKg);
-    $("#hero-prix").textContent = prix !== null ? euros(prix) : "1 €";
   }
 
 
@@ -468,12 +465,9 @@
   }
 
   function rendreCompteurs() {
-    const prix = nombre((C.tombola || {}).prixBillet);
     const items = [
       { emoji: "👕", label: "Vêtements collectés", valeur: kg, unite: "kg", uniteLongue: "kilos de vêtements", principal: true },
       { emoji: "🙌", label: "Personnes venues déposer", valeur: nombre(K.donateurs) || 0, unite: "", uniteLongue: (nombre(K.donateurs) || 0) > 1 ? "personnes" : "personne" },
-      { emoji: "🎟️", label: "Billets de tombola vendus", valeur: nombre(K.billets) || 0, unite: "", uniteLongue: (nombre(K.billets) || 0) > 1 ? "billets" : "billet" },
-      { emoji: "💰", label: "Récolté pour l'association", valeur: nombre(K.cagnotte) || 0, unite: "€", uniteLongue: "euros" },
     ];
     $("#tableau-scores").innerHTML = items.map((it) => `
       <div class="score${it.principal ? " score-principal" : ""}">
@@ -485,9 +479,6 @@
         </p>
       </div>`).join("");
     $$("#tableau-scores .score-led").forEach((el) => ledNombre(el, el.dataset.valeur));
-    if (prix !== null && (nombre(K.billets) || 0) > 0) {
-      // rien de plus : le montant récolté reste saisi à la main
-    }
   }
 
 
@@ -519,65 +510,7 @@
   }
 
 
-  /* ───────────────────── La tombola ───────────────────── */
-
-  function rendreTombola() {
-    const B = C.tombola || {};
-    const prix = nombre(B.prixBillet);
-    $("#ticket-prix").innerHTML = prix !== null ? `${esc(euros(prix))} le billet` : `Prix du billet : ${aConfirmer("à confirmer")}`;
-    $("#ticket-papier").innerHTML = texte(B.billetsPapier)
-      ? `<span aria-hidden="true">🎫</span> ${esc(B.billetsPapier)}`
-      : `<span aria-hidden="true">🎫</span> Billets papier sur place, le jour de la collecte`;
-    $("#ticket-tirage").innerHTML = texte(B.tirage) ? `Tirage : ${esc(B.tirage)}` : `Date du tirage : ${aConfirmer("à confirmer")}`;
-    $("#reglement-tirage").textContent = texte(B.tirage) || "à la date annoncée sur ce site";
-
-    const action = $("#tombola-action");
-    if (urlValide("tombola")) {
-      action.innerHTML = `<a class="bouton bouton-blanc" data-lien="tombola">🎟️ Prendre un billet en ligne</a>
-        <p class="destination destination-claire" data-destination="tombola"></p>`;
-      appliquerLiens(action);
-    } else {
-      action.innerHTML = `<p class="ticket-note">Les billets se prennent sur place, en espèces, à la table d'accueil. Un lien en ligne sera ajouté ici s'il y en a un.</p>`;
-    }
-
-    const lots = Array.isArray(B.lots) ? B.lots : [];
-    const gagnants = Array.isArray(B.gagnants) ? B.gagnants : [];
-    const tousConfirmes = lots.length > 0 && lots.every((l) => texte(l.statut) === "confirme");
-    $("#titre-lots").textContent = tousConfirmes ? "Les lots à gagner" : "Exemples de lots recherchés";
-    $("#avertissement-lots").hidden = tousConfirmes;
-    $("#lots").innerHTML = lots.map((lot, i) => {
-      const confirme = texte(lot.statut) === "confirme";
-      const numero = texte(gagnants[i]);
-      return `<li class="lot">
-          <span class="lot-emoji" aria-hidden="true">${esc(lot.emoji || "🎁")}</span>
-          <p class="lot-nom">${esc(lot.nom)}</p>
-          <span class="lot-statut ${confirme ? "statut-confirme" : "statut-recherche"}">${confirme ? "Confirmé" : "En recherche"}</span>
-          ${confirme && texte(lot.partenaire) ? `<p class="lot-partenaire">Offert par ${esc(lot.partenaire)}</p>` : ""}
-          ${numero ? `<p class="lot-gagnant">Gagnant : ${esc(numero)}</p>` : ""}
-        </li>`;
-    }).join("");
-    const resultat = $("#tombola-resultat");
-    if (gagnants.some((g) => texte(g))) {
-      resultat.innerHTML = '<p class="resultat-titre">Le tirage a eu lieu</p><p>Les gagnants sont indiqués sous chaque lot. Nous contactons chaque personne avec les coordonnées laissées à l\'achat.</p>';
-      resultat.hidden = false;
-    } else {
-      resultat.hidden = true;
-    }
-    $("#note-especes").innerHTML = texte((C.transparence || {}).especes)
-      ? esc((C.transparence || {}).especes)
-      : `Le détail est ${aConfirmer("à préciser")}.`;
-  }
-
-
-  /* ───────────────────── Transparence, association, équipe ───────────────────── */
-
-  function rendreTransparence() {
-    const t = C.transparence || {};
-    $("#encaissement").innerHTML = texte(t.encaissement) ? esc(t.encaissement) : `Modalités ${aConfirmer("à préciser")}.`;
-    $("#especes").innerHTML = texte(t.especes) ? esc(t.especes) : `Modalités ${aConfirmer("à préciser")}.`;
-    $("#projets-liste").innerHTML = (Array.isArray(C.projetsFinances) ? C.projetsFinances : [])
-      .map((pr) => `<li><span class="projet-emoji" aria-hidden="true">${esc(pr.emoji || "▶")}</span><span>${esc(pr.texte)}</span></li>`).join("");
-  }
+  /* ───────────────────── Association et équipe ───────────────────── */
 
   function rendreQui() {
     const a = C.association || {};
@@ -670,6 +603,199 @@
   }
 
 
+  /* ───────────────────── Le quiz d'avis ─────────────────────
+     Les questions viennent de js/config.js (partie 4).
+     Envoi : FormSubmit si « service » vaut "formsubmit", sinon la messagerie
+     du visiteur. En cas d'échec, le site propose toujours la messagerie. */
+
+  const Q = C.quiz || {};
+  const MOTIF_MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  function questionsQuiz() {
+    return (Array.isArray(Q.questions) ? Q.questions : []).filter((q) => texte(q.texte));
+  }
+  function idQuestion(q, i) {
+    return "quiz-" + (texte(q.id) || "q" + (i + 1)).replace(/[^a-zA-Z0-9_-]/g, "");
+  }
+  function destinataireQuiz() {
+    const d = texte(Q.destinataire) || texte(L.email);
+    return MOTIF_MAIL.test(d) ? d : "";
+  }
+
+  function champQuiz(q, i) {
+    const id = idQuestion(q, i);
+    const type = texte(q.type) || "choix";
+    const facultatif = !!q.facultatif;
+    const libelle = `<span class="quiz-numero" aria-hidden="true">${i + 1}</span>${esc(q.texte)}` +
+      (facultatif ? ' <span class="quiz-facultatif">facultatif</span>' : "");
+
+    if (type === "choix" || type === "echelle") {
+      let options = [];
+      let classe = "";
+      let legendes = "";
+      if (type === "echelle") {
+        const min = nombre(q.min) !== null ? Math.round(Number(q.min)) : 1;
+        const max = nombre(q.max) !== null ? Math.round(Number(q.max)) : 5;
+        for (let v = min; v <= Math.max(min, max); v++) options.push(String(v));
+        classe = " quiz-echelle";
+        legendes = `<p class="quiz-legendes"><span>${esc(q.legendeMin || "")}</span><span>${esc(q.legendeMax || "")}</span></p>`;
+      } else {
+        options = (Array.isArray(q.options) ? q.options : []).map(texte).filter(Boolean);
+      }
+      const choix = options.map((o) => `<label class="quiz-option">
+              <input type="radio" name="${esc(id)}" value="${esc(o)}">
+              <span>${esc(o)}</span>
+            </label>`).join("");
+      return `<li class="quiz-question">
+          <fieldset>
+            <legend class="quiz-libelle">${libelle}</legend>
+            <div class="quiz-options${classe}" id="${esc(id)}">${choix}</div>
+            ${legendes}
+          </fieldset>
+        </li>`;
+    }
+    if (type === "email") {
+      return `<li class="quiz-question">
+          <label class="quiz-libelle" for="${esc(id)}">${libelle}</label>
+          <input class="quiz-champ" type="email" id="${esc(id)}" name="${esc(id)}" autocomplete="email" inputmode="email" placeholder="prenom@exemple.fr">
+        </li>`;
+    }
+    return `<li class="quiz-question">
+        <label class="quiz-libelle" for="${esc(id)}">${libelle}</label>
+        <textarea class="quiz-champ" id="${esc(id)}" name="${esc(id)}" rows="3" placeholder="Dites-nous tout, même si ça pique un peu."></textarea>
+      </li>`;
+  }
+
+  function lireQuiz() {
+    const valeurs = [];
+    const problemes = [];
+    questionsQuiz().forEach((q, i) => {
+      const id = idQuestion(q, i);
+      const type = texte(q.type) || "choix";
+      let valeur = "";
+      if (type === "choix" || type === "echelle") {
+        const coche = document.querySelector(`input[name="${id}"]:checked`);
+        valeur = coche ? coche.value : "";
+      } else {
+        const champ = document.getElementById(id);
+        valeur = champ ? texte(champ.value) : "";
+      }
+      if (!valeur && !q.facultatif) problemes.push({ id, texte: "Il manque la réponse à « " + texte(q.texte) + " »." });
+      else if (type === "email" && valeur && !MOTIF_MAIL.test(valeur)) problemes.push({ id, texte: "L'adresse e-mail ne semble pas valide." });
+      valeurs.push({ question: texte(q.texte), reponse: valeur });
+    });
+    return { valeurs, problemes };
+  }
+
+  function recapQuiz(valeurs) {
+    const lignes = valeurs.filter((v) => v.reponse).map((v) => v.question + "\n→ " + v.reponse);
+    return "Avis sur le projet GEAnérosité\n\n" + lignes.join("\n\n");
+  }
+  function lienMailQuiz(recap) {
+    const dest = destinataireQuiz();
+    if (!dest) return "";
+    return "mailto:" + dest + "?subject=" + encodeURIComponent("Avis sur GEAnérosité") + "&body=" + encodeURIComponent(recap);
+  }
+
+  function merciQuiz(recap, message) {
+    const form = $("#quiz-form");
+    const merci = $("#quiz-merci");
+    if (!form || !merci) return;
+    form.hidden = true;
+    merci.hidden = false;
+    merci.innerHTML = `<p class="quiz-merci-tampon">Envoyé</p>
+      <p class="quiz-merci-titre">Merci beaucoup !</p>
+      <p>${message}</p>
+      <details><summary>Revoir mes réponses</summary><p class="quiz-recap">${esc(recap)}</p></details>`;
+    merci.setAttribute("tabindex", "-1");
+    merci.focus({ preventScroll: true });
+  }
+
+  function rendreQuiz() {
+    const bloc = $(".quiz");
+    if (!bloc) return;
+    const questions = questionsQuiz();
+    if (Q.actif === false || !questions.length) { bloc.hidden = true; return; }
+    bloc.hidden = false;
+    $("#quiz-questions").innerHTML = questions.map(champQuiz).join("");
+
+    const dest = destinataireQuiz();
+    const mention = $("#quiz-mention");
+    mention.innerHTML = dest
+      ? `Vos réponses nous arrivent par e-mail, à <strong>${esc(dest)}</strong>. Rien n'est enregistré sur ce site, et votre adresse n'est demandée que si vous voulez une réponse.`
+      : `L'adresse de réception n'est pas encore renseignée : le quiz ouvrira votre messagerie avec les réponses déjà écrites.`;
+
+    const form = $("#quiz-form");
+    const erreur = $("#quiz-erreur");
+    const etat = $("#quiz-etat");
+    const bouton = $("#quiz-envoyer");
+
+    // on efface le message d'erreur dès que le visiteur corrige
+    form.addEventListener("change", () => { erreur.hidden = true; });
+
+    form.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const { valeurs, problemes } = lireQuiz();
+      if (problemes.length) {
+        erreur.textContent = problemes[0].texte;
+        erreur.hidden = false;
+        const cible = document.getElementById(problemes[0].id);
+        const focusable = cible && (cible.matches("input, textarea") ? cible : $("input, textarea", cible));
+        if (focusable) focusable.focus();
+        else if (cible) cible.scrollIntoView({ block: "center" });
+        return;
+      }
+      const recap = recapQuiz(valeurs);
+      const lien = lienMailQuiz(recap);
+      const parMessagerie = texte(Q.service).toLowerCase() !== "formsubmit" || !dest;
+
+      if (parMessagerie) {
+        if (lien) window.location.href = lien;
+        merciQuiz(recap, lien
+          ? "Votre messagerie s'est ouverte avec les réponses : il ne reste plus qu'à appuyer sur <strong>Envoyer</strong>."
+          : "Copiez vos réponses ci-dessous et envoyez-les nous, l'adresse arrive bientôt sur le site.");
+        return;
+      }
+
+      const champs = { _subject: "Quiz GEAnérosité — nouvelle réponse", _template: "table", _captcha: "false" };
+      valeurs.forEach((v, k) => { champs[(k + 1) + ". " + v.question] = v.reponse || "—"; });
+
+      bouton.disabled = true;
+      etat.textContent = "Envoi en cours…";
+      erreur.hidden = true;
+
+      fetch("https://formsubmit.co/ajax/" + encodeURIComponent(dest), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(champs),
+      })
+        .then((r) => r.json().catch(() => ({ success: r.ok ? "true" : "false" })))
+        .then((data) => {
+          const ok = String(data && data.success) === "true";
+          const msg = texte(data && data.message);
+          if (ok) {
+            merciQuiz(recap, "Vos réponses viennent d'arriver dans notre boîte. Ça nous aide vraiment.");
+            return;
+          }
+          if (/activ/i.test(msg)) {
+            merciQuiz(recap, "Vos réponses sont parties. <strong>Première réponse du site</strong> : un e-mail de confirmation vient d'arriver dans notre boîte, on clique dessus et tout est branché.");
+            return;
+          }
+          throw new Error(msg || "envoi refusé");
+        })
+        .catch((err) => {
+          console.warn("GEAnérosité : envoi du quiz impossible.", err);
+          etat.textContent = "";
+          bouton.disabled = false;
+          erreur.innerHTML = lien
+            ? `L'envoi automatique n'a pas fonctionné. <a href="${esc(lien)}">Envoyer avec ma messagerie</a> (les réponses sont déjà écrites).`
+            : "L'envoi n'a pas fonctionné. Réessayez dans un instant.";
+          erreur.hidden = false;
+        });
+    });
+  }
+
+
   /* ───────────────────── Interface : menu, fenêtres, bandeaux ───────────────────── */
 
   function initMenu() {
@@ -754,11 +880,10 @@
   lancer("objectif et carton", rendreObjectif);
   lancer("compteurs", rendreCompteurs);
   lancer("infos pratiques", rendreInfos);
-  lancer("tombola", rendreTombola);
-  lancer("transparence", rendreTransparence);
   lancer("association et équipe", rendreQui);
   lancer("agenda", initAgenda);
   lancer("compte à rebours", () => { tic(); setInterval(tic, 1000); });
   lancer("typographie", () => typographie(document.body));
   lancer("titre de l'affiche", initTitre);
+  lancer("quiz d'avis", rendreQuiz);
 })();
