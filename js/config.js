@@ -104,7 +104,7 @@ const CONFIG = {
       "Sous-vêtements usagés",
     ],
     conseils: [
-      "Rassemblez vos vêtements dans un sac fermé : c'est plus simple à peser et à transporter.",
+      "Si vous en avez beaucoup, un sac fermé sera plus simple à peser et à porter. Sinon, venez comme vous êtes.",
       "Pas besoin de plier : nous trions sur place avec l'association.",
       "Vous pouvez venir à plusieurs, ou déposer pour un ami absent.",
     ],
@@ -140,7 +140,7 @@ const CONFIG = {
         options: ["Étudiant à l'IUT", "Enseignant ou personnel", "Autre"] },
       { id: "avant", type: "choix", texte: "Avant de prendre connaissance de ce projet, saviez-vous quoi faire des vêtements que vous ne mettez plus ?",
         options: ["Oui, je sais où les donner", "Vaguement", "Non, ils restent dans le placard"] },
-      { id: "venir", type: "choix", texte: "Après avoir lu la page, pensez-vous passer déposer un sac les 12 ou 13 novembre ?",
+      { id: "venir", type: "choix", texte: "Après avoir lu la page, pensez-vous passer déposer des vêtements les 12 ou 13 novembre ?",
         options: ["Oui, c'est noté", "Peut-être, si je passe par là", "Non"] },
       { id: "important", type: "choix", texte: "Qu'est-ce qui compte le plus pour vous là-dedans ?",
         options: ["Que les vêtements restent à Amiens", "Que ça ne prenne que deux minutes", "Que ce soit une association qui reçoive", "Que ce soit monté par des étudiants"] },
