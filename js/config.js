@@ -54,8 +54,8 @@ const CONFIG = {
      ══════════════════════════════════════════════════════════════════ */
 
   liens: {
-    instagram: "",   // 📸 page Instagram du projet
-    facebook: "",    // 👍 page Facebook du projet
+    instagram: "https://www.instagram.com/geanerosite/",
+    facebook: "https://www.facebook.com/share/1Cj2vrPbHd/?mibextid=wwXIfr",
     email: "geanerosite@gmail.com",   // ✉️ adresse de contact (sans « mailto: »)
   },
 
@@ -65,10 +65,20 @@ const CONFIG = {
      ══════════════════════════════════════════════════════════════════ */
 
   dates: {
-    jourCollecte: "2026-11-11",   // mercredi 11 novembre
-    ouverture: "08:00",        // heure d'ouverture
-    fermeture: "19:00",        // heure de fermeture
-    dateConfirmee: true,       // false = le site précise « date provisoire »
+    // Premier et dernier jour de la collecte.
+    // Pour une collecte d'une seule journée, mets la même date dans les deux.
+    jourDebut: "2026-11-12",   // jeudi 12 novembre
+    jourFin: "2026-11-13",     // vendredi 13 novembre
+
+    // Horaires réels, utilisés pour le compte à rebours et l'agenda.
+    ouverture: "08:00",
+    fermeture: "18:00",
+
+    // Ce qui est ÉCRIT sur le site à la place des horaires.
+    // Vide = le site écrit « de 8h à 18h » à partir des horaires ci-dessus.
+    horairesTexte: "toute la journée",
+
+    dateConfirmee: true,       // false = le site précise « dates provisoires »
   },
 
   // 🧪 POUR TESTER : "" (automatique), "avant", "direct" ou "apres"
@@ -77,7 +87,8 @@ const CONFIG = {
 
   collecte: {
     lieu: "IUT d'Amiens",   // établissement
-    salle: "",              // ex : "Hall d'entrée, bâtiment A" (vide = à confirmer)
+    salle: "Salle 111, salle de coworking",      // affiché en gros
+    precisionLieu: "1er étage du bâtiment GEA / TC",   // affiché juste en dessous
     quiPeutVenir: "Étudiants, enseignants et personnels de l'IUT",
     accepte: [
       "Vêtements propres et en bon état",
@@ -127,9 +138,9 @@ const CONFIG = {
     questions: [
       { id: "profil", type: "choix", texte: "Vous êtes…",
         options: ["Étudiant à l'IUT", "Enseignant ou personnel", "Autre"] },
-      { id: "avant", type: "choix", texte: "Avant ce site, saviez-vous quoi faire des vêtements que vous ne mettez plus ?",
+      { id: "avant", type: "choix", texte: "Avant de prendre connaissance de ce projet, saviez-vous quoi faire des vêtements que vous ne mettez plus ?",
         options: ["Oui, je sais où les donner", "Vaguement", "Non, ils restent dans le placard"] },
-      { id: "venir", type: "choix", texte: "Après avoir lu la page, pensez-vous passer déposer un sac le 11 novembre ?",
+      { id: "venir", type: "choix", texte: "Après avoir lu la page, pensez-vous passer déposer un sac les 12 ou 13 novembre ?",
         options: ["Oui, c'est noté", "Peut-être, si je passe par là", "Non"] },
       { id: "important", type: "choix", texte: "Qu'est-ce qui compte le plus pour vous là-dedans ?",
         options: ["Que les vêtements restent à Amiens", "Que ça ne prenne que deux minutes", "Que ce soit une association qui reçoive", "Que ce soit monté par des étudiants"] },
@@ -137,8 +148,6 @@ const CONFIG = {
         options: ["Les horaires", "Je n'ai rien à donner", "Je vais oublier", "Rien, je viendrai"] },
       { id: "utile", type: "echelle", texte: "Sur 5, ce projet vous paraît…",
         min: 1, max: 5, legendeMin: "pas très utile", legendeMax: "vraiment utile" },
-      { id: "clair", type: "echelle", texte: "Et ce site, sur 5, il est…",
-        min: 1, max: 5, legendeMin: "confus", legendeMax: "très clair" },
       { id: "remarque", type: "texte", texte: "Une idée, une remarque, un truc qui manque ?", facultatif: true },
       { id: "contact", type: "email", texte: "Votre e-mail, si vous voulez qu'on vous réponde", facultatif: true },
     ],

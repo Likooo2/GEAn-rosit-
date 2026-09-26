@@ -77,11 +77,15 @@
     const d = new Date(s);
     return isNaN(d.getTime()) ? null : d;
   }
-  const jour = texte(dates.jourCollecte);
+  const estUneDate = (v) => /^\d{4}-\d{2}-\d{2}$/.test(texte(v));
+  const jour1 = estUneDate(dates.jourDebut) ? texte(dates.jourDebut) : (estUneDate(dates.jourCollecte) ? texte(dates.jourCollecte) : "");
+  const jour2 = estUneDate(dates.jourFin) ? texte(dates.jourFin) : jour1;
   const heureOuverture = /^\d{1,2}:\d{2}$/.test(texte(dates.ouverture)) ? texte(dates.ouverture).padStart(5, "0") : "08:00";
-  const heureFermeture = /^\d{1,2}:\d{2}$/.test(texte(dates.fermeture)) ? texte(dates.fermeture).padStart(5, "0") : "19:00";
-  const debut = /^\d{4}-\d{2}-\d{2}$/.test(jour) ? lireDate(jour + "T" + heureOuverture) : null;
-  const fin = /^\d{4}-\d{2}-\d{2}$/.test(jour) ? lireDate(jour + "T" + heureFermeture) : null;
+  const heureFermeture = /^\d{1,2}:\d{2}$/.test(texte(dates.fermeture)) ? texte(dates.fermeture).padStart(5, "0") : "18:00";
+  // Ouverture du premier jour et fermeture du dernier
+  const debut = jour1 ? lireDate(jour1 + "T" + heureOuverture) : null;
+  const fin = jour2 ? lireDate(jour2 + "T" + heureFermeture) : null;
+  const jours = jour1 ? [jour1].concat(jour2 && jour2 !== jour1 ? [jour2] : []) : [];
   const dateConfirmee = !!dates.dateConfirmee;
 
   let decalage = 0;
@@ -110,6 +114,41 @@
   function heureTexte(hhmm) {
     const [hh, mm] = hhmm.split(":");
     return mm === "00" ? `${Number(hh)}h` : `${Number(hh)}h${mm}`;
+  }
+
+  /* Les jours, écrits comme on les dirait :
+     un seul  → « jeudi 12 novembre »
+     deux     → « jeudi 12 et vendredi 13 novembre »
+     plus     → « du jeudi 12 au samedi 14 novembre » */
+  function joursTexte(avecMajuscule) {
+    if (!jours.length) return "";
+    const dates2 = jours.map((j) => lireDate(j + "T12:00")).filter(Boolean);
+    let t;
+    if (dates2.length === 1) t = fJourCourt.format(dates2[0]);
+    else if (dates2.length === 2) {
+      const premier = fJourCourt.format(dates2[0]).replace(/\s+\S+$/, "");   // sans le mois
+      t = `${premier} et ${fJourCourt.format(dates2[1])}`;
+    } else t = `du ${fJourCourt.format(dates2[0])} au ${fJourCourt.format(dates2[dates2.length - 1])}`;
+    return avecMajuscule ? majuscule(t) : t;
+  }
+  const horairesTexte = () => texte(dates.horairesTexte) || `de ${heureTexte(heureOuverture)} à ${heureTexte(heureFermeture)}`;
+  const plusieursJours = () => jours.length > 1;
+
+  /* Créneau d'ouverture d'un jour donné (par son numéro dans « jours ») */
+  function creneau(i) {
+    if (!jours[i]) return null;
+    return { ouvre: lireDate(jours[i] + "T" + heureOuverture), ferme: lireDate(jours[i] + "T" + heureFermeture) };
+  }
+  /* Sommes-nous dans un créneau maintenant ? Sinon, quand rouvre-t-on ? */
+  function creneauActuel() {
+    const t = maintenant().getTime();
+    for (let i = 0; i < jours.length; i++) {
+      const c = creneau(i);
+      if (!c) continue;
+      if (t < c.ouvre.getTime()) return { etat: "ferme", prochain: c };
+      if (t < c.ferme.getTime()) return { etat: "ouvert", courant: c };
+    }
+    return { etat: "termine" };
   }
   const ouvertureTexte = () => (debut ? heure(debut) : heureTexte(heureOuverture));
   const fermetureTexte = () => (fin ? heure(fin) : heureTexte(heureFermeture));
@@ -235,9 +274,10 @@
     });
     $$(".quand-ouverture").forEach((el) => { el.textContent = ouvertureTexte(); });
     $$(".quand-fermeture").forEach((el) => { el.textContent = fermetureTexte(); });
+    $$(".quand-horaires").forEach((el) => { el.textContent = horairesTexte(); });
     const quand = debut
-      ? `${majuscule(formaterDate(debut, "jourCourt"))}, de ${ouvertureTexte()} à ${fermetureTexte()}`
-      : `De ${ouvertureTexte()} à ${fermetureTexte()}`;
+      ? `${joursTexte(true)}, ${horairesTexte()}`
+      : `${majuscule(horairesTexte())}`;
     $("#hero-quand").textContent = quand;
     $("#hero-objectif").textContent = poids(objectifKg);
   }
@@ -352,18 +392,27 @@
       construireEcran([{ label: "jours" }, { label: "heures" }, { label: "min" }, { label: "sec" }]);
       majEcran(["--", "--", "--", "--"]);
       if (debut) {
-        message.innerHTML = `<p class="panneau-date">${esc(formaterDate(debut, "Jour"))}, de ${esc(ouvertureTexte())} à ${esc(fermetureTexte())}${dateConfirmee ? "" : " " + aConfirmer("date provisoire")}</p>`;
-        zone.setAttribute("aria-label", `Compte à rebours jusqu'à l'ouverture de la collecte, le ${formaterDate(debut, "jour")} à ${ouvertureTexte()}`);
+        message.innerHTML = `<p class="panneau-date">${esc(joursTexte(true))}, ${esc(horairesTexte())}${dateConfirmee ? "" : " " + aConfirmer("dates provisoires")}</p>`;
+        zone.setAttribute("aria-label", `Compte à rebours jusqu'à l'ouverture de la collecte, ${joursTexte(false)} à ${ouvertureTexte()}`);
         if (agenda) agenda.hidden = false;
       } else {
-        message.innerHTML = `<span class="sticker sticker-jaune"${brouillon ? " data-exemple" : ""}>Date à confirmer</span><p class="panneau-date">La date de la collecte sera annoncée ici, de ${esc(ouvertureTexte())} à ${esc(fermetureTexte())}.</p>`;
+        message.innerHTML = `<span class="sticker sticker-jaune"${brouillon ? " data-exemple" : ""}>Dates à confirmer</span><p class="panneau-date">Les dates de la collecte seront annoncées ici.</p>`;
         zone.removeAttribute("aria-label");
         if (agenda) agenda.hidden = true;
       }
     } else if (e === "direct") {
-      titre.innerHTML = '<span class="point-direct" aria-hidden="true"></span>Collecte en cours';
+      const creneauEnCours = creneauActuel();
+      titre.innerHTML = creneauEnCours.etat === "ouvert"
+        ? '<span class="point-direct" aria-hidden="true"></span>Collecte en cours'
+        : "On rouvre dans";
+      titre.dataset.creneau = creneauEnCours.etat;
       construireEcran([{ label: "h", nb: 1 }, { label: "min" }, { label: "sec" }]);
-      message.innerHTML = `<p class="panneau-date">avant la fermeture, à ${esc(fermetureTexte())}. On vous attend !</p>`;
+      const info = creneauActuel();
+      if (info.etat === "ferme" && info.prochain) {
+        message.innerHTML = `<p class="panneau-date">C'est fermé pour ce soir&nbsp;: on rouvre ${esc(formaterDate(info.prochain.ouvre, "jourCourt"))} à ${esc(ouvertureTexte())}.</p>`;
+      } else {
+        message.innerHTML = `<p class="panneau-date">avant la fermeture, à ${esc(fermetureTexte())}. On vous attend&nbsp;!</p>`;
+      }
       zone.setAttribute("aria-label", "La collecte est en cours");
       if (agenda) agenda.hidden = true;
     } else {
@@ -390,10 +439,14 @@
       const m = Math.floor(s / 60); s -= m * 60;
       majEcran([deux(Math.min(j, 99)), deux(h), deux(m), deux(s)]);
     } else if (e === "direct" && fin) {
-      let s = Math.max(0, Math.floor((fin.getTime() - t) / 1000));
+      const info = creneauActuel();
+      const cible = info.etat === "ouvert" ? info.courant.ferme : (info.prochain ? info.prochain.ouvre : fin);
+      let s = Math.max(0, Math.floor((cible.getTime() - t) / 1000));
       const h = Math.floor(s / 3600); s -= h * 3600;
       const m = Math.floor(s / 60); s -= m * 60;
       majEcran([String(Math.min(h, 9)), deux(m), deux(s)]);
+      const titre = $("#panneau-titre");
+      if (titre && titre.dataset.creneau !== info.etat) rendreEtat("direct");
     }
   }
 
@@ -404,20 +457,29 @@
     const lieu = [texte((C.collecte || {}).lieu), texte((C.collecte || {}).salle)].filter(Boolean).join(", ");
     const details = `Apportez les vêtements que vous ne mettez plus : tout est remis à ${asso}.`;
     const ics = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const premier = creneau(0) || { ouvre: debut, ferme: fin };
     const google = new URLSearchParams({
-      action: "TEMPLATE", text: titre, details, location: lieu || "IUT d'Amiens",
-      dates: `${ics(debut)}/${ics(fin)}`,
+      action: "TEMPLATE", text: titre,
+      details: details + (plusieursJours() ? " Collecte aussi " + formaterDate(creneau(1).ouvre, "jourCourt") + "." : ""),
+      location: lieu || "IUT d'Amiens",
+      dates: `${ics(premier.ouvre)}/${ics(premier.ferme)}`,
     });
     $("#agenda-google").href = "https://calendar.google.com/calendar/render?" + google.toString();
     const echap = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+    const evenements = jours.map((j, i) => {
+      const c = creneau(i);
+      if (!c || !c.ouvre || !c.ferme) return [];
+      return [
+        "BEGIN:VEVENT", "UID:geanerosite-" + ics(c.ouvre) + "@geanerosite",
+        "DTSTAMP:" + ics(new Date()), "DTSTART:" + ics(c.ouvre), "DTEND:" + ics(c.ferme),
+        "SUMMARY:" + echap(titre), "DESCRIPTION:" + echap(details), "LOCATION:" + echap(lieu || "IUT d'Amiens"),
+        "BEGIN:VALARM", "TRIGGER:-PT2H", "ACTION:DISPLAY", "DESCRIPTION:" + echap("Pense à apporter ton sac de vêtements !"), "END:VALARM",
+        "END:VEVENT",
+      ];
+    }).reduce((t, x) => t.concat(x), []);
     const fichier = [
       "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//GEAnerosite//FR", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
-      "BEGIN:VEVENT", "UID:geanerosite-" + ics(debut) + "@geanerosite",
-      "DTSTAMP:" + ics(new Date()), "DTSTART:" + ics(debut), "DTEND:" + ics(fin),
-      "SUMMARY:" + echap(titre), "DESCRIPTION:" + echap(details), "LOCATION:" + echap(lieu || "IUT d'Amiens"),
-      "BEGIN:VALARM", "TRIGGER:-PT2H", "ACTION:DISPLAY", "DESCRIPTION:" + echap("Pense à apporter ton sac de vêtements !"), "END:VALARM",
-      "END:VEVENT", "END:VCALENDAR",
-    ].join("\r\n");
+    ].concat(evenements, ["END:VCALENDAR"]).join("\r\n");
     try {
       $("#agenda-ics").href = URL.createObjectURL(new Blob([fichier], { type: "text/calendar;charset=utf-8" }));
     } catch (err) {
@@ -455,26 +517,34 @@
 
   function rendreInfos() {
     const col = C.collecte || {};
+    const lieu = texte(col.lieu) || "IUT d'Amiens";
+    const salle = texte(col.salle);
     const infos = [
-      { emoji: "📅", valeur: debut ? majuscule(formaterDate(debut, "jourCourt")) + (dateConfirmee ? "" : " " + aConfirmer("date provisoire")) : aConfirmer("date à confirmer") },
-      { emoji: "🕗", valeur: `De ${esc(ouvertureTexte())} à ${esc(fermetureTexte())}, en continu` },
-      { emoji: "📍", valeur: texte(col.salle) ? esc(texte(col.lieu) + " — " + texte(col.salle)) : `${esc(texte(col.lieu) || "IUT d'Amiens")} — salle ${aConfirmer("à confirmer")}` },
-      { emoji: "🙋", valeur: texte(col.quiPeutVenir) ? esc(col.quiPeutVenir) : "Ouvert à tous" },
-      { emoji: "💶", valeur: "Gratuit : donner ne coûte rien" },
+      { emoji: "📍", label: "Où", large: true, valeur: salle
+        ? `${esc(salle)}<span class="fiche-lieu">${esc([texte(col.precisionLieu), lieu].filter(Boolean).join(" · "))}</span>`
+        : `${esc(lieu)} — salle ${aConfirmer("à confirmer")}` },
+      { emoji: "📅", label: "Quand", valeur: debut ? joursTexte(true) + (dateConfirmee ? "" : " " + aConfirmer("dates provisoires")) : aConfirmer("dates à confirmer") },
+      { emoji: "🕗", label: "Horaires", valeur: majuscule(horairesTexte()) + (texte(dates.horairesTexte) ? "" : ", en continu") },
+      { emoji: "🙋", label: "Pour qui", valeur: esc(texte(col.quiPeutVenir || col.public) || "Ouvert à tous") },
+      { emoji: "💶", label: "Combien", valeur: "Gratuit, sans inscription" },
     ];
-    $("#infos-collecte").innerHTML = infos.map((i) => `<li><span aria-hidden="true">${i.emoji}</span> ${i.valeur}</li>`).join("");
+    $("#infos-collecte").innerHTML = infos.map((i2) => `<li class="fiche-info${i2.large ? " fiche-info-large" : ""}">
+        <span class="fiche-label"><span aria-hidden="true">${i2.emoji}</span> ${esc(i2.label)}</span>
+        <span class="fiche-valeur">${i2.valeur}</span>
+      </li>`).join("");
     $("#liste-conseils").innerHTML = (col.conseils || []).map((x) => `<li>${esc(x)}</li>`).join("");
     $("#liste-accepte").innerHTML = (col.accepte || []).map((x) => `<li>${esc(x)}</li>`).join("");
     $("#liste-eviter").innerHTML = (col.aEviter || []).map((x) => `<li>${esc(x)}</li>`).join("");
 
     const reseaux = [];
-    if (urlValide("instagram")) reseaux.push('<a data-lien="instagram">notre Instagram</a>');
-    if (urlValide("facebook")) reseaux.push('<a data-lien="facebook">notre page Facebook</a>');
-    if (urlValide("email")) reseaux.push('<a data-lien="email" data-afficher>notre adresse e-mail</a>');
+    if (urlValide("instagram")) reseaux.push('<a data-lien="instagram">Instagram</a>');
+    if (urlValide("facebook")) reseaux.push('<a data-lien="facebook">Facebook</a>');
     const bloc = $("#bloc-reseaux");
-    bloc.innerHTML = reseaux.length
-      ? "Partagez le lien de ce site, ou retrouvez-nous sur " + reseaux.join(" et ") + "."
-      : "Partagez simplement le lien de ce site : c'est le plus efficace.";
+    const suivre = reseaux.length === 2 ? reseaux[0] + " et " + reseaux[1] : reseaux[0];
+    const ecrire = urlValide("email") ? ` Une question ? <a data-lien="email" data-afficher>écrivez-nous</a>.` : "";
+    bloc.innerHTML = (reseaux.length
+      ? `Partagez le lien de ce site, et suivez le projet sur ${suivre}.`
+      : "Partagez simplement le lien de ce site : c'est le plus efficace.") + ecrire;
     appliquerLiens(bloc);
   }
 

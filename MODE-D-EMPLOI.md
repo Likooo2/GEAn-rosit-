@@ -1,6 +1,8 @@
 # Mode d'emploi du site GEAnérosité
 
-**Un seul fichier à modifier : `js/config.js`.** Le compteur de kilos, l'objectif, les horaires, les lots, l'association : tout est dedans, en français et commenté.
+**Un seul fichier à modifier : `js/config.js`.** Le compteur de kilos, l'objectif, les dates, la salle, les listes, le quiz et l'association : tout est dedans, en français et commenté.
+
+Déjà renseigné : les dates (jeudi 12 et vendredi 13 novembre 2026), la salle 111, l'objectif de 300 kg, l'adresse e-mail, l'Instagram et le Facebook du projet, le logo de l'IUT, la page Facebook de l'association et le quiz d'avis.
 
 Le site est en ligne : **https://likooo2.github.io/GEAn-rosit-/**
 Pour le modifier : ouvre le lien ci-dessous, clique sur le crayon ✏️, change ce que tu veux, puis **Commit changes**. C'est publié une à deux minutes plus tard, même depuis un téléphone :
@@ -85,22 +87,40 @@ Ajoute `facultatif: true` pour qu'une question ne soit pas obligatoire. Pour ret
 
 ---
 
-## 5. Ce qu'il reste à compléter
+## 5. Changer les dates ou la salle
 
-- [ ] Les liens **Instagram** et **Facebook** (l'adresse e-mail est déjà en place).
-- [ ] La **salle** exacte : `collecte.salle`, par exemple `"Hall du bâtiment A"`.
-- [ ] Le **responsable de la publication** : `mentionsLegales.responsable` (obligatoire dans les mentions légales).
-- [ ] Facultatif : les **rôles** de chacun dans `equipe`, la relecture de la présentation d'A.V.A. par l'association.
+```js
+dates: {
+  jourDebut: "2026-11-12",           // premier jour
+  jourFin: "2026-11-13",             // dernier jour (même date si un seul jour)
+  ouverture: "08:00",                // horaires réels : compte à rebours et agenda
+  fermeture: "18:00",
+  horairesTexte: "toute la journée", // ce qui est ÉCRIT (vide = « de 8h à 18h »)
+  dateConfirmee: true,
+},
+collecte: {
+  salle: "Salle 111, salle de coworking",
+  precisionLieu: "1er étage du bâtiment GEA / TC",
+},
+```
+
+Le site écrit tout seul « Jeudi 12 et vendredi 13 novembre ». Avec la même date dans les deux champs, il écrit « Jeudi 12 novembre ». Le compte à rebours vise l'ouverture du premier jour, passe à « Collecte en cours » pendant les créneaux, affiche « On rouvre dans » entre les deux jours, puis « Merci » à la fin. L'ajout à l'agenda crée un rendez-vous par jour.
+
+### Ce qu'il reste à compléter
+
+- [ ] Les **rôles** de chacun dans `equipe`, si vous voulez les afficher.
+- [ ] La **relecture** de la présentation d'A.V.A. par l'association.
+- [ ] Les **accords écrits** d'A.V.A. et de l'IUT pour l'usage de leurs logos.
 
 ---
 
-## 6. Tester sans attendre le 11 novembre
+## 6. Tester sans attendre les 12 et 13 novembre
 
 À ajouter à la fin de l'adresse du site :
 
-- `?etat=direct` : le site tel qu'il sera pendant la journée
+- `?etat=direct` : le site tel qu'il sera pendant la collecte
 - `?etat=apres` : le site après la collecte
-- `?maintenant=2026-11-11T10:30` : simule une date et une heure
+- `?maintenant=2026-11-12T10:30` : simule une date et une heure (essaie aussi `2026-11-12T20:30`, entre les deux jours)
 
 Personne d'autre ne voit ces tests.
 
